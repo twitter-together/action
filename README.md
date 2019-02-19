@@ -1,4 +1,4 @@
-# tweet-together
+# better-together 🎵
 
 > A GitHub action to tweet together using pull requests
 
