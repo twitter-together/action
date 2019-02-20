@@ -30,34 +30,33 @@ async function main () {
   }
 
   if (branch === defaultBranch) {
-    console.log(`"${branch}" is the default branch`)
-
-    console.log(`TODO: show preview of new tweets (${newTweets.length})`)
-
     for (let i = 0; i < newTweets.length; i++) {
-      if (newTweets[i].length > 240) {
-        console.log(`TODO: tweet is too long - create failing status run: ${newTweets[i]}`)
+      console.log(`1st tweet: ${newTweets[i]}`)
+      try {
+        const result = await tweet({
+          consumerKey: process.env.TWITTER_CONSUMER_KEY,
+          consumerSecret: process.env.TWITTER_CONSUMER_SECRET,
+          accessTokenKey: process.env.TWITTER_ACCESS_TOKEN,
+          accessTokenSecret: process.env.TWITTER_ACCESS_SECRET,
+          tweet: newTweets[i]
+        })
+
+        console.log(`tweeted: ${newTweets[i]}`)
+        console.log(`-------- result -------- `)
+        console.log(JSON.stringify(result, null, 2))
+      } catch (error) {
+        console.error(error[0])
       }
     }
-    return
   }
 
-  for (let i = 0; i < newTweets.length; i++) {
-    console.log(`1st tweet: ${newTweets[i]}`)
-    try {
-      const result = await tweet({
-        consumerKey: process.env.TWITTER_CONSUMER_KEY,
-        consumerSecret: process.env.TWITTER_CONSUMER_SECRET,
-        accessTokenKey: process.env.TWITTER_ACCESS_TOKEN,
-        accessTokenSecret: process.env.TWITTER_ACCESS_SECRET,
-        tweet: newTweets[i]
-      })
+  console.log(`"${branch}" is the default branch`)
 
-      console.log(`tweeted: ${newTweets[i]}`)
-      console.log(`-------- result -------- `)
-      console.log(JSON.stringify(result, null, 2))
-    } catch (error) {
-      console.error(error[0])
+  console.log(`TODO: show preview of new tweets (${newTweets.length})`)
+
+  for (let i = 0; i < newTweets.length; i++) {
+    if (newTweets[i].length > 240) {
+      console.log(`TODO: tweet is too long - create failing status run: ${newTweets[i]}`)
     }
   }
 }
