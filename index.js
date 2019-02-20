@@ -4,6 +4,9 @@ const { context: { payload }, github: { request } } = new Toolkit()
 const getNewTweets = require('./lib/get-new-tweets')
 const tweet = require('./lib/tweet')
 
+console.log(`-------- payload -------- `)
+console.log(JSON.stringify(payload, null, 2))
+
 main()
 
 async function main () {
