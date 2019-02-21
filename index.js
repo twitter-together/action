@@ -4,7 +4,7 @@ const { autoLink } = require('twitter-text')
 const getNewTweets = require('./lib/get-new-tweets')
 const tweet = require('./lib/tweet')
 
-const { getFile, exit, log, context, github: octokit } = new Toolkit()
+const { getFile, exit, log, context: { payload, ref }, github: octokit } = new Toolkit()
 const startedAt = new Date().toISOString()
 
 console.log(`-------- payload -------- `)
@@ -13,19 +13,19 @@ console.log(JSON.stringify(payload, null, 2))
 main()
 
 async function main () {
-  if (!context.ref) {
+  if (!ref) {
     return exit.neutral('GITHUB_REF not set')
   }
 
-  if (!context.ref.startsWith('refs/heads/')) {
-    return exit.neutral(`GITHUB_REF is not a branch: ${context.ref}`)
+  if (!ref.startsWith('refs/heads/')) {
+    return exit.neutral(`GITHUB_REF is not a branch: ${ref}`)
   }
 
   octokit.hook.error('request', (error) => {
     log.error(error)
   })
 
-  const branch = context.ref.substr('refs/heads/'.length)
+  const branch = ref.substr('refs/heads/'.length)
   const defaultBranch = payload.repository.default_branch
   const newTweets = await getNewTweets(getFile, octokit.request, payload)
 
