@@ -69,7 +69,7 @@ async function main () {
     }
   }
 
-  const isValid = newTweets.find(tweet => tweet.valid)
+  const isValid = newTweets.every(tweet => tweet.valid)
 
   await octokit.request('POST /repos/:owner/:repo/check-runs', {
     headers: {
