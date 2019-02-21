@@ -7,9 +7,6 @@ const tweet = require('./lib/tweet')
 const { getFile, exit, log, context: { payload, ref }, github: octokit } = new Toolkit()
 const startedAt = new Date().toISOString()
 
-log(`-------- payload -------- `)
-log(JSON.stringify(payload, null, 2))
-
 main()
 
 async function main () {
@@ -21,16 +18,17 @@ async function main () {
     return exit.neutral(`GITHUB_REF is not a branch: ${ref}`)
   }
 
-  octokit.hook.error('request', (error) => {
-    log.error(error)
-  })
-
   const state = {
     branch: process.env.GITHUB_REF.substr('refs/heads/'.length),
     defaultBranch: payload.repository.default_branch,
     octokit,
-    getFile
+    getFile,
+    log
   }
+
+  octokit.hook.error('request', (error) => {
+    state.log.error(error)
+  })
 
   const newTweets = await getNewTweets(state, payload)
 
@@ -39,10 +37,10 @@ async function main () {
   }
 
   if (state.branch === state.defaultBranch) {
-    log(`"${state.branch}" is the default branch`)
+    state.log(`"${state.branch}" is the default branch`)
 
     for (let i = 0; i < newTweets.length; i++) {
-      log(`${i + 1}. ${newTweets[i].text}`)
+      state.log(`${i + 1}. ${newTweets[i].text}`)
       try {
         const result = await tweet({
           consumerKey: process.env.TWITTER_CONSUMER_KEY,
@@ -52,9 +50,9 @@ async function main () {
           tweet: newTweets[i].text
         })
 
-        log(`tweeted: ${newTweets[i]}`)
-        log(`-------- result -------- `)
-        log(JSON.stringify(result, null, 2))
+        state.log(`tweeted: ${newTweets[i]}`)
+        state.log(`-------- result -------- `)
+        state.log(JSON.stringify(result, null, 2))
       } catch (error) {
         log.error(error[0])
       }
@@ -62,7 +60,7 @@ async function main () {
     return
   }
 
-  log(`"${state.branch}" is not the default branch`)
+  state.log(`"${state.branch}" is not the default branch`)
 
   for (let i = 0; i < newTweets.length; i++) {
     if (newTweets[i].length > 240) {
