@@ -1,8 +1,11 @@
 const { Toolkit } = require('actions-toolkit')
-const { context: { payload }, github: { request } } = new Toolkit()
+const { autoLink } = require('twitter-text')
 
 const getNewTweets = require('./lib/get-new-tweets')
 const tweet = require('./lib/tweet')
+
+const { context: { payload }, github: octokit } = new Toolkit()
+const startedAt = new Date().toISOString()
 
 console.log(`-------- payload -------- `)
 console.log(JSON.stringify(payload, null, 2))
@@ -20,9 +23,13 @@ async function main () {
     return
   }
 
+  octokit.hook.error('request', (error) => {
+    console.error(error)
+  })
+
   const branch = process.env.GITHUB_REF.substr('refs/heads/'.length)
   const defaultBranch = payload.repository.default_branch
-  const newTweets = await getNewTweets(request, payload)
+  const newTweets = await getNewTweets(octokit.request, payload)
 
   if (newTweets.length === 0) {
     console.log('No new tweets')
@@ -30,6 +37,8 @@ async function main () {
   }
 
   if (branch === defaultBranch) {
+    console.log(`"${branch}" is the default branch`)
+
     for (let i = 0; i < newTweets.length; i++) {
       console.log(`1st tweet: ${newTweets[i]}`)
       try {
@@ -50,13 +59,45 @@ async function main () {
     }
   }
 
-  console.log(`"${branch}" is the default branch`)
-
-  console.log(`TODO: show preview of new tweets (${newTweets.length})`)
+  console.log(`"${branch}" is not the default branch`)
 
   for (let i = 0; i < newTweets.length; i++) {
     if (newTweets[i].length > 240) {
       console.log(`TODO: tweet is too long - create failing status run: ${newTweets[i]}`)
     }
   }
+
+  const isValid = newTweets.find(tweet => tweet.valid)
+
+  await octokit.request('POST /repos/:owner/:repo/check-runs', {
+    headers: {
+      accept: 'application/vnd.github.antiope-preview+json'
+    },
+    owner: payload.repository.owner.login,
+    repo: payload.repository.name,
+    name: 'twitter-together',
+    head_sha: payload.after,
+    started_at: startedAt,
+    completed_at: new Date().toISOString(),
+    status: 'completed',
+    conclusion: isValid ? 'success' : 'failure',
+    output: {
+      title: `Preview: ${newTweets.length} tweet(s)`,
+      summary: newTweets.map(tweet => {
+        const text = autoLink(tweet.text).replace(/(^|\n)/g, '$1> ')
+
+        if (tweet.valid) {
+          return `### ✅ Valid
+
+${text}`
+        }
+
+        return `### ❌ Valid
+
+${text}
+
+The above tweet is ${280 - tweet.weightedLength} characters to long`
+      }).join('\n\n---\n\n')
+    }
+  })
 }
