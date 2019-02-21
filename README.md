@@ -1,10 +1,10 @@
-# tweet-together
+# twitter-together
 
 > A GitHub action to tweet together using pull requests
 
 Bigger open source projects often time have their own twitter accounts. And more often than not, nobody is using it out of fear to say something that would upset the other maintainers.
 
-`tweet-together` to the rescue!
+`twitter-together` to the rescue!
 
 This GitHub action uses files in order to send out tweets. Because of that, you can utilize GitHub’s pull request reviews to create drafts and discuss with fellow maintainers and others before sending out a tweet.
 

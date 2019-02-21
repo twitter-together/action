@@ -1,5 +1,5 @@
 {
-  "name": "tweet-together",
+  "name": "twitter-together",
   "version": "1.0.0",
   "description": "A GitHub action to tweet together using pull requests",
   "main": "index.js",
@@ -10,7 +10,9 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "twitter": "^1.7.1"
+    "actions-toolkit": "^1.5.0",
+    "twitter": "^1.7.1",
+    "twitter-text": "^3.0.0"
   },
   "devDependencies": {
     "standard": "^12.0.1"
