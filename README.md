@@ -23,3 +23,9 @@ action "Tweet" {
 ```
 
 In order to get the `TWITTER_*` credentials, you need to create a twitter app with the account you want to tweet from. You can do that at https://apps.twitter.com/. The twitter app needs read and write permissions, all other configurations are irrelevant. Once you created the app, you find the credentials in the  <kbd>`Keys and tokens`</kbd>  tab.
+
+Besides creating the `.github/main.workflow` file you will also need to create a `tweets/` folder. I recommend to create a `tweets/README.md` file explaining how others can submit a tweet. You can copy this repository’s [`tweets/README.md`](tweets/README.md) file as a template.
+
+## License
+
+[MIT](LICENSE)
