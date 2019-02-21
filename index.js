@@ -4,7 +4,8 @@ const { autoLink } = require('twitter-text')
 const getNewTweets = require('./lib/get-new-tweets')
 const tweet = require('./lib/tweet')
 
-const { getFile, exit, log, context: { payload, ref }, github: octokit } = new Toolkit()
+const toolkit = new Toolkit()
+const { exit, log, context: { payload, ref }, github: octokit } = toolkit
 const startedAt = new Date().toISOString()
 
 main()
@@ -22,8 +23,8 @@ async function main () {
     branch: process.env.GITHUB_REF.substr('refs/heads/'.length),
     defaultBranch: payload.repository.default_branch,
     octokit,
-    getFile,
-    log
+    getFile: toolkit.getFile.bind(toolkit),
+    log: toolkit.log.bind(toolkit)
   }
 
   octokit.hook.error('request', (error) => {
