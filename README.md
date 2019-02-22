@@ -27,6 +27,9 @@ action "Tweet" {
 }
 
 # "push" event won’t work on forks, hence the 2nd workflow with "pull_request"
+
+[![Greenkeeper badge](https://badges.greenkeeper.io/gr2m/twitter-together.svg?token=fec4ee116d4210bb3f03e13bed6266d5fc8e8764def4f269753e522abfba3a19&ts=1550824957051)](https://greenkeeper.io/)
+
 workflow "Preview and validate tweets on pull requests" {
   on = "pull_request"
   resolves = ["Preview"]
