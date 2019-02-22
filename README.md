@@ -1,6 +1,11 @@
-# twitter-together
+<h1 align="center">Twitter, together!</h1>
 
-> A GitHub action to tweet together using pull requests
+<p align="center">
+  <a href="https://travis-ci.com/gr2m/twitter-together" rel="nofollow"><img alt="Build Status" src="https://travis-ci.com/gr2m/twitter-together.svg?branch=master"></a>
+  <a href="https://greenkeeper.io/" rel="nofollow"><img src="https://badges.greenkeeper.io/gr2m/twitter-together.svg" alt="Greenkeeper badge"></a>
+</p>
+
+<p align="center">A GitHub action to tweet together using pull requests</p>
 
 Bigger open source projects often time have their own twitter accounts. And more often than not, nobody is using it out of fear to say something that would upset the other maintainers.
 
