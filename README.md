@@ -27,7 +27,7 @@ workflow "Preview and validate tweets on pull requests" {
   resolves = ["Preview"]
 }
 
-action "Tweet" {
+action "Preview" {
   uses = "gr2m/twitter-together@master"
   secrets = ["GITHUB_TOKEN"]
 }
