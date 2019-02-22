@@ -4,7 +4,8 @@
   "description": "A GitHub action to tweet together using pull requests",
   "main": "index.js",
   "scripts": {
-    "test": "standard"
+    "test": "tap --coverage test/*/test.js",
+    "posttest": "standard"
   },
   "keywords": [],
   "author": "",
@@ -16,6 +17,8 @@
     "twitter-text": "^3.0.0"
   },
   "devDependencies": {
-    "standard": "^12.0.1"
+    "nock": "^10.0.6",
+    "standard": "^12.0.1",
+    "tap": "^12.5.3"
   }
 }
