@@ -2,7 +2,7 @@
 
 <p align="center">
   <a href="https://travis-ci.com/gr2m/twitter-together" rel="nofollow"><img alt="Build Status" src="https://travis-ci.com/gr2m/twitter-together.svg?branch=master"></a>
-  <a href="https://greenkeeper.io/" rel="nofollow"><img src="https://badges.greenkeeper.io/gr2m/twitter-together.svg" alt="Greenkeeper badge"></a>
+  <a href="https://greenkeeper.io/" rel="nofollow"><img src="https://badges.greenkeeper.io/gr2m/twitter-together.svg?token=fec4ee116d4210bb3f03e13bed6266d5fc8e8764def4f269753e522abfba3a19&ts=1550824957051"></a>
 </p>
 
 <p align="center">A GitHub action to tweet together using pull requests</p>
@@ -27,8 +27,6 @@ action "Tweet" {
 }
 
 # "push" event won’t work on forks, hence the 2nd workflow with "pull_request"
-
-[![Greenkeeper badge](https://badges.greenkeeper.io/gr2m/twitter-together.svg?token=fec4ee116d4210bb3f03e13bed6266d5fc8e8764def4f269753e522abfba3a19&ts=1550824957051)](https://greenkeeper.io/)
 
 workflow "Preview and validate tweets on pull requests" {
   on = "pull_request"
