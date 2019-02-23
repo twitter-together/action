@@ -4,6 +4,13 @@ Please note that this project is released with a [Contributor Code of Conduct](C
 
 <!-- toc -->
 
+- [Have a question? Found a bug? Have an idea?](#have-a-question-found-a-bug-have-an-idea)
+- [Submitting the Pull Request](#submitting-the-pull-request)
+- [Merging the Pull Request & releasing a new version](#merging-the-pull-request--releasing-a-new-version)
+- [Resources](#resources)
+
+<!-- tocstop -->
+
 ## Have a question? Found a bug? Have an idea?
 
 Please [create an issue](https://github.com/gr2m/twitter-together/issues/new/choose).
@@ -37,3 +44,9 @@ Before the publish it runs the `npm run build` script which generates type defin
 The script also generates the API docs. After the publish, the API docs are automatically pushed to the `gh-pages` branch which updates the documentation at  [octokit.github.io/rest.js](https://octokit.github.io/rest.js).
 
 If the pull request looks good but does not follow the commit conventions, use the "Squash & merge" button.
+
+## Resources
+
+- [How to Contribute to Open Source](https://opensource.guide/how-to-contribute/)
+- [Using Pull Requests](https://help.github.com/articles/about-pull-requests/)
+- [GitHub Help](https://help.github.com)

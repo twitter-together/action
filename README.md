@@ -15,6 +15,16 @@ This GitHub action uses files in order to send out tweets. You can utilize GitHu
 
 <!-- toc -->
 
+- [Setup](#setup)
+- [Contribute](#contribute)
+- [How it works](#how-it-works)
+  * [The `push` event](#the-push-event)
+  * [The `pull_request` event](#the-pull_request-event)
+- [Motivation](#motivation)
+- [License](#license)
+
+<!-- tocstop -->
+
 ## Setup
 
 1. Create a `.github/main.workflow` file with the content below (switch to the <kbd>`<> Edit new file`</kbd> tab to enter the code):
