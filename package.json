@@ -4,6 +4,7 @@
   "description": "A GitHub action to tweet together using pull requests",
   "main": "index.js",
   "scripts": {
+    "coverage": "nyc report --reporter=html && open coverage/index.html",
     "test": "tap --coverage test/*/test.js",
     "posttest": "standard"
   },
