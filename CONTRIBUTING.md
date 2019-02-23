@@ -1,0 +1,39 @@
+# Contributing
+
+Please note that this project is released with a [Contributor Code of Conduct](CODE_OF_CONDUCT.md). By participating in this project you agree to abide by its terms.
+
+<!-- toc -->
+
+## Have a question? Found a bug? Have an idea?
+
+Please [create an issue](https://github.com/gr2m/twitter-together/issues/new/choose).
+
+I love pull requests 😍 but before you put in too much time I’d appreciate if you created an issue first to make sure that it is an actual issue.
+
+## Submitting the Pull Request
+
+If you would like to contribute a bug fix or new feature (after discussing in an issue), please add tests.
+
+Each test is a folder such as [`test/push-master-has-tweet`](https://github.com/gr2m/twitter-together/tree/master/test/push-master-has-tweet). You can either adapt one of the existing tests or create a new folder by copying it.
+
+Each folder has a `test.js` file which runs the test, an `event.json` file which has the payload for the event you want to simulate and any other files that simulate a certain state a repository would be in.
+
+You can run the tests using `npm test`. You can run a single test using `npx tap test/<your folder here>`.
+
+## Merging the Pull Request & releasing a new version
+
+Releases are automated using [semantic-release](https://github.com/semantic-release/semantic-release).
+The following commit message conventions determine which version is released:
+
+1. `fix: ...` or `fix(scope name): ...` prefix in subject: bumps fix version, e.g. `1.2.3` → `1.2.4`
+2. `feat: ...` or `feat(scope name): ...` prefix in subject: bumps feature version, e.g. `1.2.3` → `1.3.0`
+3. `BREAKING CHANGE: ` in body: bumps breaking version, e.g. `1.2.3` → `2.0.0`
+
+Only one version number is bumped at a time, the highest version change trumps the others.
+Besides publishing a new version to npm, semantic-release also creates a git tag and release
+on GitHub, generates changelogs from the commit messages and puts them into the release notes.
+
+Before the publish it runs the `npm run build` script which generates type definitions for Typescript based on the [templates](scripts/templates/).
+The script also generates the API docs. After the publish, the API docs are automatically pushed to the `gh-pages` branch which updates the documentation at  [octokit.github.io/rest.js](https://octokit.github.io/rest.js).
+
+If the pull request looks good but does not follow the commit conventions, use the "Squash & merge" button.

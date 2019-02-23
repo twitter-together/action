@@ -16,6 +16,7 @@ You can use subfolders, e.g. `tweets/2019-02/hello-world.tweet`, as long as the 
 
 - Only newly created files are handled, deletions, updates or renames are ignored.
 - `*.tweet` files will not be created for tweets you send out directly from twitter.com
+- If you need to rename an existing tweet file, please do so locally using [`git mv old_filename new_filename`](https://help.github.com/en/articles/renaming-a-file-using-the-command-line), otherwise it may occure as deleted and added which would trigger a new tweet.
 
 ## Questions?
 

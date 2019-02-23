@@ -7,41 +7,72 @@
 
 <p align="center">A GitHub action to tweet together using pull requests</p>
 
-Bigger open source projects often time have their own twitter accounts. And more often than not, nobody is using it out of fear to say something that would upset the other maintainers.
+Shared twitter accounts are challenging. More often than not, nobody is using it out of fear to say something that would upset fellow maintainers.
 
 `twitter-together` to the rescue!
 
-This GitHub action uses files in order to send out tweets. Because of that, you can utilize GitHub’s pull request reviews to create drafts and discuss with fellow maintainers and others before sending out a tweet.
+This GitHub action uses files in order to send out tweets. You can utilize GitHub’s pull request reviews to create drafts and discuss before sending out a tweet. Even external people can contribute a tweet, just like they can contribute code.
 
-An example workflow looks like this (switch to the <kbd>`<> Edit new file`</kbd> tab when creating a new workflow and paste the code below):
+<!-- toc -->
 
-```workflow
-workflow "Tweet on push to master" {
-  on = "push"
-  resolves = ["Tweet"]
-}
+## Setup
 
-action "Tweet" {
-  uses = "gr2m/twitter-together@master"
-  secrets = ["GITHUB_TOKEN", "TWITTER_CONSUMER_KEY", "TWITTER_CONSUMER_SECRET", "TWITTER_ACCESS_TOKEN", "TWITTER_ACCESS_SECRET"]
-}
+1. Create a `.github/main.workflow` file with the content below (switch to the <kbd>`<> Edit new file`</kbd> tab to enter the code):
 
-# "push" event won’t work on forks, hence the 2nd workflow with "pull_request"
+  ```workflow
+  workflow "Tweet on push to main branch" {
+    on = "push"
+    resolves = ["Tweet"]
+  }
 
-workflow "Preview and validate tweets on pull requests" {
-  on = "pull_request"
-  resolves = ["Preview"]
-}
+  action "Tweet" {
+    uses = "gr2m/twitter-together@master"
+    secrets = ["GITHUB_TOKEN", "TWITTER_CONSUMER_KEY", "TWITTER_CONSUMER_SECRET", "TWITTER_ACCESS_TOKEN", "TWITTER_ACCESS_SECRET"]
+  }
 
-action "Preview" {
-  uses = "gr2m/twitter-together@master"
-  secrets = ["GITHUB_TOKEN"]
-}
-```
+  # "push" event won’t work on forks, hence the 2nd workflow with "pull_request"
 
-In order to get the `TWITTER_*` credentials, you need to create a twitter app with the account you want to tweet from. You can do that at https://apps.twitter.com/. The twitter app needs read and write permissions, all other configurations are irrelevant. Once you created the app, you find the credentials in the  <kbd>`Keys and tokens`</kbd>  tab.
+  workflow "Preview and validate tweets on pull requests" {
+    on = "pull_request"
+    resolves = ["Preview"]
+  }
 
-Besides creating the `.github/main.workflow` file you will also need to create a `tweets/` folder. I recommend to create a `tweets/README.md` file explaining how others can submit a tweet. You can copy this repository’s [`tweets/README.md`](tweets/README.md) file as a template.
+  action "Preview" {
+    uses = "gr2m/twitter-together@master"
+    secrets = ["GITHUB_TOKEN"]
+  }
+  ```
+
+2. In order to get the `TWITTER_*` credentials, you need to create a twitter app with the account you want to tweet from. You can do that at https://apps.twitter.com/. The twitter app needs read and write permissions, all other configurations are irrelevant. Once you created the app, you find the credentials in the  <kbd>`Keys and tokens`</kbd>  tab. Enter the values for `TWITTER_CONSUMER_KEY`, `TWITTER_CONSUMER_SECRET`, `TWITTER_ACCESS_TOKEN` and `TWITTER_ACCESS_SECRET` in your repository’s secrets Settings.
+
+3. After creating the `.github/main.workflow` or adding the workflows to your exiting ones, the `twitter-together` action will create a pull request which creates a `tweets/` folder with a `README.md` file in it. Merge it and follow its instructions to create your own tweet :)
+
+## Contribute
+
+All contributions welcome, [including tweets](tweets/), of course :) 
+
+See [CONTRIBUTING.md](CONTRIBUTING.md)
+
+## How it works
+
+`twitter-together` is using two workflows
+
+1. `push` event to publish new tweets
+2. `pull_request` event to validate and preview new tweets
+
+### The `push` event
+
+When triggered by the `push` event, we first make sure that the current branch is the repository’s main branch. After that we load the changed files and look for `*.tweet` files in the `tweets/` folder or subfolders. If there are any, we send out a tweet for each new tweet file.
+
+### The `pull_request` event
+
+For the `pull_request` event, we only handle `opened` and `synchronize` actions. First we check if the pull request’s base branch is the repository’s main branch. After that we load the changed files and look for `*.tweet` files in the `tweets/` folder or subfolders. If there are any, we validate the length of each tweet. If one is to long, a failed check run with an explanation is created. If all tweets are valid, a check run with a preview of all tweets is created.
+
+## Motivation
+
+I think we can make Open Source more inclusive to people with more diverse interests by making it easier to contribute other things than code and documentation. For example, ever since working on [Hoodie](http://hood.ie/intro/), I thought that there is a big opportunity to accept editorial contributions in Open Source projects if there were only better tools for it. That’s when the idea for a collaborative twitter account using a repository as its backend came up, that was around 2014-2015. Finally with GitHub Actions, it became fairly straight forward to make it real.
+
+I hope that you find the action useful and can’t wait to see for the first time when a project accepts a tweet from an external contributor. Please let me know if you use `twitter-together` in your project :)
 
 ## License
 
