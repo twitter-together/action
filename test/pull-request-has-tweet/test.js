@@ -72,4 +72,4 @@ process.on('exit', (code) => {
   tap.deepEqual(nock.pendingMocks(), [])
 })
 
-require('../..')
+require('../../lib')

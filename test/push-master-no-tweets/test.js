@@ -44,4 +44,4 @@ process.on('exit', (code) => {
   process.exitCode = 0
 })
 
-require('../..')
+require('../../lib')
