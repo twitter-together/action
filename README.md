@@ -27,7 +27,7 @@ This GitHub action uses files in order to send out tweets. You can utilize GitHu
 
 ## Setup
 
-1. Create a `.github/main.workflow` file with the content below (switch to the <kbd>`<> Edit new file`</kbd> tab to enter the code):
+1. In your repository, create a `.github/main.workflow` file with the content below (or add the content to your existing workflow)
 
   ```workflow
   workflow "Tweet on push to main branch" {
@@ -53,7 +53,7 @@ This GitHub action uses files in order to send out tweets. You can utilize GitHu
   }
   ```
 
-2. In order to get the `TWITTER_*` credentials, you need to create a twitter app with the account you want to tweet from. You can do that at https://apps.twitter.com/. The twitter app needs read and write permissions, all other configurations are irrelevant. Once you created the app, you find the credentials in the  <kbd>`Keys and tokens`</kbd>  tab. Enter the values for `TWITTER_CONSUMER_KEY`, `TWITTER_CONSUMER_SECRET`, `TWITTER_ACCESS_TOKEN` and `TWITTER_ACCESS_SECRET` in your repository’s secrets Settings.
+2. In order to get the `TWITTER_*` credentials, you need to [create a twitter app](https://apps.twitter.com) with the account you want to tweet from. The twitter app needs read and write permissions, all other configurations are irrelevant. Once you created the app, you find the credentials in the  <kbd>`Keys and tokens`</kbd>  tab. Enter the values for `TWITTER_CONSUMER_KEY`, `TWITTER_CONSUMER_SECRET`, `TWITTER_ACCESS_TOKEN` and `TWITTER_ACCESS_SECRET` in your repository’s secrets Settings.
 
 3. After creating the `.github/main.workflow` or adding the workflows to your exiting ones, the `twitter-together` action will create a pull request which creates a `tweets/` folder with a `README.md` file in it. Merge it and follow its instructions to create your own tweet :)
 
