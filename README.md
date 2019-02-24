@@ -4,23 +4,17 @@
 
 <h1 align="center">Twitter, together!</h1>
 
-<p align="center">A GitHub action to tweet together using pull requests</p>
-
 <p align="center">
   <a href="https://travis-ci.com/gr2m/twitter-together" rel="nofollow"><img alt="Build Status" src="https://travis-ci.com/gr2m/twitter-together.svg?token=SMJUtZjXxPL3JRiMCqHx&branch=master"></a>
   <a href="https://github.com/gr2m/twitter-together/blob/80c8aab34382347120e22501c2e44f30a7a62174/package.json#L8" rel="nofollow"><img alt="Coverage" src="https://img.shields.io/badge/coverage-100%25-green.svg"></a>
   <a href="https://greenkeeper.io/" rel="nofollow"><img src="https://badges.greenkeeper.io/gr2m/twitter-together.svg?token=fec4ee116d4210bb3f03e13bed6266d5fc8e8764def4f269753e522abfba3a19&ts=1550824957051"></a>
 </p>
 
+For Open Source or event maintainers that share a project twitter account, `twitter-together` is a GitHub Acction that utilizes text files to publish tweets from a GitHub repository. In opposite to tweeting directly, GitHub’s pull request review process encourages more twitter activity and editorial contributions by enabling everyone to submit tweet drafts to a project.
+
 <p align="center">
   <img src="assets/demo.gif" alt="Screencast demonstrating twitter-together" />
 </p>
-
-Shared twitter accounts are challenging. More often than not, nobody is using it out of fear to say something that would upset fellow maintainers.
-
-`twitter-together` to the rescue!
-
-This GitHub action uses files in order to send out tweets. You can utilize GitHub’s pull request reviews to create drafts and discuss before sending out a tweet. Even external people can contribute a tweet, just like they can contribute code.
 
 <!-- toc -->
 
@@ -34,43 +28,48 @@ This GitHub action uses files in order to send out tweets. You can utilize GitHu
 
 <!-- tocstop -->
 
+## Try it
+
+You can submit a tweet to this repository to see the magic happen. Please follow the instructions at [tweets/README.md](tweets/README.md) and add your own twitter username to the tweet. This repository is setup to tweet from [https://twitter.com/commit2tweet](https://twitter.com/commit2tweet).
+
 ## Setup
 
-1. In your repository, create a `.github/main.workflow` file with the content below (or add the content to your existing workflow)
+1. [Create a twitter](docs/01-create-twitter-app.md) app with your shared twitter account and store the credentials as `TWITTER_API_KEY`, `TWITTER_API_SECRET_KEY`, `TWITTER_ACCESS_TOKEN` and `TWITTER_ACCESS_TOKEN_SECRET` in your repository’s secrets settings.
+2. [Create a `.github/main.workflow` file](docs/02-create-main.workflow.md) or amend your existing one with the content below
 
-  ```workflow
-  workflow "Tweet on push to default branch" {
-    on = "push"
-    resolves = ["Tweet"]
-  }
+   ```workflow
+   workflow "Tweet on push to default branch" {
+     on = "push"
+     resolves = ["Tweet"]
+   }
+ 
+   action "Tweet" {
+     uses = "gr2m/twitter-together@master"
+     secrets = ["GITHUB_TOKEN", "TWITTER_API_KEY", "TWITTER_API_SECRET_KEY", "TWITTER_ACCESS_TOKEN",  "TWITTER_ACCESS_TOKEN_SECRET"]
+   }
+ 
+   # "push" event won’t work on forks, hence the 2nd workflow with "pull_request"
+   workflow "Preview and validate tweets on pull requests" {
+     on = "pull_request"
+     resolves = ["Preview"]
+   }
+ 
+   action "Preview" {
+     uses = "gr2m/twitter-together@master"
+     secrets = ["GITHUB_TOKEN"]
+   }
+   ```
+3. After creating or updating `.github/main.workflow` in your repository’s default branch, a pull request will be created with further instroctions.
 
-  action "Tweet" {
-    uses = "gr2m/twitter-together@master"
-    secrets = ["GITHUB_TOKEN", "TWITTER_CONSUMER_KEY", "TWITTER_CONSUMER_SECRET", "TWITTER_ACCESS_TOKEN", "TWITTER_ACCESS_SECRET"]
-  }
-
-  # "push" event won’t work on forks, hence the 2nd workflow with "pull_request"
-
-  workflow "Preview and validate tweets on pull requests" {
-    on = "pull_request"
-    resolves = ["Preview"]
-  }
-
-  action "Preview" {
-    uses = "gr2m/twitter-together@master"
-    secrets = ["GITHUB_TOKEN"]
-  }
-  ```
-
-2. In order to get the `TWITTER_*` credentials, you need to [create a twitter app](https://apps.twitter.com) with the account you want to tweet from. The twitter app needs read and write permissions, all other configurations are irrelevant. Once you created the app, you find the credentials in the  <kbd>`Keys and tokens`</kbd>  tab. Enter the values for `TWITTER_CONSUMER_KEY`, `TWITTER_CONSUMER_SECRET`, `TWITTER_ACCESS_TOKEN` and `TWITTER_ACCESS_SECRET` in your repository’s secrets Settings.
-
-3. After creating the `.github/main.workflow` or adding the workflows to your exiting ones, the `twitter-together` action will create a pull request which creates a `tweets/` folder with a `README.md` file in it. Merge it and follow its instructions to create your own tweet :)
+Happy collaborative tweeting! Please let me know how it works
 
 ## Contribute
 
-All contributions welcome, [including tweets](tweets/), of course :) 
+All contributions welcome!
 
-See [CONTRIBUTING.md](CONTRIBUTING.md)
+Especially if you try `twitter-together` for the first time, I’d love to hear if you run into any trouble. I greately appreciate any documentation improvements to make things more clear, I am not a native English speaker myself.
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for more information on how to contribute. You can also [just say thanks](https://github.com/gr2m/twitter-together/issues/new?labels=feature&template=04_thanks.md) 😊
 
 ## How it works
 
@@ -91,9 +90,9 @@ For the `pull_request` event, the script handles only `opened` and `synchronize`
 
 ## Motivation
 
-I think we can make Open Source more inclusive to people with more diverse interests by making it easier to contribute other things than code and documentation. For example, ever since working on [Hoodie](http://hood.ie/intro/), I thought that there is a big opportunity to accept editorial contributions in Open Source projects if there were only better tools for it. That’s when the idea for a collaborative twitter account using a repository as its backend came up, that was around 2014-2015. Finally with GitHub Actions, it became fairly straight forward to make it real.
+I think we can make Open Source more inclusive to people with more diverse interests by making it easier to contribute other things than code and documentation. I see a particularly big opportunity to be more welcoming towards editorial contributions using GitHub’s Acions, Apps and custom user interfaces backed by GitHub’s REST & GraphQL APIs.
 
-I hope that you find the action useful and can’t wait to see for the first time when a project accepts a tweet from an external contributor. Please let me know if you use `twitter-together` in your project :)
+I’ve plenty more ideas that I’d like to build out. Please ping me on twitter if you’d like to chat: [@gr2m](https://twitter.com/gr2m).
 
 ## License
 
