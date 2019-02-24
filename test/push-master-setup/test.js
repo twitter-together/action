@@ -15,13 +15,13 @@ process.env.GITHUB_TOKEN = 'secret123'
 process.env.GITHUB_EVENT_PATH = require.resolve('./event.json')
 process.env.GITHUB_REF = 'refs/heads/master'
 process.env.GITHUB_WORKSPACE = path.dirname(process.env.GITHUB_EVENT_PATH)
+process.env.GITHUB_SHA = '0000000000000000000000000000000000000002'
 
 // set other env variables so action-toolkit is happy
 process.env.GITHUB_WORKFLOW = ''
 process.env.GITHUB_ACTION = ''
 process.env.GITHUB_ACTOR = ''
 process.env.GITHUB_REPOSITORY = ''
-process.env.GITHUB_SHA = ''
 
 // MOCK
 nock('https://api.github.com', {
@@ -33,18 +33,6 @@ nock('https://api.github.com', {
   // check if twitter-together-setup branch exists
   .head('/repos/gr2m/twitter-together/git/refs/heads/twitter-together-setup')
   .reply(404)
-
-  // get last commit of default branch
-  .get('/repos/gr2m/twitter-together/commits')
-  .query({
-    sha: 'master',
-    per_page: 1
-  })
-  .reply(200, [
-    {
-      sha: '0000000000000000000000000000000000000002'
-    }
-  ])
 
   // Create the "twitter-together-setup" branch
   .post('/repos/gr2m/twitter-together/git/refs', body => {
