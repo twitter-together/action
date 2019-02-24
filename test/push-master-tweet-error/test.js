@@ -23,7 +23,12 @@ process.env.GITHUB_REPOSITORY = ''
 process.env.GITHUB_SHA = ''
 
 // MOCK
-nock('https://api.github.com')
+nock('https://api.github.com', {
+  reqheaders: {
+    authorization: 'token secret123'
+  }
+})
+
   // get changed files
   .get('/repos/gr2m/twitter-together/compare/0000000000000000000000000000000000000001...0000000000000000000000000000000000000002')
   .reply(200, {
@@ -34,6 +39,14 @@ nock('https://api.github.com')
       }
     ]
   })
+
+  // post comment
+  .post('/repos/gr2m/twitter-together/commits/0000000000000000000000000000000000000002/comments', body => {
+    console.log(body.body)
+    tap.equal(body.body, 'Errors:\n\n- Tweet needs to be a bit shorter.')
+    return true
+  })
+  .reply(201)
 
 nock('https://api.twitter.com')
   .post('/1.1/statuses/update.json')

@@ -23,7 +23,12 @@ process.env.GITHUB_REPOSITORY = ''
 process.env.GITHUB_SHA = ''
 
 // MOCK
-nock('https://api.github.com')
+nock('https://api.github.com', {
+  reqheaders: {
+    authorization: 'token secret123'
+  }
+})
+
   // get changed files
   .get('/repos/gr2m/twitter-together/compare/0000000000000000000000000000000000000001...0000000000000000000000000000000000000002')
   .reply(200, {
