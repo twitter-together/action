@@ -1,4 +1,4 @@
-workflow "Tweet on push to main branch" {
+workflow "Tweet on push to default branch" {
   on = "push"
   resolves = ["Tweet"]
 }
