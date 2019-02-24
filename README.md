@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://github.com/gr2m/twitter-together/issues/16"><img src="assets/logo.png" width="320" alt="twitter together logo" /></a>
+  <a href="https://github.com/gr2m/twitter-together/issues/16"><img src="assets/logo.png" width="150" alt="twitter together logo" /></a>
 </p>
 
 <h1 align="center">Twitter, together!</h1>
