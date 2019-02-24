@@ -12,6 +12,10 @@
   <a href="https://greenkeeper.io/" rel="nofollow"><img src="https://badges.greenkeeper.io/gr2m/twitter-together.svg?token=fec4ee116d4210bb3f03e13bed6266d5fc8e8764def4f269753e522abfba3a19&ts=1550824957051"></a>
 </p>
 
+<p align="center">
+  <img src="assets/demo.gif" alt="Screencast demonstrating twitter-together" />
+</p>
+
 Shared twitter accounts are challenging. More often than not, nobody is using it out of fear to say something that would upset fellow maintainers.
 
 `twitter-together` to the rescue!
@@ -35,7 +39,7 @@ This GitHub action uses files in order to send out tweets. You can utilize GitHu
 1. In your repository, create a `.github/main.workflow` file with the content below (or add the content to your existing workflow)
 
   ```workflow
-  workflow "Tweet on push to main branch" {
+  workflow "Tweet on push to default branch" {
     on = "push"
     resolves = ["Tweet"]
   }
