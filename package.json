@@ -2,7 +2,7 @@
   "name": "twitter-together",
   "version": "1.0.0",
   "description": "A GitHub action to tweet together using pull requests",
-  "main": "index.js",
+  "main": "lib/index.js",
   "scripts": {
     "coverage": "nyc report --reporter=html && open coverage/index.html",
     "test": "tap --100 test/*/test.js",
