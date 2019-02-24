@@ -15,4 +15,4 @@ RUN npm ci --only=production
 
 # start
 COPY lib .
-ENTRYPOINT ["node", "/lib/index.js"]
+ENTRYPOINT ["node", "/index.js"]
