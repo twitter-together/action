@@ -18,6 +18,7 @@ For Open Source or event maintainers that share a project twitter account, `twit
 
 <!-- toc -->
 
+- [Try it](#try-it)
 - [Setup](#setup)
 - [Contribute](#contribute)
 - [How it works](#how-it-works)
