@@ -29,34 +29,19 @@ nock('https://api.github.com')
   .reply(200, {
     files: [
       {
-        status: 'added',
+        status: 'updated',
         filename: 'tweets/hello-world.tweet'
       }
     ]
   })
 
-  // post comment
-  .post('/repos/gr2m/twitter-together/commits/0000000000000000000000000000000000000002/comments', body => {
-    tap.equal(body.body, 'Tweeted:\n\n- https://twitter.com/gr2m/status/0000000000000000001')
-    return true
-  })
-  .reply(201)
-
-nock('https://api.twitter.com')
-  .post('/1.1/statuses/update.json', body => {
-    tap.equal(body.status, 'Hello, world!')
-    return true
-  })
-  .reply(201, {
-    id_str: '0000000000000000001',
-    user: {
-      screen_name: 'gr2m'
-    }
-  })
-
 process.on('exit', (code) => {
-  tap.equal(code, 0)
+  tap.equal(code, 78)
   tap.deepEqual(nock.pendingMocks(), [])
+
+  // above code exits with 78 (neutral), but tap expects 0.
+  // Tap adds the "process.exitCode" property for that purpose.
+  process.exitCode = 0
 })
 
 require('../..')

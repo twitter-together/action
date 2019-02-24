@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "coverage": "nyc report --reporter=html && open coverage/index.html",
-    "test": "tap --coverage test/*/test.js",
+    "test": "tap --100 test/*/test.js",
     "posttest": "standard"
   },
   "keywords": [],
