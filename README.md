@@ -72,11 +72,13 @@ See [CONTRIBUTING.md](CONTRIBUTING.md)
 
 ### The `push` event
 
-When triggered by the `push` event, we first make sure that the current branch is the repository’s main branch. After that we load the changed files and look for `*.tweet` files in the `tweets/` folder or subfolders. If there are any, we send out a tweet for each new tweet file.
+When triggered by the `push` event, the script looks for new `*.tweet` files in the `tweets/` folder or subfolders. If there are any, a tweet for each new tweet file is published.
+
+If there is no `tweets/` subfolder, the scripts creates a pull request wich creates it with further instructions.
 
 ### The `pull_request` event
 
-For the `pull_request` event, we only handle `opened` and `synchronize` actions. First we check if the pull request’s base branch is the repository’s main branch. After that we load the changed files and look for `*.tweet` files in the `tweets/` folder or subfolders. If there are any, we validate the length of each tweet. If one is to long, a failed check run with an explanation is created. If all tweets are valid, a check run with a preview of all tweets is created.
+For the `pull_request` event, the script handles only `opened` and `synchronize` actions. It looks for new `*.tweet` files in the `tweets/` folder or subfolders. If there are any, the length of each tweet is validated. If one is to long, a failed check run with an explanation is created. If all tweets are valid, a check run with a preview of all tweets is created.
 
 ## Motivation
 
