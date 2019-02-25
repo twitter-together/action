@@ -31,7 +31,7 @@ For Open Source or event maintainers that share a project twitter account, `twit
 
 ## Try it
 
-You can submit a tweet to this repository to see the magic happen. Please follow the instructions at [tweets/README.md](tweets/README.md) and add your own twitter username to the tweet. This repository is setup to tweet from [https://twitter.com/commit2tweet](https://twitter.com/commit2tweet).
+You can submit a tweet to this repository to see the magic happen. Please follow the instructions at [tweets/README.md](tweets/README.md) and mention your own twitter username to the tweet. This repository is setup to tweet from [https://twitter.com/commit2tweet](https://twitter.com/commit2tweet).
 
 ## Setup
 
@@ -62,13 +62,13 @@ You can submit a tweet to this repository to see the magic happen. Please follow
    ```
 3. After creating or updating `.github/main.workflow` in your repository’s default branch, a pull request will be created with further instructions.
 
-Happy collaborative tweeting! Please let me know how it works!
+Happy collaborative tweeting!
 
 ## Contribute
 
 All contributions welcome!
 
-Especially if you try `twitter-together` for the first time, I’d love to hear if you run into any trouble. I greately appreciate any documentation improvements to make things more clear, I am not a native English speaker myself.
+Especially if you try `twitter-together` for the first time, I’d love to hear if you ran into any trouble. I greately appreciate any documentation improvements to make things more clear, I am not a native English speaker myself.
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for more information on how to contribute. You can also [just say thanks](https://github.com/gr2m/twitter-together/issues/new?labels=feature&template=04_thanks.md) 😊
 
@@ -93,7 +93,7 @@ This project follows the [all-contributors](https://github.com/all-contributors/
 
 ### The `push` event
 
-When triggered by the `push` event, the script looks for new `*.tweet` files in the `tweets/` folder or subfolders. If there are any, a tweet for each new tweet file is published.
+When triggered by the `push` event, the script looks for added `*.tweet` files in the `tweets/` folder or subfolders. If there are any, a tweet for each added tweet file is published.
 
 If there is no `tweets/` subfolder, the scripts opens a pull request creating the folder with further instructions.
 
@@ -103,7 +103,7 @@ For the `pull_request` event, the script handles only `opened` and `synchronize`
 
 ## Motivation
 
-I think we can make Open Source more inclusive to people with more diverse interests by making it easier to contribute other things than code and documentation. I see a particularly big opportunity to be more welcoming towards editorial contributions using GitHub’s Acions, Apps and custom user interfaces backed by GitHub’s REST & GraphQL APIs.
+I think we can make Open Source more inclusive to people with more diverse interests by making it easier to contribute other things than code and documentation. I see a particularly big opportunity to be more welcoming towards editorial contributions by creating tools using GitHub’s Acions, Apps and custom user interfaces backed by GitHub’s REST & GraphQL APIs.
 
 I’ve plenty more ideas that I’d like to build out. Please ping me on twitter if you’d like to chat: [@gr2m](https://twitter.com/gr2m).
 
