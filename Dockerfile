@@ -1,8 +1,8 @@
 FROM node:alpine
 
 # A bunch of `LABEL` fields for GitHub to index
-LABEL "com.github.actions.name"="Tweet together"
-LABEL "com.github.actions.description"="Tweet together using repository files"
+LABEL "com.github.actions.name"="Twitter, together!"
+LABEL "com.github.actions.description"="Tweet from a repository"
 LABEL "com.github.actions.icon"="cast"
 LABEL "com.github.actions.color"="blue"
 LABEL "repository"="http://github.com/gr2m/twitter-together-action"
