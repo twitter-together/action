@@ -10,7 +10,7 @@
   <a href="https://greenkeeper.io/" rel="nofollow"><img src="https://badges.greenkeeper.io/gr2m/twitter-together.svg?token=fec4ee116d4210bb3f03e13bed6266d5fc8e8764def4f269753e522abfba3a19&ts=1550824957051"></a>
 </p>
 
-For Open Source or event maintainers that share a project twitter account, `twitter-together` is a GitHub Acction that utilizes text files to publish tweets from a GitHub repository. In opposite to tweeting directly, GitHub’s pull request review process encourages more twitter activity and editorial contributions by enabling everyone to submit tweet drafts to a project.
+For Open Source or event maintainers that share a project twitter account, `twitter-together` is a GitHub Action that utilizes text files to publish tweets from a GitHub repository. Rather than tweeting directly, GitHub’s pull request review process encourages more collaboration, Twitter activity and editorial contributions by enabling everyone to submit tweet drafts to a project.
 
 <p align="center">
   <img src="assets/demo.gif" alt="Screencast demonstrating twitter-together" />
@@ -60,9 +60,9 @@ You can submit a tweet to this repository to see the magic happen. Please follow
      secrets = ["GITHUB_TOKEN"]
    }
    ```
-3. After creating or updating `.github/main.workflow` in your repository’s default branch, a pull request will be created with further instroctions.
+3. After creating or updating `.github/main.workflow` in your repository’s default branch, a pull request will be created with further instructions.
 
-Happy collaborative tweeting! Please let me know how it works
+Happy collaborative tweeting! Please let me know how it works!
 
 ## Contribute
 
@@ -83,11 +83,11 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for more information on how to contribute
 
 When triggered by the `push` event, the script looks for new `*.tweet` files in the `tweets/` folder or subfolders. If there are any, a tweet for each new tweet file is published.
 
-If there is no `tweets/` subfolder, the scripts creates a pull request wich creates it with further instructions.
+If there is no `tweets/` subfolder, the scripts opens a pull request creating the folder with further instructions.
 
 ### The `pull_request` event
 
-For the `pull_request` event, the script handles only `opened` and `synchronize` actions. It looks for new `*.tweet` files in the `tweets/` folder or subfolders. If there are any, the length of each tweet is validated. If one is to long, a failed check run with an explanation is created. If all tweets are valid, a check run with a preview of all tweets is created.
+For the `pull_request` event, the script handles only `opened` and `synchronize` actions. It looks for new `*.tweet` files in the `tweets/` folder or subfolders. If there are any, the length of each tweet is validated. If one is too long, a failed check run with an explanation is created. If all tweets are valid, a check run with a preview of all tweets is created.
 
 ## Motivation
 
