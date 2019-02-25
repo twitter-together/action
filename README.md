@@ -1,4 +1,5 @@
 <p align="center">
+[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors)
   <a href="https://github.com/gr2m/twitter-together/issues/16"><img src="assets/logo.png" width="150" alt="twitter together logo" /></a>
 </p>
 
@@ -71,6 +72,18 @@ All contributions welcome!
 Especially if you try `twitter-together` for the first time, I’d love to hear if you run into any trouble. I greately appreciate any documentation improvements to make things more clear, I am not a native English speaker myself.
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for more information on how to contribute. You can also [just say thanks](https://github.com/gr2m/twitter-together/issues/new?labels=feature&template=04_thanks.md) 😊
+
+## Thanks to all contributors 💐
+
+Thanks goes to these wonderful people ([emoji key](https://github.com/all-contributors/all-contributors#emoji-key)):
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore -->
+| [<img src="https://avatars1.githubusercontent.com/u/10660468?v=4" width="100px;" alt="Jason Etcovitch"/><br /><sub><b>Jason Etcovitch</b></sub>](https://jasonet.co)<br />[🎨](#design-JasonEtco "Design") [📖](https://github.com/gr2m/twitter-together/commits?author=JasonEtco "Documentation") [💻](https://github.com/gr2m/twitter-together/commits?author=JasonEtco "Code") |
+| :---: |
+<!-- ALL-CONTRIBUTORS-LIST:END -->
+
+This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
 
 ## How it works
 
