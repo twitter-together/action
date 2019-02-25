@@ -6,11 +6,11 @@ You can create a twitter app for your twitter account at https://developer.twitt
 
 [![](twitter-01-create-an-app.png)](https://developer.twitter.com/en/apps)
 
+If you haven’t yet, you will be asked to apply for a Twitter developer account. See my answers below for reference. I’ve you’ve done that before, skip the next section and continue at [Create an app](#createanapp).
+
 ## Apply for a developer account
 
 ![](twitter-02-sign-up-for-developer-account.png)
-
-If you haven’t yet, you will be asked to apply for a Twitter developer account. Here are my answers for reference
 
 ### Who are you requesting access for?
 
