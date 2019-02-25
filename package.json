@@ -1,6 +1,6 @@
 {
   "name": "twitter-together",
-  "version": "1.0.0",
+  "version": "0.0.0-development",
   "description": "A GitHub action to tweet together using pull requests",
   "main": "lib/index.js",
   "scripts": {
@@ -20,6 +20,20 @@
   "devDependencies": {
     "nock": "^10.0.6",
     "standard": "^12.0.1",
-    "tap": "^12.5.3"
+    "tap": "^12.5.3",
+    "semantic-release": "^15.13.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gr2m/tweet-together.git"
+  },
+  "release": {
+    "prepare": [],
+    "verifyConditions": [
+      "@semantic-release/github"
+    ],
+    "publish": [
+      "@semantic-release/github"
+    ]
   }
 }
