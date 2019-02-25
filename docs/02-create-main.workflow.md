@@ -6,7 +6,7 @@ In your repository, open the Actions tab.
 
 ![](workflow-01-actions-tab.png)
 
-This should open the visual workflow editor. If it does not, it should say "Workflows defined in main.workflow" on top of the page. Press the "main.workflow" link.
+Press the <kbd>create a new workflow</kbd> button to open the visual workflow editor. If you don’t see the button, look for the "main.workflow" link.
 
 ![](workflow-02-visual-editor.png)
 
