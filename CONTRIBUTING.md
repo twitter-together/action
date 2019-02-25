@@ -37,11 +37,6 @@ The following commit message conventions determine which version is released:
 3. `BREAKING CHANGE: ` in body: bumps breaking version, e.g. `1.2.3` → `2.0.0`
 
 Only one version number is bumped at a time, the highest version change trumps the others.
-Besides publishing a new version to npm, semantic-release also creates a git tag and release
-on GitHub, generates changelogs from the commit messages and puts them into the release notes.
-
-Before the publish it runs the `npm run build` script which generates type definitions for Typescript based on the [templates](scripts/templates/).
-The script also generates the API docs. After the publish, the API docs are automatically pushed to the `gh-pages` branch which updates the documentation at  [octokit.github.io/rest.js](https://octokit.github.io/rest.js).
 
 If the pull request looks good but does not follow the commit conventions, use the "Squash & merge" button.
 
