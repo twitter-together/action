@@ -8,3 +8,14 @@ branches:
   only:
     - master
     - /^greenkeeper.*$/
+
+stages:
+  - test
+  - name: release
+    if: branch = master AND type IN (push)
+
+jobs:
+  include:
+    - stage: test
+    - stage: release
+      script: npx semantic-release
