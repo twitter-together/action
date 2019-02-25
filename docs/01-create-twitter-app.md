@@ -6,24 +6,6 @@ You can create a twitter app for your twitter account at https://developer.twitt
 
 [![](twitter-01-create-an-app.png)](https://developer.twitter.com/en/apps)
 
-<!-- toc -->
-
-- [Apply for a developer account](#apply-for-a-developer-account)
-  * [Who are you requesting access for?](#who-are-you-requesting-access-for)
-  * [Account name](#account-name)
-  * [Primary country of operation](#primary-country-of-operation)
-  * [What use case(s) are you interested in?](#what-use-cases-are-you-interested-in)
-  * [Describe in your own words what you are building](#describe-in-your-own-words-what-you-are-building)
-  * [Will your product, service, or analysis make Twitter content or derived information available to a government entity?](#will-your-product-service-or-analysis-make-twitter-content-or-derived-information-available-to-a-government-entity)
-- [Create an app](#create-an-app)
-  * [App name (required)](#app-name-required)
-  * [Application description (required)](#application-description-required)
-  * [Website URL (required)](#website-url-required)
-  * [Tell us how this app will be used (required)](#tell-us-how-this-app-will-be-used-required)
-- [Save credentials](#save-credentials)
-
-<!-- tocstop -->
-
 ## Apply for a developer account
 
 ![](twitter-02-sign-up-for-developer-account.png)
