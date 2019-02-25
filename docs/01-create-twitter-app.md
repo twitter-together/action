@@ -32,8 +32,8 @@ If you haven’t yet, you will be asked to apply for a Twitter developer account
 
 ### Who are you requesting access for?
 
-( ) I am requesting access for my organization
-(x) I am requesting access for my own personal use
+    ( ) I am requesting access for my organization
+    (x) I am requesting access for my own personal use
 
 ### Account name
 
@@ -45,17 +45,17 @@ When in doubt, select United States
 
 ### What use case(s) are you interested in?
 
-[ ] Academic research
-[ ] Advertising
-[ ] Audience analysis
-[ ] Chatbots and automation
-[ ] Consumer / end-user experience
-[ ] Engagement and customer service
-[x] Publish and curate Tweets
-[ ] Student project / Learning to code
-[ ] Topic analysis
-[ ] Trend and event detection
-[ ] Other
+    [ ] Academic research
+    [ ] Advertising
+    [ ] Audience analysis
+    [ ] Chatbots and automation
+    [ ] Consumer / end-user experience
+    [ ] Engagement and customer service
+    [x] Publish and curate Tweets
+    [ ] Student project / Learning to code
+    [ ] Topic analysis
+    [ ] Trend and event detection
+    [ ] Other
 
 ### Describe in your own words what you are building
 
