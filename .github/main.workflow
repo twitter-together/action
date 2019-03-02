@@ -36,3 +36,21 @@ action "npm test" {
   runs = "npm"
   args = "test"
 }
+
+workflow "Release" {
+  on = "push"
+  resolves = ["semantic-release"]
+}
+
+action "filter: master branch" {
+  needs = "npm test"
+  uses = "actions/bin/filter@master"
+  args = "branch master"
+}
+
+action "npx semantic-release" {
+  needs = "filter: master branch"
+  uses = "docker://node:alpine"
+  runs = "npx"
+  args = "semantic-release"
+}
