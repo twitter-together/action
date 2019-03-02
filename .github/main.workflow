@@ -39,7 +39,7 @@ action "npm test" {
 
 workflow "Release" {
   on = "push"
-  resolves = ["semantic-release"]
+  resolves = ["npx semantic-release"]
 }
 
 action "filter: master branch" {
