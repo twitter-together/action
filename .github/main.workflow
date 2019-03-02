@@ -53,4 +53,5 @@ action "npx semantic-release" {
   uses = "docker://node:alpine"
   runs = "npx"
   args = "semantic-release"
+  secrets = ["GITHUB_TOKEN"]
 }
