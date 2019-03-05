@@ -19,19 +19,42 @@ action "Preview" {
   secrets = ["GITHUB_TOKEN"]
 }
 
-workflow "Test" {
+workflow "Test on push" {
   on = "push"
-  resolves = ["npm test"]
+  resolves = ["npm test (push)"]
 }
 
-action "npm ci" {
+action "npm ci (push)" {
   uses = "docker://node:alpine"
   runs = "npm"
   args = "ci"
 }
 
-action "npm test" {
-  needs = "npm ci"
+action "npm test (push)" {
+  needs = "npm ci (push)"
+  uses = "docker://node:alpine"
+  runs = "npm"
+  args = "test"
+}
+
+workflow "Test on pull_request" {
+  on = "pull_request"
+  resolves = ["npm test (pull request)"]
+}
+
+action "checkout pull request" {
+  uses = "gr2m/git-checkout-pull-request-action@master"
+}
+
+action "npm ci (pull request)" {
+  needs = "checkout pull request"
+  uses = "docker://node:alpine"
+  runs = "npm"
+  args = "ci"
+}
+
+action "npm test (pull request)" {
+  needs = "npm ci (pull request)"
   uses = "docker://node:alpine"
   runs = "npm"
   args = "test"
@@ -43,7 +66,7 @@ workflow "Release" {
 }
 
 action "filter: master branch" {
-  needs = "npm test"
+  needs = "npm test (push)"
   uses = "actions/bin/filter@master"
   args = "branch master"
 }
