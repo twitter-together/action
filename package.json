@@ -5,7 +5,7 @@
   "main": "lib/index.js",
   "scripts": {
     "coverage": "nyc report --reporter=html && open coverage/index.html",
-    "test": "tap --100 test/*/test.js",
+    "test": "exit 1",
     "posttest": "standard"
   },
   "keywords": [],
