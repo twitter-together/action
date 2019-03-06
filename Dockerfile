@@ -14,5 +14,5 @@ COPY package*.json ./
 RUN npm ci --only=production
 
 # start
-COPY lib .
+COPY lib tweets/README.md ./
 ENTRYPOINT ["node", "/index.js"]
