@@ -10,6 +10,7 @@ const nock = require('nock')
 const tap = require('tap')
 
 // SETUP
+fs.promises.readFile = async () => fs.readFileSync('tweets/README.md')
 process.env.GITHUB_EVENT_NAME = 'push'
 process.env.GITHUB_TOKEN = 'secret123'
 process.env.GITHUB_EVENT_PATH = require.resolve('./event.json')
