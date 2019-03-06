@@ -13,6 +13,10 @@ LABEL "maintainer"="Gregor Martynus (https://github.com/gr2m)"
 COPY package*.json ./
 RUN npm ci --only=production
 
-# start
+# copy required files
 COPY lib .
+RUN mkdir tweets
+COPY tweets/README.md tweets/
+
+# start
 ENTRYPOINT ["node", "/index.js"]
