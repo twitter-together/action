@@ -10,6 +10,8 @@ If you haven’t yet, you will be asked to apply for a Twitter developer account
 
 ## Apply for a developer account
 
+You might be asked to add a phone number to your twitter account before proceeding. If the phone number is used in another account, it won’t let you use it again. But you can remove the phone number from the other account. You can change it back once your developer account was approved.
+
 ![](twitter-02-sign-up-for-developer-account.png)
 
 ### Who are you requesting access for?
