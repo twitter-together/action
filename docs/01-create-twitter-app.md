@@ -43,21 +43,21 @@ When in doubt, select United States
 
 ### Describe in your own words what you are building
 
-1. **What is the core use case, intent, or purpose for your use of Twitter's APIs?**
+#### 1. What is the core use case, intent, or purpose for your use of Twitter's APIs?
 
-	 This app will be used to publish tweets using the [twitter-together](https://github.com/gr2m/twitter-together/) GitHub Action. It allows to use a GitHub repository and pull request reviews as a workflow to collaboratively tweet from a shared twitter account.
+This app will be used to publish tweets using the [twitter-together](https://github.com/gr2m/twitter-together/) GitHub Action. It allows to use a GitHub repository and pull request reviews as a workflow to collaboratively tweet from a shared twitter account.
 
-2. **Do you intend to analyze Tweets, Twitter users, or their content? If so, share details about the analyses you plan to conduct and the methods or techniques you plan to use.**
+#### 2. Do you intend to analyze Tweets, Twitter users, or their content? If so, share details about the analyses you plan to conduct and the methods or techniques you plan to use.
 
-   No
+No
 
-3. **Does your use case involve Tweeting, Retweeting, or liking content? If so, share how you will interact with Twitter users or their content.**
+#### 3. Does your use case involve Tweeting, Retweeting, or liking content? If so, share how you will interact with Twitter users or their content.
 
-   Yes. This app will be used to publish tweets for this account. It might be used for retweeting in future. There are no plans for liking.
+Yes. This app will be used to publish tweets for this account. It might be used for retweeting in future. There are no plans for liking.
    
-4. **How will Twitter data be displayed to users of your solution? If you plan to display Twitter content off of Twitter, explain how and where Tweets and Twitter content will be displayed to users of your product or service. Will individual Tweets and Twitter content be displayed, or will information about Tweets or Twitter content be displayed in aggregate?**
+#### 4. How will Twitter data be displayed to users of your solution? If you plan to display Twitter content off of Twitter, explain how and where Tweets and Twitter content will be displayed to users of your product or service. Will individual Tweets and Twitter content be displayed, or will information about Tweets or Twitter content be displayed in aggregate?**
 
-   No twitter data will be displayed. The `twitter-together` GitHub action shows a preview of the tweet before it is published and becomes twitter data.
+No twitter data will be displayed. The `twitter-together` GitHub action shows a preview of the tweet before it is published and becomes twitter data.
    
 ### Will your product, service, or analysis make Twitter content or derived information available to a government entity?
    
