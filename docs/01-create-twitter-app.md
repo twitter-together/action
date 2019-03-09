@@ -75,7 +75,7 @@ Only 4 questions are required. Here are my answers for reference
 
 ### App name (required)
 
-twitter-together
+`<your twitter account name>-twitter-together`, e.g. `probot-twitter-together`
 
 ### Application description (required)
 
