@@ -95,7 +95,7 @@ This project follows the [all-contributors](https://github.com/all-contributors/
 
 When triggered by the `push` event, the script looks for added `*.tweet` files in the `tweets/` folder or subfolders. If there are any, a tweet for each added tweet file is published.
 
-If there is no `tweets/` subfolder, the scripts opens a pull request creating the folder with further instructions.
+If there is no `tweets/` subfolder, the script opens a pull request creating the folder with further instructions.
 
 ### The `pull_request` event
 
