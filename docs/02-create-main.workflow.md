@@ -1,4 +1,4 @@
-[back to README.md](../#setup)
+[back to README.md](../README.md/#setup)
 
 # Create a `.github/main.workflow` file
 
@@ -41,4 +41,4 @@ action "Preview" {
 
 Nearly done! Shortly after creating or updating `.github/main.workflow` in your repository’s default branch, a pull request will be created with further instructions.
 
-[back to README.md](../#setup)
+[back to README.md](../README.md/#setup)
