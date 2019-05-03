@@ -1,4 +1,4 @@
-[back to README.md](../#setup)
+[back to README.md](../README.md/#setup)
 
 # Create a twitter app
 
