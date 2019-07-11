@@ -19,7 +19,7 @@
   },
   "devDependencies": {
     "nock": "^10.0.6",
-    "standard": "^12.0.1",
+    "standard": "^13.0.1",
     "tap": "^14.0.0",
     "semantic-release": "^15.13.3"
   },
