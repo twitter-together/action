@@ -13,7 +13,7 @@
   "license": "MIT",
   "dependencies": {
     "actions-toolkit": "^2.0.0",
-    "parse-diff": "^0.5.1",
+    "parse-diff": "^0.6.0",
     "twitter": "^1.7.1",
     "twitter-text": "^3.0.0"
   },
