@@ -38,12 +38,11 @@ jobs:
           TWITTER_ACCESS_TOKEN_SECRET: ${{ secrets.TWITTER_ACCESS_TOKEN_SECRET }}
           TWITTER_API_KEY: ${{ secrets.TWITTER_API_KEY }}
           TWITTER_API_SECRET_KEY: ${{ secrets.TWITTER_API_SECRET_KEY }}
-
 ```
 
 ![](workflow-04-commit.png)
 
-To create the file, press the <kbd>Start commit</kbd> button.  You can optionally set a custom commit message, then press <kbd>Commit new file</kbd>.
+To create the file, press the <kbd>Start commit</kbd> button. You can optionally set a custom commit message, then press <kbd>Commit new file</kbd>.
 
 ---
 
