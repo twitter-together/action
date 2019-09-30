@@ -3,73 +3,78 @@
  * when the `tweets/` folder does not yet exist
  */
 
-const fs = require('fs')
-const path = require('path')
+const fs = require("fs");
+const path = require("path");
 
-const nock = require('nock')
-const tap = require('tap')
+const nock = require("nock");
+const tap = require("tap");
 
 // SETUP
-fs.promises.readFile = async () => fs.readFileSync('tweets/README.md')
-process.env.GITHUB_EVENT_NAME = 'push'
-process.env.GITHUB_TOKEN = 'secret123'
-process.env.GITHUB_EVENT_PATH = require.resolve('./event.json')
-process.env.GITHUB_REF = 'refs/heads/master'
-process.env.GITHUB_WORKSPACE = path.dirname(process.env.GITHUB_EVENT_PATH)
-process.env.GITHUB_SHA = '0000000000000000000000000000000000000002'
+fs.promises.readFile = async () => fs.readFileSync("tweets/README.md");
+process.env.GITHUB_EVENT_NAME = "push";
+process.env.GITHUB_TOKEN = "secret123";
+process.env.GITHUB_EVENT_PATH = require.resolve("./event.json");
+process.env.GITHUB_REF = "refs/heads/master";
+process.env.GITHUB_WORKSPACE = path.dirname(process.env.GITHUB_EVENT_PATH);
+process.env.GITHUB_SHA = "0000000000000000000000000000000000000002";
 
 // set other env variables so action-toolkit is happy
-process.env.GITHUB_WORKFLOW = ''
-process.env.GITHUB_ACTION = ''
-process.env.GITHUB_ACTOR = ''
-process.env.GITHUB_REPOSITORY = ''
+process.env.GITHUB_WORKFLOW = "";
+process.env.GITHUB_ACTION = "";
+process.env.GITHUB_ACTOR = "";
+process.env.GITHUB_REPOSITORY = "";
 
 // MOCK
-nock('https://api.github.com', {
+nock("https://api.github.com", {
   reqheaders: {
-    authorization: 'token secret123'
+    authorization: "token secret123"
   }
 })
-
   // check if twitter-together-setup branch exists
-  .head('/repos/gr2m/twitter-together/git/refs/heads/twitter-together-setup')
+  .head("/repos/gr2m/twitter-together/git/refs/heads/twitter-together-setup")
   .reply(404)
 
   // Create the "twitter-together-setup" branch
-  .post('/repos/gr2m/twitter-together/git/refs', body => {
-    tap.equal(body.ref, 'refs/heads/twitter-together-setup')
-    tap.equal(body.sha, '0000000000000000000000000000000000000002')
+  .post("/repos/gr2m/twitter-together/git/refs", body => {
+    tap.equal(body.ref, "refs/heads/twitter-together-setup");
+    tap.equal(body.sha, "0000000000000000000000000000000000000002");
 
-    return true
+    return true;
   })
   .reply(201)
 
   // Create tweets/README.md file
-  .put('/repos/gr2m/twitter-together/contents/tweets/README.md', body => {
-    tap.equal(body.content, fs.readFileSync('tweets/README.md').toString('base64'))
-    tap.equal(body.branch, 'twitter-together-setup')
-    tap.equal(body.message, 'twitter-together setup')
+  .put("/repos/gr2m/twitter-together/contents/tweets/README.md", body => {
+    tap.equal(
+      body.content,
+      fs.readFileSync("tweets/README.md").toString("base64")
+    );
+    tap.equal(body.branch, "twitter-together-setup");
+    tap.equal(body.message, "twitter-together setup");
 
-    return true
+    return true;
   })
   .reply(201)
 
   // Create pull request
-  .post('/repos/gr2m/twitter-together/pulls', body => {
-    tap.equal(body.title, '🐦 twitter-together setup')
-    tap.equal(body.body, 'This pull requests creates the `tweets/` folder where your `*.tweet` files go into. It also creates the `tweets/README.md` file with instructions. Enjoy!')
-    tap.equal(body.head, 'twitter-together-setup')
-    tap.equal(body.base, 'master')
+  .post("/repos/gr2m/twitter-together/pulls", body => {
+    tap.equal(body.title, "🐦 twitter-together setup");
+    tap.equal(
+      body.body,
+      "This pull requests creates the `tweets/` folder where your `*.tweet` files go into. It also creates the `tweets/README.md` file with instructions. Enjoy!"
+    );
+    tap.equal(body.head, "twitter-together-setup");
+    tap.equal(body.base, "master");
 
-    return true
+    return true;
   })
   .reply(201, {
-    html_url: 'https://github.com/gr2m/twitter-together/pull/123'
-  })
+    html_url: "https://github.com/gr2m/twitter-together/pull/123"
+  });
 
-process.on('exit', (code) => {
-  tap.equal(code, 0)
-  tap.deepEqual(nock.pendingMocks(), [])
-})
+process.on("exit", code => {
+  tap.equal(code, 0);
+  tap.deepEqual(nock.pendingMocks(), []);
+});
 
-require('../../lib')
+require("../../lib");

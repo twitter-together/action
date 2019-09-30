@@ -1,6 +1,6 @@
 # The tweets/ folder
 
-To create a new tweet create a new `*.tweet` file in this `tweets/` folder. 
+To create a new tweet create a new `*.tweet` file in this `tweets/` folder.
 
 <kbd>[Create new tweet](../../../new/master/?filename=tweets/<your-path>.tweet)</kbd>
 

@@ -6,8 +6,10 @@
   "scripts": {
     "build": "ncc build lib/index.js -o dist",
     "coverage": "nyc report --reporter=html && open coverage/index.html",
+    "lint": "prettier --check '{lib,test}/**/*.js' 'docs/*.md' 'tweets/README.md' README.md package.json",
+    "lint:fix": "prettier --write '{lib,test}/**/*.js' 'docs/*.md' 'tweets/README.md' README.md package.json",
     "test": "tap --100 test/*/test.js",
-    "posttest": "standard"
+    "posttest": "npm run -s lint"
   },
   "keywords": [],
   "author": "",
@@ -22,8 +24,8 @@
     "@semantic-release/git": "^7.0.16",
     "@zeit/ncc": "^0.20.5",
     "nock": "^11.1.0",
+    "prettier": "^1.18.2",
     "semantic-release": "^15.13.3",
-    "standard": "^14.0.2",
     "tap": "^14.0.0"
   },
   "repository": {

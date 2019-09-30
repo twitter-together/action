@@ -54,13 +54,13 @@ No
 #### 3. Does your use case involve Tweeting, Retweeting, or liking content? If so, share how you will interact with Twitter users or their content.
 
 Yes. This app will be used to publish tweets for this account. It might be used for retweeting in future. There are no plans for liking.
-   
-#### 4. How will Twitter data be displayed to users of your solution? If you plan to display Twitter content off of Twitter, explain how and where Tweets and Twitter content will be displayed to users of your product or service. Will individual Tweets and Twitter content be displayed, or will information about Tweets or Twitter content be displayed in aggregate?**
+
+#### 4. How will Twitter data be displayed to users of your solution? If you plan to display Twitter content off of Twitter, explain how and where Tweets and Twitter content will be displayed to users of your product or service. Will individual Tweets and Twitter content be displayed, or will information about Tweets or Twitter content be displayed in aggregate?
 
 No twitter data will be displayed. The `twitter-together` GitHub action shows a preview of the tweet before it is published and becomes twitter data.
-   
+
 ### Will your product, service, or analysis make Twitter content or derived information available to a government entity?
-   
+
 No
 
 ---
@@ -97,12 +97,12 @@ Open your app’s "Keys and tokens" tab. In the "Access token & access token sec
 
 Now save the credentials into your repository’s "Secrets" settings as follows
 
-| Twitter Credential name | GitHub Secret name |
-| - | - |
-| API key | `TWITTER_API_KEY` |
-| API secret key | `TWITTER_API_SECRET_KEY` |
-| Access token | `TWITTER_ACCESS_TOKEN` |
-| Access token secret | `TWITTER_ACCESS_TOKEN_SECRET` |
+| Twitter Credential name | GitHub Secret name            |
+| ----------------------- | ----------------------------- |
+| API key                 | `TWITTER_API_KEY`             |
+| API secret key          | `TWITTER_API_SECRET_KEY`      |
+| Access token            | `TWITTER_ACCESS_TOKEN`        |
+| Access token secret     | `TWITTER_ACCESS_TOKEN_SECRET` |
 
 ![](twitter-05-repository-secrets.png)
 

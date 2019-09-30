@@ -22,8 +22,8 @@ For Open Source or event maintainers that share a project twitter account, `twit
 - [Setup](#setup)
 - [Contribute](#contribute)
 - [How it works](#how-it-works)
-  * [The `push` event](#the-push-event)
-  * [The `pull_request` event](#the-pull_request-event)
+  - [The `push` event](#the-push-event)
+  - [The `pull_request` event](#the-pull_request-event)
 - [Motivation](#motivation)
 - [License](#license)
 
@@ -39,31 +39,31 @@ You can submit a tweet to this repository to see the magic happen. Please follow
 2. [Create a `.github/workflows/twitter-together.yml` file](docs/02-create-twitter-together-workflow.md) or amend your existing one with the content below
 
    ```yml
-     on: [push, pull_request]
-     name: Twitter, together!
-     jobs:
-       preview:
-         name: Preview
-         runs-on: ubuntu-latest
-         steps:
-           - uses: actions/checkout@master
-           - name: Preview
-             uses: ./
-             env:
-               GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-       tweet:
-         name: Tweet
-         runs-on: ubuntu-latest
-         steps:
-           - uses: actions/checkout@master
-           - name: Tweet
-             uses: ./
-             env:
-               GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-               TWITTER_ACCESS_TOKEN: ${{ secrets.TWITTER_ACCESS_TOKEN }}
-               TWITTER_ACCESS_TOKEN_SECRET: ${{ secrets.TWITTER_ACCESS_TOKEN_SECRET }}
-               TWITTER_API_KEY: ${{ secrets.TWITTER_API_KEY }}
-               TWITTER_API_SECRET_KEY: ${{ secrets.TWITTER_API_SECRET_KEY }}
+   on: [push, pull_request]
+   name: Twitter, together!
+   jobs:
+     preview:
+       name: Preview
+       runs-on: ubuntu-latest
+       steps:
+         - uses: actions/checkout@master
+         - name: Preview
+           uses: ./
+           env:
+             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+     tweet:
+       name: Tweet
+       runs-on: ubuntu-latest
+       steps:
+         - uses: actions/checkout@master
+         - name: Tweet
+           uses: ./
+           env:
+             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+             TWITTER_ACCESS_TOKEN: ${{ secrets.TWITTER_ACCESS_TOKEN }}
+             TWITTER_ACCESS_TOKEN_SECRET: ${{ secrets.TWITTER_ACCESS_TOKEN_SECRET }}
+             TWITTER_API_KEY: ${{ secrets.TWITTER_API_KEY }}
+             TWITTER_API_SECRET_KEY: ${{ secrets.TWITTER_API_SECRET_KEY }}
    ```
 
 3. After creating or updating `.github/workflows/twitter-together.yml` in your repository’s default branch, a pull request will be created with further instructions.
