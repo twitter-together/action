@@ -1,0 +1,5 @@
+name: Twitter, together!
+description: "Collaborate on tweets just like you collaborate on code, using pull requests"
+runs:
+  using: "node12"
+  main: "dist/index.js"

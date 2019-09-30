@@ -5,7 +5,7 @@
 <h1 align="center">Twitter, together!</h1>
 
 <p align="center">
-  <a href="https://action-badges.now.sh" rel="nofollow"><img alt="Build Status" src="https://action-badges.now.sh/gr2m/twitter-together?workflow=Test"></a>
+  <a href="https://action-badges.now.sh" rel="nofollow"><img alt="Build Status" src="https://github.com/gr2m/twitter-together/workflows/Test/badge.svg"></a>
   <a href="https://github.com/gr2m/twitter-together/blob/80c8aab34382347120e22501c2e44f30a7a62174/package.json#L8" rel="nofollow"><img alt="Coverage" src="https://img.shields.io/badge/coverage-100%25-green.svg"></a>
   <a href="https://greenkeeper.io/" rel="nofollow"><img src="https://badges.greenkeeper.io/gr2m/twitter-together.svg?token=fec4ee116d4210bb3f03e13bed6266d5fc8e8764def4f269753e522abfba3a19&ts=1550824957051"></a>
 </p>
@@ -36,31 +36,37 @@ You can submit a tweet to this repository to see the magic happen. Please follow
 ## Setup
 
 1. [Create a twitter](docs/01-create-twitter-app.md) app with your shared twitter account and store the credentials as `TWITTER_API_KEY`, `TWITTER_API_SECRET_KEY`, `TWITTER_ACCESS_TOKEN` and `TWITTER_ACCESS_TOKEN_SECRET` in your repository’s secrets settings.
-2. [Create a `.github/main.workflow` file](docs/02-create-main.workflow.md) or amend your existing one with the content below
+2. [Create a `.github/workflows/twitter-together.yml` file](docs/02-create-twitter-together-workflow.md) or amend your existing one with the content below
 
-   ```workflow
-   workflow "Tweet on push to default branch" {
-     on = "push"
-     resolves = ["Tweet"]
-   }
- 
-   action "Tweet" {
-     uses = "gr2m/twitter-together@master"
-     secrets = ["GITHUB_TOKEN", "TWITTER_API_KEY", "TWITTER_API_SECRET_KEY", "TWITTER_ACCESS_TOKEN",  "TWITTER_ACCESS_TOKEN_SECRET"]
-   }
- 
-   # "push" event won’t work on forks, hence the 2nd workflow with "pull_request"
-   workflow "Preview and validate tweets on pull requests" {
-     on = "pull_request"
-     resolves = ["Preview"]
-   }
- 
-   action "Preview" {
-     uses = "gr2m/twitter-together@master"
-     secrets = ["GITHUB_TOKEN"]
-   }
+   ```yml
+     on: [push, pull_request]
+     name: Twitter, together!
+     jobs:
+       preview:
+         name: Preview
+         runs-on: ubuntu-latest
+         steps:
+           - uses: actions/checkout@master
+           - name: Preview
+             uses: ./
+             env:
+               GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+       tweet:
+         name: Tweet
+         runs-on: ubuntu-latest
+         steps:
+           - uses: actions/checkout@master
+           - name: Tweet
+             uses: ./
+             env:
+               GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+               TWITTER_ACCESS_TOKEN: ${{ secrets.TWITTER_ACCESS_TOKEN }}
+               TWITTER_ACCESS_TOKEN_SECRET: ${{ secrets.TWITTER_ACCESS_TOKEN_SECRET }}
+               TWITTER_API_KEY: ${{ secrets.TWITTER_API_KEY }}
+               TWITTER_API_SECRET_KEY: ${{ secrets.TWITTER_API_SECRET_KEY }}
    ```
-3. After creating or updating `.github/main.workflow` in your repository’s default branch, a pull request will be created with further instructions.
+
+3. After creating or updating `.github/workflows/twitter-together.yml` in your repository’s default branch, a pull request will be created with further instructions.
 
 Happy collaborative tweeting!
 

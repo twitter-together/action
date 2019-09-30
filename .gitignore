@@ -1,4 +1,5 @@
 .env
 .nyc_output
-coverage
+coverage/
+dist/
 node_modules/
