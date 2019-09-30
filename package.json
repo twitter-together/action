@@ -4,6 +4,7 @@
   "description": "A GitHub action to tweet together using pull requests",
   "main": "lib/index.js",
   "scripts": {
+    "build": "ncc build lib/index.js -o dist",
     "coverage": "nyc report --reporter=html && open coverage/index.html",
     "test": "tap --100 test/*/test.js",
     "posttest": "standard"
@@ -18,21 +19,30 @@
     "twitter-text": "^3.0.0"
   },
   "devDependencies": {
+    "@semantic-release/git": "^7.0.16",
+    "@zeit/ncc": "^0.20.5",
     "nock": "^11.1.0",
+    "semantic-release": "^15.13.3",
     "standard": "^14.0.2",
-    "tap": "^14.0.0",
-    "semantic-release": "^15.13.3"
+    "tap": "^14.0.0"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/gr2m/tweet-together.git"
   },
   "release": {
-    "prepare": [],
-    "verifyConditions": [
-      "@semantic-release/github"
-    ],
-    "publish": [
+    "plugins": [
+      "@semantic-release/commit-analyzer",
+      "@semantic-release/release-notes-generator",
+      [
+        "@semantic-release/git",
+        {
+          "assets": [
+            "dist/index.js"
+          ],
+          "message": "build(release): compiled action for ${nextRelease.version}\n\n[skip ci]"
+        }
+      ],
       "@semantic-release/github"
     ]
   }
