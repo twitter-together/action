@@ -108,4 +108,4 @@ Now save the credentials into your repository’s "Secrets" settings as follows
 
 ---
 
-next: [Create a `.github/main.workflow` file](02-create-main.workflow.md)
+next: [Create a `.github/workflows/twitter-together.yml` file](02-create-twitter-together-workflow.md)
