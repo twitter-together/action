@@ -44,6 +44,7 @@ You can submit a tweet to this repository to see the magic happen. Please follow
    jobs:
      preview:
        name: Preview
+       if: github.event_name == 'pull_request'
        runs-on: ubuntu-latest
        steps:
          - uses: actions/checkout@master
@@ -53,6 +54,7 @@ You can submit a tweet to this repository to see the magic happen. Please follow
              GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
      tweet:
        name: Tweet
+       if: github.event_name == 'push' && github.ref == 'master'
        runs-on: ubuntu-latest
        steps:
          - uses: actions/checkout@master
@@ -65,6 +67,8 @@ You can submit a tweet to this repository to see the magic happen. Please follow
              TWITTER_API_KEY: ${{ secrets.TWITTER_API_KEY }}
              TWITTER_API_SECRET_KEY: ${{ secrets.TWITTER_API_SECRET_KEY }}
    ```
+
+   If your repository's default branch is not `master`, then replace the `'master'` on line 6 with your repository's default branch.
 
 3. After creating or updating `.github/workflows/twitter-together.yml` in your repository’s default branch, a pull request will be created with further instructions.
 

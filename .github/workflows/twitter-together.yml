@@ -3,6 +3,7 @@ name: Twitter, together!
 jobs:
   preview:
     name: Preview
+    if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
@@ -14,6 +15,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   tweet:
     name: Tweet
+    if: github.event_name == 'push' && github.ref == 'master'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
