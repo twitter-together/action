@@ -62,7 +62,7 @@ nock("https://api.github.com", {
   }
 })
   .post("/repos/gr2m/twitter-together/check-runs", body => {
-    tap.equal(body.name, "twitter-together");
+    tap.equal(body.name, "Preview");
     tap.equal(body.head_sha, "0000000000000000000000000000000000000002");
     tap.equal(body.status, "completed");
     tap.equal(body.conclusion, "failure");

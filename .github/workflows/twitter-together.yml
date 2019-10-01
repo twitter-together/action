@@ -5,8 +5,7 @@
 on: [push, pull_request]
 name: Twitter, together!
 jobs:
-  preview:
-    name: Preview
+  createPreview:
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     steps:
