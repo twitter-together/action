@@ -3,6 +3,7 @@
  * when the `tweets/` folder does not yet exist
  */
 
+const assert = require("assert");
 const fs = require("fs");
 const path = require("path");
 
@@ -20,7 +21,7 @@ process.env.GITHUB_SHA = "0000000000000000000000000000000000000002";
 
 // set other env variables so action-toolkit is happy
 process.env.GITHUB_WORKFLOW = "";
-process.env.GITHUB_ACTION = "";
+process.env.GITHUB_ACTION = "twitter-together";
 process.env.GITHUB_ACTOR = "";
 process.env.GITHUB_REPOSITORY = "";
 
@@ -73,8 +74,8 @@ nock("https://api.github.com", {
   });
 
 process.on("exit", code => {
-  tap.equal(code, 0);
-  tap.deepEqual(nock.pendingMocks(), []);
+  assert.equal(code, 0);
+  assert.deepEqual(nock.pendingMocks(), []);
 });
 
 require("../../lib");

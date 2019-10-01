@@ -3,6 +3,7 @@
  * which includes a new *.tweet file.
  */
 
+const assert = require("assert");
 const path = require("path");
 
 const nock = require("nock");
@@ -17,7 +18,7 @@ process.env.GITHUB_WORKSPACE = path.dirname(process.env.GITHUB_EVENT_PATH);
 
 // set other env variables so action-toolkit is happy
 process.env.GITHUB_WORKFLOW = "";
-process.env.GITHUB_ACTION = "";
+process.env.GITHUB_ACTION = "twitter-together";
 process.env.GITHUB_ACTOR = "";
 process.env.GITHUB_REPOSITORY = "";
 process.env.GITHUB_SHA = "";
@@ -67,8 +68,8 @@ nock("https://api.twitter.com")
   });
 
 process.on("exit", code => {
-  tap.equal(code, 0);
-  tap.deepEqual(nock.pendingMocks(), []);
+  assert.equal(code, 0);
+  assert.deepEqual(nock.pendingMocks(), []);
 });
 
 require("../../lib");

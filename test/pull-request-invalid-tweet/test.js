@@ -2,6 +2,8 @@
  * This test checks the happy path of pull request adding a new *.tweet file
  */
 
+const assert = require("assert");
+
 const nock = require("nock");
 const tap = require("tap");
 
@@ -14,7 +16,7 @@ process.env.GITHUB_EVENT_PATH = require.resolve("./event.json");
 process.env.GITHUB_REF = "";
 process.env.GITHUB_WORKSPACE = "";
 process.env.GITHUB_WORKFLOW = "";
-process.env.GITHUB_ACTION = "";
+process.env.GITHUB_ACTION = "twitter-together";
 process.env.GITHUB_ACTOR = "";
 process.env.GITHUB_REPOSITORY = "";
 process.env.GITHUB_SHA = "";
@@ -75,8 +77,8 @@ nock("https://api.github.com", {
   .reply(201);
 
 process.on("exit", code => {
-  tap.equal(code, 0);
-  tap.deepEqual(nock.pendingMocks(), []);
+  assert.equal(code, 0);
+  assert.deepEqual(nock.pendingMocks(), []);
 });
 
 require("../../lib");
