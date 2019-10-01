@@ -10,35 +10,7 @@ Press the <kbd>Setup a new workflow yourself</kbd> button to open the file edito
 
 ![](workflow-02-editor.png)
 
-In the filename input above the code area, replace `main.yml` with `twitter-together.yml`. Then replace the code below with the following
-
-```yml
-on: [push, pull_request]
-name: Twitter, together!
-jobs:
-  preview:
-    name: Preview
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@master
-      - name: Preview
-        uses: gr2m/twitter-together@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  tweet:
-    name: Tweet
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@master
-      - name: Tweet
-        uses: gr2m/twitter-together@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          TWITTER_ACCESS_TOKEN: ${{ secrets.TWITTER_ACCESS_TOKEN }}
-          TWITTER_ACCESS_TOKEN_SECRET: ${{ secrets.TWITTER_ACCESS_TOKEN_SECRET }}
-          TWITTER_API_KEY: ${{ secrets.TWITTER_API_KEY }}
-          TWITTER_API_SECRET_KEY: ${{ secrets.TWITTER_API_SECRET_KEY }}
-```
+In the filename input above the code area, replace `main.yml` with `twitter-together.yml`. Then replace the code below with the content of [this repository's `.github/workflows/twitter-together.yml` file](.github/workflows/twitter-together.yml). Make sure to replace `'master'` if you changed your repository's default branch.
 
 ![](workflow-04-commit.png)
 

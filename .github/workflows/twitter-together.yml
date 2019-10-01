@@ -1,3 +1,6 @@
+# NOTE: if you want to use this file as a template, make sure to replace 'master' in line 21
+# with your repository's default branch (in case you changed it to something other than 'master')
+
 on: [push, pull_request]
 name: Twitter, together!
 jobs:

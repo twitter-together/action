@@ -36,40 +36,7 @@ You can submit a tweet to this repository to see the magic happen. Please follow
 ## Setup
 
 1. [Create a twitter](docs/01-create-twitter-app.md) app with your shared twitter account and store the credentials as `TWITTER_API_KEY`, `TWITTER_API_SECRET_KEY`, `TWITTER_ACCESS_TOKEN` and `TWITTER_ACCESS_TOKEN_SECRET` in your repository’s secrets settings.
-2. [Create a `.github/workflows/twitter-together.yml` file](docs/02-create-twitter-together-workflow.md) or amend your existing one with the content below
-
-   ```yml
-   on: [push, pull_request]
-   name: Twitter, together!
-   jobs:
-     preview:
-       name: Preview
-       if: github.event_name == 'pull_request'
-       runs-on: ubuntu-latest
-       steps:
-         - uses: actions/checkout@master
-         - name: Preview
-           uses: ./
-           env:
-             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-     tweet:
-       name: Tweet
-       if: github.event_name == 'push' && github.ref == 'master'
-       runs-on: ubuntu-latest
-       steps:
-         - uses: actions/checkout@master
-         - name: Tweet
-           uses: ./
-           env:
-             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-             TWITTER_ACCESS_TOKEN: ${{ secrets.TWITTER_ACCESS_TOKEN }}
-             TWITTER_ACCESS_TOKEN_SECRET: ${{ secrets.TWITTER_ACCESS_TOKEN_SECRET }}
-             TWITTER_API_KEY: ${{ secrets.TWITTER_API_KEY }}
-             TWITTER_API_SECRET_KEY: ${{ secrets.TWITTER_API_SECRET_KEY }}
-   ```
-
-   If your repository's default branch is not `master`, then replace the `'master'` on line 6 with your repository's default branch.
-
+2. [Create a `.github/workflows/twitter-together.yml` file](docs/02-create-twitter-together-workflow.md). You can copy the content of [this repository's `.github/workflows/twitter-together.yml` file](.github/workflows/twitter-together.yml). Make sure to replace `'master'` if you changed your repository's default branch.
 3. After creating or updating `.github/workflows/twitter-together.yml` in your repository’s default branch, a pull request will be created with further instructions.
 
 Happy collaborative tweeting!
