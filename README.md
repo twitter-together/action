@@ -46,14 +46,14 @@ You can submit a tweet to this repository to see the magic happen. Please follow
        name: Preview
        if: github.event_name == 'pull_request'
        steps:
-         - uses: gr2m/twitter-together@v1
+         - uses: gr2m/twitter-together@v1.x
            env:
              GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
      tweet:
        name: Tweet
        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
        steps:
-         - uses: gr2m/twitter-together@v1
+         - uses: gr2m/twitter-together@v1.x
            env:
              GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
              TWITTER_ACCESS_TOKEN: ${{ secrets.TWITTER_ACCESS_TOKEN }}
