@@ -17,7 +17,7 @@
   "dependencies": {
     "@actions/core": "^1.1.1",
     "@octokit/auth-action": "^1.0.1",
-    "@octokit/core": "^1.1.0",
+    "@octokit/core": "^2.0.0",
     "actions-toolkit": "^2.0.0",
     "parse-diff": "^0.6.0",
     "twitter": "^1.7.1",
