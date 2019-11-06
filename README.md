@@ -44,6 +44,7 @@ You can submit a tweet to this repository to see the magic happen. Please follow
    jobs:
      preview:
        name: Preview
+       runs-on: ubuntu-latest
        if: github.event_name == 'pull_request'
        steps:
          - uses: gr2m/twitter-together@v1.x
@@ -51,6 +52,7 @@ You can submit a tweet to this repository to see the magic happen. Please follow
              GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
      tweet:
        name: Tweet
+       runs-on: ubuntu-latest
        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
        steps:
          - uses: gr2m/twitter-together@v1.x
