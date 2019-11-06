@@ -48,7 +48,10 @@ nock("https://api.github.com", {
 
   // Create tweets/README.md file
   .put("/repos/gr2m/twitter-together/contents/tweets/README.md", body => {
-    tap.equal(body.content, "contents of tweets/README.md".toString("base64"));
+    tap.equal(
+      body.content,
+      Buffer.from("contents of tweets/README.md").toString("base64")
+    );
     tap.equal(body.branch, "twitter-together-setup");
     tap.equal(body.message, "twitter-together setup");
 
