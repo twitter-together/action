@@ -35973,12 +35973,9 @@ module.exports = exports["default"];
 /***/ }),
 /* 801 */,
 /* 802 */
-/***/ (function(module, __unusedexports, __webpack_require__) {
+/***/ (function(module) {
 
 module.exports = setup;
-
-const fs = __webpack_require__(747).promises;
-const { resolve: pathResolve } = __webpack_require__(622);
 
 async function setup({ toolkit, octokit, payload, sha }) {
   toolkit.info('Checking if "twitter-together-setup" branch exists already');
@@ -36012,10 +36009,18 @@ async function setup({ toolkit, octokit, payload, sha }) {
   });
   toolkit.info('"twitter-together-setup" branch created');
 
-  // Create tweets/README.md file
-  // https://developer.github.com/v3/repos/contents/#create-a-file
-  const readmeContent = await fs.readFile(
-    __webpack_require__.ab + "README.md"
+  // Create tweets/README.md from same file in gr2m/twitter-together repo
+  // https://developer.github.com/v3/repos/contents/#create-a-file}
+  const { data: readmeContent } = await octokit.request(
+    "GET /repos/:owner/:repo/contents/:path",
+    {
+      mediaType: {
+        format: "raw"
+      },
+      owner: "gr2m",
+      repo: "twitter-together",
+      path: "tweets/README.md"
+    }
   );
   await octokit.request("PUT /repos/:owner/:repo/contents/:path", {
     owner: payload.repository.owner.login,
