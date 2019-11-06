@@ -4,14 +4,12 @@
  */
 
 const assert = require("assert");
-const fs = require("fs");
 const path = require("path");
 
 const nock = require("nock");
 const tap = require("tap");
 
 // SETUP
-fs.promises.readFile = async () => fs.readFileSync("tweets/README.md");
 process.env.GITHUB_EVENT_NAME = "push";
 process.env.GITHUB_TOKEN = "secret123";
 process.env.GITHUB_EVENT_PATH = require.resolve("./event.json");
@@ -44,12 +42,13 @@ nock("https://api.github.com", {
   })
   .reply(201)
 
+  // Read contents of tweets/README.md file in gr2m/twitter-together
+  .get("/repos/gr2m/twitter-together/contents/tweets/README.md")
+  .reply(200, "contents of tweets/README.md")
+
   // Create tweets/README.md file
   .put("/repos/gr2m/twitter-together/contents/tweets/README.md", body => {
-    tap.equal(
-      body.content,
-      fs.readFileSync("tweets/README.md").toString("base64")
-    );
+    tap.equal(body.content, "contents of tweets/README.md".toString("base64"));
     tap.equal(body.branch, "twitter-together-setup");
     tap.equal(body.message, "twitter-together setup");
 
