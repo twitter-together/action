@@ -36010,7 +36010,7 @@ async function setup({ toolkit, octokit, payload, sha }) {
   toolkit.info('"twitter-together-setup" branch created');
 
   // Create tweets/README.md from same file in gr2m/twitter-together repo
-  // https://developer.github.com/v3/repos/contents/#create-a-file}
+  // https://developer.github.com/v3/repos/contents/#get-contents
   const { data: readmeContent } = await octokit.request(
     "GET /repos/:owner/:repo/contents/:path",
     {
@@ -36022,11 +36022,12 @@ async function setup({ toolkit, octokit, payload, sha }) {
       path: "tweets/README.md"
     }
   );
+  // https://developer.github.com/v3/repos/contents/#create-or-update-a-file
   await octokit.request("PUT /repos/:owner/:repo/contents/:path", {
     owner: payload.repository.owner.login,
     repo: payload.repository.name,
     path: "tweets/README.md",
-    content: readmeContent.toString("base64"),
+    content: Buffer.from(readmeContent).toString("base64"),
     branch: "twitter-together-setup",
     message: "twitter-together setup"
   });
