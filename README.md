@@ -55,7 +55,10 @@ You can submit a tweet to this repository to see the magic happen. Please follow
        runs-on: ubuntu-latest
        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
        steps:
-         - uses: gr2m/twitter-together@v1.x
+         - name: checkout master
+           uses: actions/checkout@v2
+         - name: Tweet
+           uses: gr2m/twitter-together@v1.x
            env:
              GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
              TWITTER_ACCESS_TOKEN: ${{ secrets.TWITTER_ACCESS_TOKEN }}
