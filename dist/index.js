@@ -17432,7 +17432,7 @@ async function getNewTweets({ octokit, toolkit, payload }) {
     });
 
   toolkit.info(`New tweets found: ${newTweets.length}`);
-  return newTweets
+  return newTweets;
 }
 
 
@@ -36752,7 +36752,8 @@ async function handlePullRequest(state) {
   });
 
   const newTweets = await getNewTweets(state);
-  await createCheckRun(state, newTweets);
+  const response = await createCheckRun(state, newTweets);
+  toolkit.info(`check run created: ${response.data.html_url}`);
 }
 
 
