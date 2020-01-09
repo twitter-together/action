@@ -1,6 +1,6 @@
 [back to README.md](../README.md/#setup)
 
-# Create a `.github/main.workflow` file
+# Create a `.github/workflows/twitter-together.yml` file
 
 In your repository, open the Actions tab.
 
