@@ -62,12 +62,12 @@ nock("https://api.github.com", {
   }
 })
   .post("/repos/gr2m/twitter-together/check-runs", body => {
-    tap.equal(body.name, "twitter-together");
+    tap.equal(body.name, "preview");
     tap.equal(body.head_sha, "0000000000000000000000000000000000000002");
     tap.equal(body.status, "completed");
     tap.equal(body.conclusion, "failure");
     tap.deepEqual(body.output, {
-      title: "Preview: 1 tweet(s)",
+      title: "1 tweet(s)",
       summary:
         "### ❌ Invalid\n\n> Cupcake ipsum dolor sit amet chupa chups candy halvah I love. Apple pie gummi bears chupa chups jujubes I love cake jelly. Jelly candy canes pudding jujubes caramels sweet roll I love. Sweet fruitcake oat cake I love brownie sesame snaps apple pie lollipop. Pie dragée I love apple pie cotton candy candy chocolate bar.\n\nThe above tweet is 39 characters too long"
     });

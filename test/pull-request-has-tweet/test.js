@@ -59,12 +59,12 @@ index 0000000..0123456
 nock("https://api.github.com")
   // get changed files
   .post("/repos/gr2m/twitter-together/check-runs", body => {
-    tap.equal(body.name, "twitter-together");
+    tap.equal(body.name, "preview");
     tap.equal(body.head_sha, "0000000000000000000000000000000000000002");
     tap.equal(body.status, "completed");
     tap.equal(body.conclusion, "success");
     tap.deepEqual(body.output, {
-      title: "Preview: 1 tweet(s)",
+      title: "1 tweet(s)",
       summary: "### ✅ Valid\n\n> Hello, world!"
     });
 
