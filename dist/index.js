@@ -17419,7 +17419,7 @@ async function getNewTweets({ octokit, toolkit, payload }) {
     }
   );
 
-  return parseDiff(data)
+  const newTweets = parseDiff(data)
     .filter(file => file.new && /^tweets\/.*\.tweet$/.test(file.to))
     .map(file => {
       const text = file.chunks[0].changes
@@ -17430,6 +17430,9 @@ async function getNewTweets({ octokit, toolkit, payload }) {
         ...parseTweet(text)
       };
     });
+
+  toolkit.info(`New tweets found: ${newTweets.length}`);
+  return newTweets
 }
 
 
