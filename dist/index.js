@@ -7577,14 +7577,14 @@ function createCheckRun({ octokit, payload, startedAt }, newTweets) {
     },
     owner: payload.repository.owner.login,
     repo: payload.repository.name,
-    name: "twitter-together",
+    name: "preview",
     head_sha: payload.pull_request.head.sha,
     started_at: startedAt,
     completed_at: new Date().toISOString(),
     status: "completed",
     conclusion: allTweetsValid ? "success" : "failure",
     output: {
-      title: `Preview: ${newTweets.length} tweet(s)`,
+      title: `${newTweets.length} tweet(s)`,
       summary: newTweets
         .map(tweet => {
           const text = autoLink(tweet.text).replace(/(^|\n)/g, "$1> ");
