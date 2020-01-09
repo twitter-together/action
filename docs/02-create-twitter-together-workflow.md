@@ -18,6 +18,7 @@ name: Twitter, together!
 jobs:
   preview:
     name: Preview
+    runs-on: ubuntu-latest
     if: github.event_name == 'pull_request'
     steps:
       - uses: gr2m/twitter-together@v1.x
@@ -25,6 +26,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   tweet:
     name: Tweet
+    runs-on: ubuntu-latest
     if: github.event_name == 'push' && github.ref == 'refs/heads/master'
     steps:
       - name: checkout master
