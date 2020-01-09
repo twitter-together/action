@@ -47,6 +47,6 @@ To create the file, press the <kbd>Start commit</kbd> button. You can optionally
 
 ---
 
-Nearly done! Shortly after creating or updating `.github/main.workflow` in your repository’s default branch, a pull request will be created with further instructions.
+Nearly done! Shortly after creating or updating `.github/workflows/twitter-together.yml` in your repository’s default branch, a pull request will be created with further instructions.
 
 [back to README.md](../README.md/#setup)
