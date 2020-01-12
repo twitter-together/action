@@ -1,0 +1,20 @@
+{
+  "action": "opened",
+  "pull_request": {
+    "number": 123,
+    "base": {
+      "ref": "master"
+    },
+    "head": {
+      "sha": "0000000000000000000000000000000000000002"
+    }
+  },
+  "repository": {
+    "default_branch": "master",
+    "name": "twitter-together",
+    "owner": {
+      "login": "gr2m"
+    },
+    "fork": true
+  }
+}
