@@ -6,7 +6,10 @@
       "ref": "master"
     },
     "head": {
-      "sha": "0000000000000000000000000000000000000002"
+      "sha": "0000000000000000000000000000000000000002",
+      "repo": {
+        "fork": true
+      }
     }
   },
   "repository": {
@@ -14,7 +17,6 @@
     "name": "twitter-together",
     "owner": {
       "login": "gr2m"
-    },
-    "fork": true
+    }
   }
 }
