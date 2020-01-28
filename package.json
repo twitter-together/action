@@ -15,7 +15,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@actions/core": "^1.1.1",
+    "@actions/core": "1.2.1",
     "@octokit/action": "^1.0.3",
     "actions-toolkit": "^2.0.0",
     "parse-diff": "^0.6.0",
