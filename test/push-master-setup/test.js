@@ -62,9 +62,9 @@ nock("https://api.github.com", {
   // Create pull request
   .post("/repos/gr2m/twitter-together/pulls", body => {
     tap.equal(body.title, "🐦 twitter-together setup");
-    tap.equal(
+    tap.match(
       body.body,
-      "This pull requests creates the `tweets/` folder where your `*.tweet` files go into. It also creates the `tweets/README.md` file with instructions. Enjoy!"
+      /This pull requests creates the `tweets\/` folder where your `\*\.tweet` files go into/
     );
     tap.equal(body.head, "twitter-together-setup");
     tap.equal(body.base, "master");
