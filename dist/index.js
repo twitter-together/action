@@ -7610,28 +7610,41 @@ The above tweet is ${tweet.weightedLength - 280} characters too long`);
       conclusion: allTweetsValid ? "success" : "failure",
       output: {
         title: `${newTweets.length} tweet(s)`,
-        summary: newTweets
-          .map(tweet => {
-            const text = autoLink(tweet.text).replace(/(^|\n)/g, "$1> ");
-
-            if (tweet.valid) {
-              return `### ✅ Valid
-
-${text}`;
-            }
-
-            return `### ❌ Invalid
-
-${text}
-
-The above tweet is ${tweet.weightedLength - 280} characters too long`;
-          })
-          .join("\n\n---\n\n")
+        summary: newTweets.map(tweetToCheckRunSummary).join("\n\n---\n\n")
       }
     }
   );
 
   toolkit.info(`check run created: ${response.data.html_url}`);
+}
+
+function tweetToCheckRunSummary(tweet) {
+  let text = autoLink(tweet.text).replace(/(^|\n)/g, "$1> ");
+
+  if (tweet.poll && (tweet.poll.length < 2 || tweet.poll.length > 4)) {
+    return `### ❌ Invalid
+
+${text}
+
+The tweet includes a poll, but it has ${tweet.poll.length} options. A poll must have 2-4 options.`;
+  }
+
+  if (tweet.poll) {
+    text +=
+      "\n\nThe tweet includes a poll:\n\n> 🔘 " + tweet.poll.join("\n> 🔘 ");
+  }
+
+  if (tweet.valid) {
+    return `### ✅ Valid
+
+${text}`;
+  }
+
+  return `### ❌ Invalid
+
+${text}
+
+The above tweet is ${tweet.weightedLength - 280} characters too long`;
 }
 
 
@@ -16551,7 +16564,46 @@ Fingerprint._oldVersionDetect = function (obj) {
 
 
 /***/ }),
-/* 401 */,
+/* 401 */
+/***/ (function(module, __unusedexports, __webpack_require__) {
+
+module.exports = parseTweetFileContent;
+
+const EOL = __webpack_require__(87).EOL;
+
+const { parseTweet } = __webpack_require__(914);
+
+function parseTweetFileContent(text) {
+  const pollOptions = [];
+  let lastLine;
+  while ((lastLine = getlastLineMatchingPollOption(text))) {
+    pollOptions.push(lastLine.replace(/\( \)\s+/, ""));
+    text = withLastLineRemoved(text);
+  }
+
+  return {
+    poll: pollOptions.length ? pollOptions.reverse() : null,
+    text,
+    ...parseTweet(text)
+  };
+}
+
+function getlastLineMatchingPollOption(text) {
+  const lines = text.trim().split(EOL);
+  const [lastLine] = lines.reverse();
+  return /^\( \) /.test(lastLine) ? lastLine : null;
+}
+
+function withLastLineRemoved(text) {
+  const lines = text.trim().split(EOL);
+  return lines
+    .slice(0, lines.length - 1)
+    .join(EOL)
+    .trim();
+}
+
+
+/***/ }),
 /* 402 */,
 /* 403 */,
 /* 404 */,
@@ -17368,13 +17420,20 @@ class Command {
         let cmdStr = CMD_STRING + this.command;
         if (this.properties && Object.keys(this.properties).length > 0) {
             cmdStr += ' ';
+            let first = true;
             for (const key in this.properties) {
                 if (this.properties.hasOwnProperty(key)) {
                     const val = this.properties[key];
                     if (val) {
+                        if (first) {
+                            first = false;
+                        }
+                        else {
+                            cmdStr += ',';
+                        }
                         // safely append the val - avoid blowing up when attempting to
                         // call .replace() if message is not a string for some reason
-                        cmdStr += `${key}=${escape(`${val || ''}`)},`;
+                        cmdStr += `${key}=${escape(`${val || ''}`)}`;
                     }
                 }
             }
@@ -17406,7 +17465,8 @@ function escape(s) {
 module.exports = getNewTweets;
 
 const parseDiff = __webpack_require__(557);
-const { parseTweet } = __webpack_require__(914);
+
+const parseTweetFileContent = __webpack_require__(401);
 
 async function getNewTweets({ octokit, toolkit, payload }) {
   // Avoid loading huuuge diffs for pull requests that don’t create a new tweet file
@@ -17450,13 +17510,11 @@ async function getNewTweets({ octokit, toolkit, payload }) {
   const newTweets = parseDiff(data)
     .filter(file => file.new && /^tweets\/.*\.tweet$/.test(file.to))
     .map(file => {
-      const text = file.chunks[0].changes
+      const tweetFileContent = file.chunks[0].changes
         .map(line => line.content.substr(1))
         .join("\n");
-      return {
-        text,
-        ...parseTweet(text)
-      };
+
+      return parseTweetFileContent(tweetFileContent);
     });
 
   toolkit.info(`New tweets found: ${newTweets.length}`);
@@ -17660,6 +17718,7 @@ async function getNewTweets({ payload, octokit }) {
       ).trim();
       return {
         text,
+        filename: file.filename,
         ...parseTweet(text)
       };
     });
@@ -21636,7 +21695,7 @@ var ExitCode;
 // Variables
 //-----------------------------------------------------------------------
 /**
- * sets env variable for this action and future actions in the job
+ * Sets env variable for this action and future actions in the job
  * @param name the name of the variable to set
  * @param val the value of the variable
  */
@@ -21646,18 +21705,13 @@ function exportVariable(name, val) {
 }
 exports.exportVariable = exportVariable;
 /**
- * exports the variable and registers a secret which will get masked from logs
- * @param name the name of the variable to set
- * @param val value of the secret
+ * Registers a secret which will get masked from logs
+ * @param secret value of the secret
  */
-function exportSecret(name, val) {
-    exportVariable(name, val);
-    // the runner will error with not implemented
-    // leaving the function but raising the error earlier
-    command_1.issueCommand('set-secret', {}, val);
-    throw new Error('Not implemented.');
+function setSecret(secret) {
+    command_1.issueCommand('add-mask', {}, secret);
 }
-exports.exportSecret = exportSecret;
+exports.setSecret = setSecret;
 /**
  * Prepends inputPath to the PATH (for this action and future actions)
  * @param inputPath
@@ -21780,6 +21834,29 @@ function group(name, fn) {
     });
 }
 exports.group = group;
+//-----------------------------------------------------------------------
+// Wrapper action state
+//-----------------------------------------------------------------------
+/**
+ * Saves state for current action, the state can only be retrieved by this action's post job execution.
+ *
+ * @param     name     name of the state to store
+ * @param     value    value to store
+ */
+function saveState(name, value) {
+    command_1.issueCommand('save-state', { name }, value);
+}
+exports.saveState = saveState;
+/**
+ * Gets the value of an state set by this action's main execution.
+ *
+ * @param     name     name of the state to get
+ * @returns   string
+ */
+function getState(name) {
+    return process.env[`STATE_${name}`] || '';
+}
+exports.getState = getState;
 //# sourceMappingURL=core.js.map
 
 /***/ }),
@@ -25661,6 +25738,8 @@ const isSetupDone = __webpack_require__(269);
 const setup = __webpack_require__(802);
 const tweet = __webpack_require__(576);
 
+const parseTweetFileContent = __webpack_require__(401);
+
 async function handlePush(state) {
   const { toolkit, octokit, payload, ref } = state;
 
@@ -25706,13 +25785,23 @@ async function handlePush(state) {
   const tweetUrls = [];
   const tweetErrors = [];
   for (let i = 0; i < newTweets.length; i++) {
-    toolkit.info(`Tweeting: ${newTweets[i].text}`);
+    const { text, poll } = parseTweetFileContent(newTweets[i].text);
+    toolkit.info(`Tweeting: ${text}`);
+    if (poll) {
+      toolkit.info(
+        `Tweet has poll with ${poll.length} options: ${poll.join(", ")}`
+      );
+    }
+
     try {
-      const result = await tweet(state, newTweets[i].text);
+      const result = await tweet(state, newTweets[i]);
 
       toolkit.info(`tweeted: ${result.url}`);
       tweetUrls.push(result.url);
     } catch (error) {
+      console.log(`error`);
+      console.log(error);
+
       tweetErrors.push(error[0]);
     }
   }
@@ -26693,11 +26782,92 @@ module.exports = tweet;
 
 const Twitter = __webpack_require__(918);
 
-async function tweet({ twitterCredentials }, tweet) {
+const parseTweetFileContent = __webpack_require__(401);
+
+async function tweet({ twitterCredentials }, tweetFile) {
   const client = new Twitter(twitterCredentials);
 
+  const tweet = parseTweetFileContent(tweetFile.text);
+
+  if (!tweet.poll) {
+    return createTweet(client, { status: tweet.text });
+  }
+
+  /* istanbul ignore if */
+  if (!process.env.TWITTER_ACCOUNT_ID) {
+    throw new Error(`TWITTER_ACCOUNT_ID environment variable must be set`);
+  }
+
+  const { card_uri } = await createPollCard(client, {
+    name: tweetFile.filename,
+    pollOptions: tweet.poll
+  });
+  return createTweet(client, { status: tweet.text, card_uri });
+}
+
+function createPollCard(
+  client,
+  {
+    name,
+    pollOptions: [first_choice, second_choice, third_choice, fourth_choice]
+  }
+) {
   return new Promise((resolve, reject) => {
-    client.post("statuses/update", { status: tweet }, (error, result) => {
+    client.post(
+      `https://ads-api.twitter.com/6/accounts/${process.env.TWITTER_ACCOUNT_ID}/cards/poll`,
+      {
+        name,
+        duration_in_minutes: 1440, // two days
+        first_choice,
+        second_choice,
+        third_choice,
+        fourth_choice
+      },
+      (error, result) => {
+        /* istanbul ignore if */
+        if (error) {
+          return reject(error);
+        }
+
+        resolve(result.data);
+
+        // result looks like this:
+        // {
+        //   request: {
+        //     params: {
+        //       name: 'foo-bar-1',
+        //       first_choice: 'foo',
+        //       third_choice: 'daz',
+        //       fourth_choice: 'daz',
+        //       second_choice: 'bar',
+        //       duration_in_minutes: 120
+        //     }
+        //   },
+        //   data: {
+        //     name: 'foo-bar-1',
+        //     start_time: '2020-01-07T22:42:50Z',
+        //     first_choice: 'foo',
+        //     third_choice: 'daz',
+        //     fourth_choice: 'daz',
+        //     second_choice: 'bar',
+        //     end_time: '2020-01-08T00:42:50Z',
+        //     id: '8r115',
+        //     created_at: '2020-01-07T22:42:50Z',
+        //     duration_in_minutes: '120',
+        //     card_uri: 'card://1214678808315351040',
+        //     updated_at: '2020-01-07T22:42:50Z',
+        //     deleted: false,
+        //     card_type: 'TEXT_POLLS'
+        //   }
+        // }
+      }
+    );
+  });
+}
+
+function createTweet(client, options) {
+  return new Promise((resolve, reject) => {
+    client.post("statuses/update", options, (error, result) => {
       if (error) {
         return reject(error);
       }
@@ -36070,8 +36240,11 @@ async function setup({ toolkit, octokit, payload, sha }) {
     owner: payload.repository.owner.login,
     repo: payload.repository.name,
     title: "🐦 twitter-together setup",
-    body:
-      "This pull requests creates the `tweets/` folder where your `*.tweet` files go into. It also creates the `tweets/README.md` file with instructions. Enjoy!",
+    body: `This pull requests creates the \`tweets/\` folder where your \`*.tweet\` files go into. It also creates the \`tweets/README.md\` file with instructions.
+
+Note that if you plan to support tweets with polls, your twitter app has to be approved for Twitters Ads API. See [The Ads API Application Form](https://github.com/gr2m/twitter-together/blob/master/docs/03-apply-for-access-to-the-twitter-ads-api.md) documentation for more details.
+
+Enjoy!`,
     head: "twitter-together-setup",
     base: payload.repository.default_branch
   });
