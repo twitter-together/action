@@ -65,7 +65,10 @@ You can submit a tweet to this repository to see the magic happen. Please follow
              TWITTER_ACCESS_TOKEN_SECRET: ${{ secrets.TWITTER_ACCESS_TOKEN_SECRET }}
              TWITTER_API_KEY: ${{ secrets.TWITTER_API_KEY }}
              TWITTER_API_SECRET_KEY: ${{ secrets.TWITTER_API_SECRET_KEY }}
+             TWITTER_USERNAME: [Your Twitter Username Here]
    ```
+
+   Make sure to replace `[Your Twitter Username Here]` with your actual twitter username, without the `@`.
 
 3. After creating or updating `.github/workflows/twitter-together.yml` in your repository’s default branch, a pull request will be created with further instructions.
 

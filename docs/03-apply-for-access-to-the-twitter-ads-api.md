@@ -131,8 +131,11 @@ jobs:
           TWITTER_ACCESS_TOKEN_SECRET: ${{ secrets.TWITTER_ACCESS_TOKEN_SECRET }}
           TWITTER_API_KEY: ${{ secrets.TWITTER_API_KEY }}
           TWITTER_API_SECRET_KEY: ${{ secrets.TWITTER_API_SECRET_KEY }}
+          TWITTER_USERNAME: [Your Twitter Username Here]
           TWITTER_ACCOUNT_ID: 18ce551qf6o
 ```
+
+Make sure to replace `[Your Twitter Username Here]` with your actual twitter username, without the `@`.
 
 ---
 
