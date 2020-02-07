@@ -39,7 +39,10 @@ jobs:
           TWITTER_ACCESS_TOKEN_SECRET: ${{ secrets.TWITTER_ACCESS_TOKEN_SECRET }}
           TWITTER_API_KEY: ${{ secrets.TWITTER_API_KEY }}
           TWITTER_API_SECRET_KEY: ${{ secrets.TWITTER_API_SECRET_KEY }}
+          TWITTER_USERNAME: [Your Twitter Username Here]
 ```
+
+Make sure to replace `[Your Twitter Username Here]` with your actual twitter username, without the `@`.
 
 Make sure to replace `'master'` if you changed your repository's default branch.
 
