@@ -25,7 +25,6 @@ process.env.GITHUB_SHA = "";
 
 // Needed for polls only
 process.env.TWITTER_ACCOUNT_ID = "account123";
-process.env.TWITTER_USERNAME = "gr2m";
 
 // MOCK
 nock("https://api.github.com", {
@@ -60,13 +59,6 @@ nock("https://api.github.com", {
   .reply(201);
 
 // lookup user ID
-nock("https://api.twitter.com")
-  .get("/1.1/users/lookup.json")
-  .query({
-    screen_name: "gr2m"
-  })
-  .reply(200, [{ id: 123 }]);
-
 nock("https://ads-api.twitter.com")
   .post("/6/accounts/account123/cards/poll", body => {
     tap.equal(body.name, "tweets/my-poll.tweet");
@@ -77,14 +69,20 @@ nock("https://ads-api.twitter.com")
     tap.equal(body.fourth_choice, "option 4");
     return true;
   })
-  .reply(201, { data: { card_uri: "card://123" } })
-  .post("/6/accounts/account123/tweet", body => {
-    tap.equal(body.as_user_id, "123");
-    tap.equal(body.text, "Here is my poll"); // two days
+  .reply(201, { data: { card_uri: "card://123" } });
+
+nock("https://api.twitter.com")
+  .post("/1.1/statuses/update.json", body => {
     tap.equal(body.card_uri, "card://123");
+    tap.equal(body.status, "Here is my poll");
     return true;
   })
-  .reply(201, { data: { id_str: "0000000000000000001" } });
+  .reply(201, {
+    id_str: "0000000000000000001",
+    user: {
+      screen_name: "gr2m"
+    }
+  });
 
 process.on("exit", code => {
   assert.equal(code, 0);
