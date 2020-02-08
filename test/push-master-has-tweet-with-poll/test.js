@@ -78,7 +78,7 @@ nock("https://ads-api.twitter.com")
     return true;
   })
   .reply(201, { data: { card_uri: "card://123" } })
-  .post("/6/accounts/account123/cards/poll", body => {
+  .post("/6/accounts/account123/tweet", body => {
     tap.equal(body.as_user_id, "123");
     tap.equal(body.text, "Here is my poll"); // two days
     tap.equal(body.card_uri, "card://123");
