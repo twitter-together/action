@@ -28,7 +28,6 @@
     "nock": "^11.1.0",
     "prettier": "^1.18.2",
     "semantic-release": "^17.0.0",
-    "semantic-release-plugin-update-version-in-files": "^1.0.0",
     "tap": "^14.0.0"
   },
   "repository": {
@@ -40,14 +39,6 @@
       "@semantic-release/commit-analyzer",
       "@semantic-release/release-notes-generator",
       "@semantic-release/github",
-      [
-        "semantic-release-plugin-update-version-in-files",
-        {
-          "files": [
-            "lib/version.js"
-          ]
-        }
-      ],
       [
         "@semantic-release/git",
         {
