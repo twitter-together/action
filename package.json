@@ -43,6 +43,7 @@
         "@semantic-release/git",
         {
           "assets": [
+            "package.json",
             "dist/index.js"
           ],
           "message": "build(release): compiled action for ${nextRelease.version}\n\n[skip ci]"
