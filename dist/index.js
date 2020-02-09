@@ -24889,6 +24889,10 @@ const toolkit = __webpack_require__(470);
 const handlePullRequest = __webpack_require__(815);
 const handlePush = __webpack_require__(555);
 
+const VERSION = __webpack_require__(775);
+
+console.log(`Running twitter-together version ${VERSION}`);
+
 main();
 
 async function main() {
@@ -35630,7 +35634,13 @@ module.exports = function generate__limitLength(it, $keyword, $ruleType) {
 /***/ }),
 /* 773 */,
 /* 774 */,
-/* 775 */,
+/* 775 */
+/***/ (function(module) {
+
+module.exports = "0.0.0-development";
+
+
+/***/ }),
 /* 776 */
 /***/ (function(module) {
 
