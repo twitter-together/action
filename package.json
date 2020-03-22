@@ -27,7 +27,7 @@
     "nock": "^12.0.0",
     "prettier": "^2.0.1",
     "semantic-release": "^17.0.0",
-    "tap": "^14.0.0"
+    "tap": "^14.10.7"
   },
   "repository": {
     "type": "git",
