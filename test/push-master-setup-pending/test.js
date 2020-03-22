@@ -26,14 +26,14 @@ process.env.GITHUB_SHA = "";
 // MOCK
 nock("https://api.github.com", {
   reqheaders: {
-    authorization: "token secret123"
-  }
+    authorization: "token secret123",
+  },
 })
   // check if twitter-together-setup branch exists
   .head("/repos/gr2m/twitter-together/git/refs/heads/twitter-together-setup")
   .reply(200);
 
-process.on("exit", code => {
+process.on("exit", (code) => {
   tap.equal(code, 0);
   tap.deepEqual(nock.pendingMocks(), []);
 

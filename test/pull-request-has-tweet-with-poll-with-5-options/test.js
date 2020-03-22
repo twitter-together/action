@@ -24,24 +24,24 @@ process.env.GITHUB_SHA = "";
 // MOCK
 nock("https://api.github.com", {
   reqheaders: {
-    authorization: "token secret123"
-  }
+    authorization: "token secret123",
+  },
 })
   // get changed files
   .get("/repos/gr2m/twitter-together/pulls/123/files")
   .reply(200, [
     {
       status: "added",
-      filename: "tweets/hello-world.tweet"
-    }
+      filename: "tweets/hello-world.tweet",
+    },
   ]);
 
 // get pull request diff
 nock("https://api.github.com", {
   reqheaders: {
     accept: "application/vnd.github.diff",
-    authorization: "token secret123"
-  }
+    authorization: "token secret123",
+  },
 })
   .get("/repos/gr2m/twitter-together/pulls/123")
   .reply(
@@ -64,7 +64,7 @@ index 0000000..0123456
 // create check run
 nock("https://api.github.com")
   // get changed files
-  .post("/repos/gr2m/twitter-together/check-runs", body => {
+  .post("/repos/gr2m/twitter-together/check-runs", (body) => {
     tap.equal(body.name, "preview");
     tap.equal(body.head_sha, "0000000000000000000000000000000000000002");
     tap.equal(body.status, "completed");
@@ -75,14 +75,14 @@ nock("https://api.github.com")
 
 > Here is my poll
 
-The tweet includes a poll, but it has 5 options. A poll must have 2-4 options.`
+The tweet includes a poll, but it has 5 options. A poll must have 2-4 options.`,
     });
 
     return true;
   })
   .reply(201);
 
-process.on("exit", code => {
+process.on("exit", (code) => {
   assert.equal(code, 0);
   assert.deepEqual(nock.pendingMocks(), []);
 });

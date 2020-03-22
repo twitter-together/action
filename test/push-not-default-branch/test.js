@@ -19,7 +19,7 @@ process.env.GITHUB_ACTOR = "";
 process.env.GITHUB_REPOSITORY = "";
 process.env.GITHUB_SHA = "";
 
-process.on("exit", code => {
+process.on("exit", (code) => {
   tap.equal(code, 0);
 
   // for some reason, tap fails with "Suites:   1 failed" if we don't exit explicitly

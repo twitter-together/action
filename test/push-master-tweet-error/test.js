@@ -26,8 +26,8 @@ process.env.GITHUB_SHA = "";
 // MOCK
 nock("https://api.github.com", {
   reqheaders: {
-    authorization: "token secret123"
-  }
+    authorization: "token secret123",
+  },
 })
   // get changed files
   .get(
@@ -37,15 +37,15 @@ nock("https://api.github.com", {
     files: [
       {
         status: "added",
-        filename: "tweets/cupcake-ipsum.tweet"
-      }
-    ]
+        filename: "tweets/cupcake-ipsum.tweet",
+      },
+    ],
   })
 
   // post comment
   .post(
     "/repos/gr2m/twitter-together/commits/0000000000000000000000000000000000000002/comments",
-    body => {
+    (body) => {
       console.log(body.body);
       tap.equal(body.body, "Errors:\n\n- Tweet needs to be a bit shorter.");
       return true;
@@ -59,12 +59,12 @@ nock("https://api.twitter.com")
     errors: [
       {
         code: 186,
-        message: "Tweet needs to be a bit shorter."
-      }
-    ]
+        message: "Tweet needs to be a bit shorter.",
+      },
+    ],
   });
 
-process.on("exit", code => {
+process.on("exit", (code) => {
   assert.equal(code, 1);
   assert.deepEqual(nock.pendingMocks(), []);
 

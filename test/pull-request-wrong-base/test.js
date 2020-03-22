@@ -19,7 +19,7 @@ process.env.GITHUB_ACTOR = "";
 process.env.GITHUB_REPOSITORY = "";
 process.env.GITHUB_SHA = "";
 
-process.on("exit", code => {
+process.on("exit", (code) => {
   tap.equal(code, 0);
   tap.deepEqual(nock.pendingMocks(), []);
 

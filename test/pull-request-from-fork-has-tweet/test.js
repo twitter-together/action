@@ -24,24 +24,24 @@ process.env.GITHUB_SHA = "";
 // MOCK
 nock("https://api.github.com", {
   reqheaders: {
-    authorization: "token secret123"
-  }
+    authorization: "token secret123",
+  },
 })
   // get changed files
   .get("/repos/gr2m/twitter-together/pulls/123/files")
   .reply(200, [
     {
       status: "added",
-      filename: "tweets/hello-world.tweet"
-    }
+      filename: "tweets/hello-world.tweet",
+    },
   ]);
 
 // get pull request diff
 nock("https://api.github.com", {
   reqheaders: {
     accept: "application/vnd.github.diff",
-    authorization: "token secret123"
-  }
+    authorization: "token secret123",
+  },
 })
   .get("/repos/gr2m/twitter-together/pulls/123")
   .reply(
@@ -55,7 +55,7 @@ index 0000000..0123456
 +Hello, world!`
   );
 
-process.on("exit", code => {
+process.on("exit", (code) => {
   assert.equal(code, 0);
   assert.deepEqual(nock.pendingMocks(), []);
 });

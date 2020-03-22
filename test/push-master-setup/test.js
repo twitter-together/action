@@ -26,15 +26,15 @@ process.env.GITHUB_REPOSITORY = "";
 // MOCK
 nock("https://api.github.com", {
   reqheaders: {
-    authorization: "token secret123"
-  }
+    authorization: "token secret123",
+  },
 })
   // check if twitter-together-setup branch exists
   .head("/repos/gr2m/twitter-together/git/refs/heads/twitter-together-setup")
   .reply(404)
 
   // Create the "twitter-together-setup" branch
-  .post("/repos/gr2m/twitter-together/git/refs", body => {
+  .post("/repos/gr2m/twitter-together/git/refs", (body) => {
     tap.equal(body.ref, "refs/heads/twitter-together-setup");
     tap.equal(body.sha, "0000000000000000000000000000000000000002");
 
@@ -47,7 +47,7 @@ nock("https://api.github.com", {
   .reply(200, "contents of tweets/README.md")
 
   // Create tweets/README.md file
-  .put("/repos/gr2m/twitter-together/contents/tweets/README.md", body => {
+  .put("/repos/gr2m/twitter-together/contents/tweets/README.md", (body) => {
     tap.equal(
       body.content,
       Buffer.from("contents of tweets/README.md").toString("base64")
@@ -60,7 +60,7 @@ nock("https://api.github.com", {
   .reply(201)
 
   // Create pull request
-  .post("/repos/gr2m/twitter-together/pulls", body => {
+  .post("/repos/gr2m/twitter-together/pulls", (body) => {
     tap.equal(body.title, "🐦 twitter-together setup");
     tap.match(
       body.body,
@@ -72,10 +72,10 @@ nock("https://api.github.com", {
     return true;
   })
   .reply(201, {
-    html_url: "https://github.com/gr2m/twitter-together/pull/123"
+    html_url: "https://github.com/gr2m/twitter-together/pull/123",
   });
 
-process.on("exit", code => {
+process.on("exit", (code) => {
   assert.equal(code, 0);
   assert.deepEqual(nock.pendingMocks(), []);
 });

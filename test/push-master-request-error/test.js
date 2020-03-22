@@ -30,7 +30,7 @@ nock("https://api.github.com")
   )
   .reply(500);
 
-process.on("exit", code => {
+process.on("exit", (code) => {
   tap.equal(code, 1);
   tap.deepEqual(nock.pendingMocks(), []);
 

@@ -24,24 +24,24 @@ process.env.GITHUB_SHA = "";
 // MOCK
 nock("https://api.github.com", {
   reqheaders: {
-    authorization: "token secret123"
-  }
+    authorization: "token secret123",
+  },
 })
   // get changed files
   .get("/repos/gr2m/twitter-together/pulls/123/files")
   .reply(200, [
     {
       status: "added",
-      filename: "tweets/hello-world.tweet"
-    }
+      filename: "tweets/hello-world.tweet",
+    },
   ]);
 
 // get pull request diff
 nock("https://api.github.com", {
   reqheaders: {
     accept: "application/vnd.github.diff",
-    authorization: "token secret123"
-  }
+    authorization: "token secret123",
+  },
 })
   .get("/repos/gr2m/twitter-together/pulls/123")
   .reply(
@@ -55,7 +55,7 @@ index 0000000..0123456
 +Cupcake ipsum dolor sit amet chupa chups candy halvah I love. Apple pie gummi bears chupa chups jujubes I love cake jelly. Jelly candy canes pudding jujubes caramels sweet roll I love. Sweet fruitcake oat cake I love brownie sesame snaps apple pie lollipop. Pie dragée I love apple pie cotton candy candy chocolate bar.`
   );
 
-process.on("exit", code => {
+process.on("exit", (code) => {
   assert.equal(code, 1);
   assert.deepEqual(nock.pendingMocks(), []);
   process.exitCode = 0;

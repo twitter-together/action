@@ -22,14 +22,14 @@ process.env.GITHUB_SHA = "";
 // MOCK
 nock("https://api.github.com", {
   reqheaders: {
-    authorization: "token secret123"
-  }
+    authorization: "token secret123",
+  },
 })
   // get changed files
   .get("/repos/gr2m/twitter-together/pulls/123/files")
   .reply(500);
 
-process.on("exit", code => {
+process.on("exit", (code) => {
   tap.equal(code, 1);
   tap.deepEqual(nock.pendingMocks(), []);
 

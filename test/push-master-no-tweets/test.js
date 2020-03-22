@@ -32,12 +32,12 @@ nock("https://api.github.com")
     files: [
       {
         status: "updated",
-        filename: "tweets/hello-world.tweet"
-      }
-    ]
+        filename: "tweets/hello-world.tweet",
+      },
+    ],
   });
 
-process.on("exit", code => {
+process.on("exit", (code) => {
   tap.equal(code, 0);
   tap.deepEqual(nock.pendingMocks(), []);
 
