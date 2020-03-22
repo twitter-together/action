@@ -25,7 +25,7 @@
     "@semantic-release/git": "^9.0.0",
     "@zeit/ncc": "^0.21.0",
     "nock": "^12.0.0",
-    "prettier": "^1.18.2",
+    "prettier": "^2.0.1",
     "semantic-release": "^17.0.0",
     "tap": "^14.0.0"
   },
