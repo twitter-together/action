@@ -1,7 +1,7 @@
 ---
 name: "💝 Thank you"
 about: "twitter-together is awesome 🙌"
-labels: feature
+labels: thanks
 ---
 
 <!-- Please replace all placeholders such as this below -->
