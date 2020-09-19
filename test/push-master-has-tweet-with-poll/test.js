@@ -60,7 +60,7 @@ nock("https://api.github.com", {
 
 // lookup user ID
 nock("https://ads-api.twitter.com")
-  .post("/6/accounts/account123/cards/poll", (body) => {
+  .post("/7/accounts/account123/cards/poll", (body) => {
     tap.equal(body.name, "tweets/my-poll.tweet");
     tap.equal(body.duration_in_minutes, "1440"); // two days
     tap.equal(body.first_choice, "option 1");
