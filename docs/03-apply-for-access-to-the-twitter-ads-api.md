@@ -102,7 +102,7 @@ You need to get your account id. Open [ads.twitter.com](https://ads.twitter.com)
 https://ads.twitter.com/onboarding/18ce551qf6o/welcome?onboarding=true
 ```
 
-your twitter account id is `18ce551qf6o`. Now set `TWITTER_API_SECRET_KEY` in your `twitter-together.yml` file.
+your twitter account id is `18ce551qf6o`. Now set `TWITTER_ACCOUNT_ID` in your `twitter-together.yml` file.
 
 ```yml
 on: [push, pull_request]
