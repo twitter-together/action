@@ -91,15 +91,11 @@ https://github.com/gr2m/twitter-together
 
 This app will be used to create tweets that have previously been reviewed and accepted on our GitHub repository. It allows everyone to submit a tweet draft that we can discuss prior publishing.
 
-### Set app permissions
-
-When you have created your app, open `app settings` and set app permissions to "Read & Write".
-
 ## Save credentials
 
-"read and write" permissions are required. If you change the permission you must re-generate tokens for the change to take effect
+"read and write" permissions are required. When you have created your app, open `app settings` and set app permissions to "Read & Write". If you change the permission you must re-generate tokens for the change to take effect.
 
-Open your app’s "Keys and tokens" tab. In the "Access token & access token secret" section, press the "Create" button. After that you will see all four credentials required for `twitter-together`
+Open your app’s "Keys and tokens" tab. In the "Access token & access token secret" section, press the "Create" button. After that you will see all four credentials required for `twitter-together`.
 
 ![](twitter-04-keys-and-tokens.png)
 
