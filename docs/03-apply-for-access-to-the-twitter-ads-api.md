@@ -34,7 +34,7 @@ Here are some anwsers to the option that I usually default to
 
 ...what do you plan to build on the Ads API?\*
 
-> Create pools
+> Create polls
 
 ...describe your unique differentiators in the Ad Tech ecosystem\*
 
