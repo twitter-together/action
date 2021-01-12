@@ -44,7 +44,7 @@ No
 
 ---
 
-You will receive an email to verify your developer account. After that you can create an app at https://developer.twitter.com/en/apps/create.
+You will receive an email to verify your developer account. After that you can create an app at https://developer.twitter.com/en/portal/apps/new.
 
 ## Create an app
 
