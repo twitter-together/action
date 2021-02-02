@@ -18,6 +18,7 @@ For Open Source or event maintainers that share a project twitter account, `twit
 <!-- toc -->
 
 - [Try it](#try-it)
+- [Twitter API compatibility](#twitter-api-compatibility)
 - [Setup](#setup)
 - [Contribute](#contribute)
 - [How it works](#how-it-works)
@@ -31,6 +32,10 @@ For Open Source or event maintainers that share a project twitter account, `twit
 ## Try it
 
 You can submit a tweet to this repository to see the magic happen. Please follow the instructions at [tweets/README.md](tweets/README.md) and mention your own twitter username to the tweet. This repository is setup to tweet from [https://twitter.com/commit2tweet](https://twitter.com/commit2tweet).
+
+## Twitter API compatibility
+
+The Twitter Ads API we currently use is the `v8` version.
 
 ## Setup
 
