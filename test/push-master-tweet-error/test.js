@@ -65,8 +65,8 @@ nock("https://api.twitter.com")
   });
 
 process.on("exit", (code) => {
-  assert.equal(code, 1);
-  assert.deepEqual(nock.pendingMocks(), []);
+  assert.strictEqual(code, 1);
+  assert.deepStrictEqual(nock.pendingMocks(), []);
 
   // above code exits with 1 (error), but tap expects 0.
   // Tap adds the "process.exitCode" property for that purpose.
