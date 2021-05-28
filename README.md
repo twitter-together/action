@@ -40,7 +40,7 @@ The Twitter Ads API we currently use is the `v8` version.
 ## Setup
 
 1. [Create a twitter app](docs/01-create-twitter-app.md) with your shared twitter account and store the credentials as `TWITTER_API_KEY`, `TWITTER_API_SECRET_KEY`, `TWITTER_ACCESS_TOKEN` and `TWITTER_ACCESS_TOKEN_SECRET` in your repository’s secrets settings.
-2. [Create a `.github/workflows/twitter-together.yml` file](docs/02-create-twitter-together-workflow.md) with the content below. Make sure to replace `'master'` if you changed your repository's default branch.
+2. [Create a `.github/workflows/twitter-together.yml` file](docs/02-create-twitter-together-workflow.md) with the content below. Make sure to replace `'main'` if you changed your repository's default branch.
 
    ```yml
    on: [push, pull_request]
@@ -57,9 +57,9 @@ The Twitter Ads API we currently use is the `v8` version.
      tweet:
        name: Tweet
        runs-on: ubuntu-latest
-       if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+       if: github.event_name == 'push' && github.ref == 'refs/heads/main'
        steps:
-         - name: checkout master
+         - name: checkout main
            uses: actions/checkout@v2
          - name: Tweet
            uses: gr2m/twitter-together@v1.x
