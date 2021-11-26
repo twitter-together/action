@@ -1,19 +1,21 @@
 ---
-name: "🧚‍♂️ Feature Request"
-about: "Wouldn’t it be nice if 💭"
-labels: feature
+name: "🧚‍♂️ Funktionsanfrage"
+about: "Wäre es nicht schön, wenn 💭"
+labels: Funktion
 ---
 
 <!-- Please replace all placeholders such as this below -->
 
-**What’s missing?**
+**Was fehlt noch?**
 
 <!-- Describe your feature idea  -->
 
-**Why?**
+**Warum**
 
 <!-- Describe the problem you are facing -->
 
-**Alternatives you tried**
+**Alternativen, die Sie ausprobiert haben**
 
 <!-- Describe the workarounds you tried so far and how they worked for you -->
+
+

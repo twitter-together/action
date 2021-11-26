@@ -1,5 +1,5 @@
 ---
-name: "🆘 Help"
-about: "How does this even work 🤷‍♂️"
-labels: support
+name: "🆘 Hilfe"
+about: "Wie funktioniert das überhaupt 🤷‍♂️"
+labels: Unterstützung
 ---
