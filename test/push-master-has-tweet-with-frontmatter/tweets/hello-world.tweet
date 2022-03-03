@@ -1,0 +1,12 @@
+---
+thread-delimiter: ~~~
+poll:
+- a
+- b
+---
+
+Hello, world!
+
+~~~
+
+Second Tweet!
