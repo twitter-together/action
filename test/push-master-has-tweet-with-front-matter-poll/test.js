@@ -60,27 +60,27 @@ nock("https://api.github.com", {
 
 // lookup user ID
 nock("https://ads-api.twitter.com")
-    .post("/8/accounts/account123/cards/poll", (body) => {
-      tap.equal(body.name, "tweets/hello-world.tweet");
-      tap.equal(body.duration_in_minutes, "1440"); // two days
-      tap.equal(body.first_choice, "a");
-      tap.equal(body.second_choice, "b");
-      return true;
-    })
-    .reply(201, { data: { card_uri: "card://123" } });
+  .post("/8/accounts/account123/cards/poll", (body) => {
+    tap.equal(body.name, "tweets/hello-world.tweet");
+    tap.equal(body.duration_in_minutes, "1440"); // two days
+    tap.equal(body.first_choice, "a");
+    tap.equal(body.second_choice, "b");
+    return true;
+  })
+  .reply(201, { data: { card_uri: "card://123" } });
 
 nock("https://api.twitter.com")
-    .post("/1.1/statuses/update.json", (body) => {
-      tap.equal(body.card_uri, "card://123");
-      tap.equal(body.status, "Hello, world!");
-      return true;
-    })
-    .reply(201, {
-      id_str: "0000000000000000001",
-      user: {
-        screen_name: "gr2m",
-      },
-    });
+  .post("/1.1/statuses/update.json", (body) => {
+    tap.equal(body.card_uri, "card://123");
+    tap.equal(body.status, "Hello, world!");
+    return true;
+  })
+  .reply(201, {
+    id_str: "0000000000000000001",
+    user: {
+      screen_name: "gr2m",
+    },
+  });
 
 process.on("exit", (code) => {
   assert.equal(code, 0);

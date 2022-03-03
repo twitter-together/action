@@ -56,18 +56,18 @@ nock("https://api.github.com", {
   .reply(201);
 
 nock("https://api.twitter.com")
-    .post("/1.1/statuses/update.json", (body) => {
-        tap.equal(body.status, "Good idea :)");
-        tap.equal(body.in_reply_to_status_id, "0000000000000000001");
-        tap.equal(body.auto_populate_reply_metadata, "true");
-      return true;
-    })
-    .reply(201, {
-      id_str: "0000000000000000002",
-      user: {
-        screen_name: "gr2m",
-      },
-    });
+  .post("/1.1/statuses/update.json", (body) => {
+    tap.equal(body.status, "Good idea :)");
+    tap.equal(body.in_reply_to_status_id, "0000000000000000001");
+    tap.equal(body.auto_populate_reply_metadata, "true");
+    return true;
+  })
+  .reply(201, {
+    id_str: "0000000000000000002",
+    user: {
+      screen_name: "gr2m",
+    },
+  });
 
 process.on("exit", (code) => {
   assert.equal(code, 0);

@@ -17403,9 +17403,11 @@ const { parseTweet } = __webpack_require__(914);
 const { load } = __webpack_require__(186);
 
 const OPTION_REGEX = /^\(\s?\)\s+/;
-const FRONT_MATTER_REGEX = new RegExp(`^---${EOL}([\\s\\S]*?)${EOL}---${EOL}`);
+const FRONT_MATTER_REGEX = new RegExp(
+  `^---${EOL}([\\s\\S]*?)${EOL}---(?:${EOL})+`
+);
 
-function parseTweetFileContent(text) {
+function parseTweetFileContent(text, isThread = false) {
   const options = {
     threadDelimiter: "---",
     reply: null,
@@ -17413,24 +17415,33 @@ function parseTweetFileContent(text) {
     media: [],
     schedule: null,
     poll: null,
-    thread: [],
+    thread: null,
   };
 
   const frontMatterMatch = text.match(FRONT_MATTER_REGEX);
   if (frontMatterMatch) {
     text = text.slice(frontMatterMatch[0].length);
     getOptionsFromFrontMatter(frontMatterMatch[1], options);
+
+    if (isThread) {
+      if (options.reply)
+        throw new Error("Cannot set a tweet to reply to when in a thread");
+    }
   }
 
   if (options.threadDelimiter) {
-    const thread = text.split(`${EOL}${options.threadDelimiter}${EOL}`);
-    text = thread[0];
-    // Each item can have front matter if threadDelimiter is not '---'
-    // TODO: Restrict what front matter can be used for threaded tweets
-    options.thread = thread.slice(1).map(parseTweetFileContent);
+    const threadIdx = text.match(
+      new RegExp(`(?:${EOL})+${options.threadDelimiter}(?:${EOL})+`)
+    );
+    if (threadIdx) {
+      // Each item can have front matter, as we only split one thread delimiter at a time
+      options.thread = parseTweetFileContent(
+        text.slice(threadIdx.index + threadIdx[0].length),
+        true
+      );
+      text = text.slice(0, threadIdx.index);
+    }
   }
-
-  text = text.trim();
 
   if (!options.poll) {
     const pollOptions = [];
@@ -17445,6 +17456,8 @@ function parseTweetFileContent(text) {
   // TODO: Introduce more properties from options
   return {
     poll: options.poll,
+    thread: options.thread,
+    reply: options.reply,
     text,
     ...parseTweet(text),
   };
@@ -17454,26 +17467,25 @@ function getOptionsFromFrontMatter(frontMatter, options) {
   const parsedFrontMatter = load(frontMatter);
   if (typeof parsedFrontMatter !== "object" || !parsedFrontMatter) return;
 
-  if (typeof parsedFrontMatter['thread-delimiter'] === 'string')
-    options.threadDelimiter = parsedFrontMatter['thread-delimiter'];
-  if (typeof parsedFrontMatter.reply === 'string')
+  if (typeof parsedFrontMatter["thread-delimiter"] === "string")
+    options.threadDelimiter = parsedFrontMatter["thread-delimiter"];
+  if (typeof parsedFrontMatter.reply === "string")
     options.reply = parsedFrontMatter.reply;
-  if (typeof parsedFrontMatter.retweet === 'string')
+  if (typeof parsedFrontMatter.retweet === "string")
     options.retweet = parsedFrontMatter.retweet;
 
   // TODO: Max 1 video or one gif can be attached, or up to 4 images
   if (Array.isArray(parsedFrontMatter.media))
     options.media = parsedFrontMatter.media.reduce((arr, item) => {
-      if (typeof item !== "object" || !item) return arr;
-      if (typeof item.url !== "string") return arr;
-      arr.push({
-        url: item.url,
-        alt: typeof item.url !== "string" ? null : item.alt,
-      });
+      if (item && typeof item === "object" && typeof item.url === "string")
+        arr.push({
+          url: item.url,
+          alt: typeof item.url !== "string" ? null : item.alt,
+        });
       return arr;
     }, []);
 
-  if (typeof parsedFrontMatter.schedule === 'string') {
+  if (typeof parsedFrontMatter.schedule === "string") {
     const schedule = new Date(parsedFrontMatter.schedule);
     if (!isNaN(schedule.getTime())) options.schedule = schedule;
   }
@@ -17481,8 +17493,7 @@ function getOptionsFromFrontMatter(frontMatter, options) {
   // TODO: Max 4 options
   if (Array.isArray(parsedFrontMatter.poll))
     options.poll = parsedFrontMatter.poll.reduce((arr, item) => {
-      if (typeof item !== "string") return arr;
-      arr.push(item);
+      if (typeof item === "string") arr.push(item);
       return arr;
     }, []);
 }
@@ -29976,10 +29987,13 @@ async function handlePush(state) {
     }
 
     try {
-      const result = await tweet(state, newTweets[i]);
+      let result = await tweet(state, newTweets[i]);
 
-      toolkit.info(`tweeted: ${result.url}`);
-      tweetUrls.push(result.url);
+      while (result) {
+        toolkit.info(`tweeted: ${result.url}`);
+        tweetUrls.push(result.url);
+        result = result.thread;
+      }
     } catch (error) {
       console.log(`error`);
       console.log(error);
@@ -30968,24 +30982,47 @@ const parseTweetFileContent = __webpack_require__(401);
 
 async function tweet({ twitterCredentials }, tweetFile) {
   const client = new Twitter(twitterCredentials);
-
   const tweet = parseTweetFileContent(tweetFile.text);
+  return handleTweet(client, tweet, tweetFile.filename);
+}
 
-  if (!tweet.poll) {
-    return createTweet(client, { status: tweet.text });
+async function handleTweet(client, tweet, name) {
+  const tweetData = {
+    status: tweet.text,
+  };
+
+  if (tweet.poll) {
+    /* istanbul ignore if */
+    if (!process.env.TWITTER_ACCOUNT_ID) {
+      throw new Error(`TWITTER_ACCOUNT_ID environment variable must be set`);
+    }
+
+    tweetData.card_uri = await createPoll(client, {
+      name,
+      pollOptions: tweet.poll,
+    }).then((poll) => poll.card_uri);
   }
 
-  /* istanbul ignore if */
-  if (!process.env.TWITTER_ACCOUNT_ID) {
-    throw new Error(`TWITTER_ACCOUNT_ID environment variable must be set`);
+  if (tweet.reply) {
+    // TODO: Should this throw if an invalid reply is passed and there is no match?
+    const match = tweet.reply.match(
+      /^https:\/\/twitter\.com\/[^/]+\/status\/(\d+)$/
+    );
+    if (match) {
+      tweetData.in_reply_to_status_id = match[1];
+      tweetData.auto_populate_reply_metadata = true;
+    }
   }
 
-  const { card_uri } = await createPoll(client, {
-    name: tweetFile.filename,
-    pollOptions: tweet.poll,
-  });
+  const tweetResult = await createTweet(client, tweetData);
+  if (tweet.thread)
+    tweetResult.thread = await handleTweet(
+      client,
+      { ...tweet.thread, reply: tweetResult.url },
+      name
+    );
 
-  return createTweet(client, { status: tweet.text, card_uri });
+  return tweetResult;
 }
 
 function createPoll(
