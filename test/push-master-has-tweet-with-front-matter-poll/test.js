@@ -1,6 +1,6 @@
 /**
  * This test checks the happy path of a commit to the main branch (master)
- * which includes a new *.tweet file that is making use of the front matter.
+ * which includes a new *.tweet file that is making use of the front matter for a poll.
  */
 
 const assert = require("assert");
