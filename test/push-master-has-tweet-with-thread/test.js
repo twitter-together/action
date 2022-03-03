@@ -1,6 +1,8 @@
 /**
  * This test checks the happy path of a commit to the main branch (master)
  * which includes a new *.tweet file that is making use of the front matter.
+ *
+ * Only threads and polls are supported as part of .
  */
 
 const assert = require("assert");
@@ -51,7 +53,7 @@ nock("https://api.github.com", {
     (body) => {
       tap.equal(
         body.body,
-        "Tweeted:\n\n- https://twitter.com/gr2m/status/0000000000000000001"
+        "Tweeted:\n\n- https://twitter.com/gr2m/status/0000000000000000001\n- https://twitter.com/gr2m/status/0000000000000000002"
       );
       return true;
     }
@@ -71,7 +73,6 @@ nock("https://ads-api.twitter.com")
 
 nock("https://api.twitter.com")
     .post("/1.1/statuses/update.json", (body) => {
-      tap.equal(body.card_uri, "card://123");
       tap.equal(body.status, "Hello, world!");
       return true;
     })
@@ -80,6 +81,20 @@ nock("https://api.twitter.com")
       user: {
         screen_name: "gr2m",
       },
+    })
+
+    .post("/1.1/statuses/update.json", (body) => {
+        tap.equal(body.card_uri, "card://123");
+        tap.equal(body.status, "Second Tweet!");
+        tap.equal(body.in_reply_to_status_id, "0000000000000000001");
+        tap.equal(body.auto_populate_reply_metadata, "true");
+        return true;
+    })
+    .reply(201, {
+        id_str: "0000000000000000002",
+        user: {
+            screen_name: "gr2m",
+        },
     });
 
 process.on("exit", (code) => {
