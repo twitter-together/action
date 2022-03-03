@@ -1,5 +1,4 @@
 ---
-thread-delimiter: ~~~
 poll:
 - a
 - b
@@ -7,6 +6,6 @@ poll:
 
 Hello, world!
 
-~~~
+---
 
 Second Tweet!
