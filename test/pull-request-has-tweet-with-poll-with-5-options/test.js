@@ -68,14 +68,20 @@ nock("https://api.github.com")
     tap.equal(body.name, "preview");
     tap.equal(body.head_sha, "0000000000000000000000000000000000000002");
     tap.equal(body.status, "completed");
-    tap.equal(body.conclusion, "success");
+    tap.equal(body.conclusion, "failure");
     tap.deepEqual(body.output, {
       title: "1 tweet(s)",
       summary: `### ❌ Invalid
 
 > Here is my poll
+>
+> ( ) option 1
+> ( ) option 2
+> ( ) option 3
+> ( ) option 4
+> ( ) option 5
 
-The tweet includes a poll, but it has 5 options. A poll must have 2-4 options.`,
+Polls cannot have more than four options, found 5 options`,
     });
 
     return true;
