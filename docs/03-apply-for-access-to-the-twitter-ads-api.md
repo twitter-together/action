@@ -64,7 +64,7 @@ United States
 
 #### Tell us more about your strategic customers/advertisers\*
 
-> The app is for self-use only. THere are not strategic customers/advertisers.
+> The app is for self-use only. There are not strategic customers/advertisers.
 
 ### `#Product`
 
