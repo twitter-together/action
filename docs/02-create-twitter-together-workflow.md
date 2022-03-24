@@ -41,7 +41,7 @@ jobs:
           TWITTER_API_SECRET_KEY: ${{ secrets.TWITTER_API_SECRET_KEY }}
 ```
 
-Make sure to replace `'master'` if you changed your repository's default branch.
+Make sure to replace `'main'` if you changed your repository's default branch.
 
 ![](workflow-04-commit.png)
 
