@@ -1,19 +1,19 @@
 ---
-name: "💝 Thank you"
-about: "twitter-together is awesome 🙌"
-labels: thanks
+name: "💝 Dankeschön"
+about: "twitter-together ist großartig 🙌"
+labels: danke
 ---
 
 <!-- Please replace all placeholders such as this below -->
 
-**How do you use twitter-together?**
+**Wie nutzen Sie Twitter-together?**
 
 <!-- I’d love to know how you use twitter-together, to better understand people’s use cases -->
 
-**What do you love about it?**
+**Was gefällt Ihnen daran?**
 
 <!-- Thanks for the kind words 🤗 -->
 
-**How did you learn about it?**
+**Wie haben Sie davon erfahren?**
 
 <!-- Just curious -->
