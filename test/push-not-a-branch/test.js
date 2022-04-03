@@ -1,5 +1,5 @@
 /**
- * This test checks the happy path of a commit to the main branch (master)
+ * This test checks the happy path of a commit to the main branch (main)
  * which includes a new *.tweet file.
  */
 
