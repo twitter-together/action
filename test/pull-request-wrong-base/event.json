@@ -13,7 +13,7 @@
     }
   },
   "repository": {
-    "default_branch": "master",
+    "default_branch": "main",
     "name": "twitter-together",
     "owner": {
       "login": "gr2m"

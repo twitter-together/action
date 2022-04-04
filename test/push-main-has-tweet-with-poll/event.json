@@ -1,5 +1,5 @@
 {
-  "ref": "refs/heads/master",
+  "ref": "refs/heads/main",
   "before": "0000000000000000000000000000000000000001",
   "after": "0000000000000000000000000000000000000002",
   "head_commit": {
@@ -10,6 +10,6 @@
       "login": "gr2m"
     },
     "name": "twitter-together",
-    "default_branch": "master"
+    "default_branch": "main"
   }
 }

@@ -2,7 +2,7 @@
 
 To create a new tweet create a new `*.tweet` file in this `tweets/` folder.
 
-<kbd>[Create new tweet](../../../new/master/?filename=tweets/<your-path>.tweet)</kbd>
+<kbd>[Create new tweet](../../../new/main/?filename=tweets/<your-path>.tweet)</kbd>
 
 ## Example
 
@@ -14,7 +14,7 @@ You can use subfolders, e.g. `tweets/2019-02/hello-world.tweet`, as long as the 
 
 ## Create a tweet with a twitter poll
 
-**Note**: The configured twitter account needs to be authorized to use Twitters Ads API in order to send tweets including a poll.
+**Note**: The configured twitter account needs to be authorized to use Twitter's Ads API in order to send tweets including a poll.
 
 A tweet including a poll must end with 2-4 options in the following format
 

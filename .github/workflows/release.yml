@@ -1,14 +1,14 @@
 on:
   push:
     branches:
-      - master
+      - main
 name: release
 jobs:
   release:
     name: release
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@master
+      - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
         with:
           node-version: "12.x"

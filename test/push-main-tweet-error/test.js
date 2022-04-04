@@ -1,5 +1,5 @@
 /**
- * This test checks the happy path of a commit to the main branch (master)
+ * This test checks the happy path of a commit to the main branch (main)
  * which includes a new *.tweet file.
  */
 
@@ -13,7 +13,7 @@ const tap = require("tap");
 process.env.GITHUB_EVENT_NAME = "push";
 process.env.GITHUB_TOKEN = "secret123";
 process.env.GITHUB_EVENT_PATH = require.resolve("./event.json");
-process.env.GITHUB_REF = "refs/heads/master";
+process.env.GITHUB_REF = "refs/heads/main";
 process.env.GITHUB_WORKSPACE = path.dirname(process.env.GITHUB_EVENT_PATH);
 
 // set other env variables so action-toolkit is happy
@@ -37,7 +37,7 @@ nock("https://api.github.com", {
     files: [
       {
         status: "added",
-        filename: "tweets/hello-world.tweet",
+        filename: "tweets/cupcake-ipsum.tweet",
       },
     ],
   })
@@ -46,30 +46,31 @@ nock("https://api.github.com", {
   .post(
     "/repos/gr2m/twitter-together/commits/0000000000000000000000000000000000000002/comments",
     (body) => {
-      tap.equal(
-        body.body,
-        "Tweeted:\n\n- https://twitter.com/gr2m/status/0000000000000000001"
-      );
+      console.log(body.body);
+      tap.equal(body.body, "Errors:\n\n- Tweet needs to be a bit shorter.");
       return true;
     }
   )
   .reply(201);
 
 nock("https://api.twitter.com")
-  .post("/1.1/statuses/update.json", (body) => {
-    tap.equal(body.status, "Hello, world!");
-    return true;
-  })
-  .reply(201, {
-    id_str: "0000000000000000001",
-    user: {
-      screen_name: "gr2m",
-    },
+  .post("/1.1/statuses/update.json")
+  .reply(403, {
+    errors: [
+      {
+        code: 186,
+        message: "Tweet needs to be a bit shorter.",
+      },
+    ],
   });
 
 process.on("exit", (code) => {
-  assert.equal(code, 0);
-  assert.deepEqual(nock.pendingMocks(), []);
+  assert.strictEqual(code, 1);
+  assert.deepStrictEqual(nock.pendingMocks(), []);
+
+  // above code exits with 1 (error), but tap expects 0.
+  // Tap adds the "process.exitCode" property for that purpose.
+  process.exitCode = 0;
 });
 
 require("../../lib");
