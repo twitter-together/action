@@ -27,9 +27,9 @@ jobs:
   tweet:
     name: Tweet
     runs-on: ubuntu-latest
-    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     steps:
-      - name: checkout master
+      - name: checkout main
         uses: actions/checkout@v2
       - name: Tweet
         uses: gr2m/twitter-together@v1.x
@@ -41,7 +41,7 @@ jobs:
           TWITTER_API_SECRET_KEY: ${{ secrets.TWITTER_API_SECRET_KEY }}
 ```
 
-Make sure to replace `'master'` if you changed your repository's default branch.
+Make sure to replace `'main'` if you changed your repository's default branch.
 
 ![](workflow-04-commit.png)
 

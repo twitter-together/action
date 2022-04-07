@@ -1,5 +1,5 @@
 /**
- * This test checks the setup routine that occurs on a push to master
+ * This test checks the setup routine that occurs on a push to main
  * when the `tweets/` folder does not yet exist
  */
 
@@ -13,7 +13,7 @@ const tap = require("tap");
 process.env.GITHUB_EVENT_NAME = "push";
 process.env.GITHUB_TOKEN = "secret123";
 process.env.GITHUB_EVENT_PATH = require.resolve("./event.json");
-process.env.GITHUB_REF = "refs/heads/master";
+process.env.GITHUB_REF = "refs/heads/main";
 process.env.GITHUB_WORKSPACE = path.dirname(process.env.GITHUB_EVENT_PATH);
 process.env.GITHUB_SHA = "0000000000000000000000000000000000000002";
 
@@ -64,10 +64,10 @@ nock("https://api.github.com", {
     tap.equal(body.title, "🐦 twitter-together setup");
     tap.match(
       body.body,
-      /This pull requests creates the `tweets\/` folder where your `\*\.tweet` files go into/
+      /This pull request creates the `tweets\/` folder where your `\*\.tweet` files go into/
     );
     tap.equal(body.head, "twitter-together-setup");
-    tap.equal(body.base, "master");
+    tap.equal(body.base, "main");
 
     return true;
   })

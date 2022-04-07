@@ -64,7 +64,7 @@ United States
 
 #### Tell us more about your strategic customers/advertisers\*
 
-> The app is for self-use only. THere are not strategic customers/advertisers.
+> The app is for self-use only. There are not strategic customers/advertisers.
 
 ### `#Product`
 
@@ -119,9 +119,9 @@ jobs:
   tweet:
     name: Tweet
     runs-on: ubuntu-latest
-    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     steps:
-      - name: checkout master
+      - name: checkout main
         uses: actions/checkout@v2
       - name: Tweet
         uses: gr2m/twitter-together@v1.x

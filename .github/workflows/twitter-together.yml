@@ -1,5 +1,5 @@
-# NOTE: if you want to use this file as a template, make sure to replace 'master' in line 21
-# with your repository's default branch (in case you changed it to something other than 'master')
+# NOTE: if you want to use this file as a template, make sure to replace 'main' in line 21
+# with your repository's default branch (in case you changed it to something other than 'main')
 
 on: [push, pull_request]
 name: Twitter, together!
@@ -9,7 +9,7 @@ jobs:
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@master
+      - uses: actions/checkout@v2
       - run: npm ci
       - run: npm run build
       - name: Preview
@@ -18,10 +18,10 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   tweet:
     name: Tweet
-    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@master
+      - uses: actions/checkout@v2
       - run: npm ci
       - run: npm run build
       - name: Tweet
