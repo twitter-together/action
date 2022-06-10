@@ -26,7 +26,7 @@
     "@zeit/ncc": "^0.22.0",
     "nock": "^12.0.0",
     "prettier": "^2.0.1",
-    "semantic-release": "^17.2.3",
+    "semantic-release": "^19.0.3",
     "tap": "^14.10.7"
   },
   "repository": "github:gr2m/twitter-together",
