@@ -122,7 +122,7 @@ jobs:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     steps:
       - name: checkout main
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Tweet
         uses: gr2m/twitter-together@v1.x
         env:
