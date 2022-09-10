@@ -7614,12 +7614,12 @@ const { autoLink } = __webpack_require__(914);
 const parseTweetFileContent = __webpack_require__(401);
 
 async function createCheckRun(
-  { octokit, payload, startedAt, toolkit },
+  { octokit, payload, startedAt, toolkit, dir },
   newTweets
 ) {
   const parsedTweets = newTweets.map((rawTweet) => {
     try {
-      return parseTweetFileContent(rawTweet);
+      return parseTweetFileContent(rawTweet, dir);
     } catch (error) {
       return {
         error: error.message,
@@ -10412,7 +10412,7 @@ var errors = __webpack_require__(584);
 var types = __webpack_require__(362);
 
 var Reader = __webpack_require__(733);
-var Writer = __webpack_require__(713);
+var Writer = __webpack_require__(922);
 
 
 // --- Exports
@@ -17404,9 +17404,7 @@ const FRONT_MATTER_REGEX = new RegExp(
   `^---${EOL}([\\s\\S]*?)${EOL}---(?:$|(?:${EOL})+)`
 );
 
-const MEDIA_DIR = join(process.env.GITHUB_WORKSPACE, "media");
-
-function parseTweetFileContent(text, isThread = false) {
+function parseTweetFileContent(text, dir, isThread = false) {
   const options = {
     threadDelimiter: "---",
     reply: null,
@@ -17421,7 +17419,7 @@ function parseTweetFileContent(text, isThread = false) {
   const frontMatterMatch = text.match(FRONT_MATTER_REGEX);
   if (frontMatterMatch) {
     text = text.slice(frontMatterMatch[0].length);
-    getOptionsFromFrontMatter(frontMatterMatch[1], options);
+    getOptionsFromFrontMatter(frontMatterMatch[1], options, dir);
 
     if (isThread) {
       if (options.reply)
@@ -17439,7 +17437,7 @@ function parseTweetFileContent(text, isThread = false) {
       text = text.slice(0, threadIdx.index);
 
       // Each item can have front matter, as we only split one thread delimiter at a time
-      options.thread = parseTweetFileContent(threadText, true);
+      options.thread = parseTweetFileContent(threadText, dir, true);
     }
   }
 
@@ -17455,7 +17453,7 @@ function parseTweetFileContent(text, isThread = false) {
   }
 
   // Validate options
-  validateOptions(options, text);
+  validateOptions(options, text, dir);
 
   // Parse tweet if has text
   const parsed = text ? parseTweet(text) : { valid: true, weightedLength: 0 };
@@ -17478,7 +17476,7 @@ function parseTweetFileContent(text, isThread = false) {
   };
 }
 
-function validateOptions(options, text) {
+function validateOptions(options, text, dir) {
   if (options.retweet && !text && options.poll)
     throw new Error("Cannot attach a poll to a retweet");
 
@@ -17503,7 +17501,7 @@ function validateOptions(options, text) {
 
   if (options.media) {
     for (const media of options.media) {
-      if (media.file.indexOf(MEDIA_DIR) !== 0)
+      if (media.file.indexOf(join(dir, 'media')) !== 0)
         throw new Error(`Media file should be within the media directory`);
 
       if (!existsSync(media.file))
@@ -17517,7 +17515,7 @@ function validateOptions(options, text) {
   }
 }
 
-function getOptionsFromFrontMatter(frontMatter, options) {
+function getOptionsFromFrontMatter(frontMatter, options, dir) {
   const parsedFrontMatter = load(frontMatter);
   if (typeof parsedFrontMatter !== "object" || !parsedFrontMatter) return;
 
@@ -17532,7 +17530,7 @@ function getOptionsFromFrontMatter(frontMatter, options) {
     options.media = parsedFrontMatter.media.reduce((arr, item) => {
       if (item && typeof item === "object" && typeof item.file === "string")
         arr.push({
-          file: join(MEDIA_DIR, item.file),
+          file: join(dir, 'media', item.file),
           alt: typeof item.alt !== "string" ? null : item.alt,
         });
       return arr;
@@ -29115,34 +29113,22 @@ module.exports.Collection = Hook.Collection
 /***/ (function(__unusedmodule, __unusedexports, __webpack_require__) {
 
 const { readFileSync } = __webpack_require__(747);
+const { resolve, basename } = __webpack_require__(622);
 
 const { Octokit } = __webpack_require__(725);
 const toolkit = __webpack_require__(470);
 
 const handlePullRequest = __webpack_require__(815);
 const handlePush = __webpack_require__(555);
+const parseTweetFileContent = __webpack_require__(401);
+const tweet = __webpack_require__(713);
 
 const VERSION = __webpack_require__(731).version;
 
 console.log(`Running twitter-together version ${VERSION}`);
 
-main();
-
 async function main() {
-  const octokit = new Octokit();
-
-  const payload = JSON.parse(
-    readFileSync(process.env.GITHUB_EVENT_PATH, "utf8")
-  );
-  const ref = process.env.GITHUB_REF;
-  const sha = process.env.GITHUB_SHA;
-
   const state = {
-    toolkit,
-    octokit,
-    payload,
-    ref,
-    sha,
     startedAt: new Date().toISOString(),
     twitterCredentials: {
       consumer_key: process.env.TWITTER_API_KEY,
@@ -29152,15 +29138,52 @@ async function main() {
     },
   };
 
+  // Allow for CLI invocation using `--file tweets/test.tweet`
+  if (process.argv.length > 2 && process.argv[2] === "--file") {
+    if (!process.argv[3]) throw new Error("No file specified for --file");
+    const fileState = {
+      ...state,
+      dir: resolve(process.argv[3], "..", ".."),
+    };
+
+    const payload = readFileSync(resolve(process.argv[3]), "utf8");
+    const parsed = parseTweetFileContent(payload, fileState.dir);
+    console.log("Parsed tweet:", parsed);
+    console.log(await tweet(fileState, parsed, basename(process.argv[3])));
+    return;
+  }
+
+  // If not given file flag, assume GitHub Action
+  const payload = JSON.parse(
+    readFileSync(process.env.GITHUB_EVENT_PATH, "utf8")
+  );
+  const ref = process.env.GITHUB_REF;
+  const sha = process.env.GITHUB_SHA;
+  const dir = process.env.GITHUB_WORKSPACE;
+  const githubState = {
+    ...state,
+    toolkit,
+    octokit: new Octokit(),
+    payload,
+    ref,
+    sha,
+    dir,
+  };
+
   switch (process.env.GITHUB_EVENT_NAME) {
     case "push":
-      await handlePush(state);
+      await handlePush(githubState);
       break;
     case "pull_request":
-      await handlePullRequest(state);
+      await handlePullRequest(githubState);
       break;
   }
 }
+
+main().catch((error) => {
+  console.error(error);
+  process.exit(1);
+});
 
 
 /***/ }),
@@ -29975,7 +29998,7 @@ const addComment = __webpack_require__(591);
 const getNewTweets = __webpack_require__(629);
 const isSetupDone = __webpack_require__(269);
 const setup = __webpack_require__(802);
-const tweet = __webpack_require__(576);
+const tweet = __webpack_require__(713);
 
 const parseTweetFileContent = __webpack_require__(401);
 
@@ -30025,7 +30048,7 @@ async function handlePush(state) {
   const tweetErrors = [];
   for (let i = 0; i < newTweets.length; i++) {
     try {
-      const parsed = parseTweetFileContent(newTweets[i].text);
+      const parsed = parseTweetFileContent(newTweets[i].text, state.dir);
 
       toolkit.info(`Tweeting: ${parsed.text}`);
       if (parsed.poll) {
@@ -31018,212 +31041,7 @@ Signature._oldVersionDetect = function (obj) {
 
 
 /***/ }),
-/* 576 */
-/***/ (function(module, __unusedexports, __webpack_require__) {
-
-module.exports = tweet;
-
-const { promises: fs } = __webpack_require__(747);
-const Twitter = __webpack_require__(918);
-const mime = __webpack_require__(779);
-
-const TWEET_REGEX = /^https:\/\/twitter\.com\/[^/]+\/status\/(\d+)$/;
-
-async function tweet({ twitterCredentials }, tweetData, tweetFile) {
-  const client = new Twitter(twitterCredentials);
-  return handleTweet(client, tweetData, tweetFile);
-}
-
-async function handleTweet(client, tweet, name) {
-  if (tweet.retweet && !tweet.text) {
-    // TODO: Should this throw if an invalid tweet is passed and there is no match?
-    const match = tweet.retweet.match(TWEET_REGEX);
-    if (match) return createRetweet(client, match[1]);
-  }
-
-  const tweetData = {
-    status: tweet.text,
-  };
-
-  if (tweet.poll) {
-    /* istanbul ignore if */
-    if (!process.env.TWITTER_ACCOUNT_ID) {
-      throw new Error(`TWITTER_ACCOUNT_ID environment variable must be set`);
-    }
-
-    tweetData.card_uri = await createPoll(client, {
-      name,
-      pollOptions: tweet.poll,
-    }).then((poll) => poll.card_uri);
-  }
-
-  if (tweet.reply) {
-    // TODO: Should this throw if an invalid reply is passed and there is no match?
-    const match = tweet.reply.match(TWEET_REGEX);
-    if (match) {
-      tweetData.in_reply_to_status_id = match[1];
-      tweetData.auto_populate_reply_metadata = true;
-    }
-  }
-
-  if (tweet.retweet) {
-    // TODO: Should this throw if an invalid tweet is passed and there is no match?
-    const match = tweet.retweet.match(TWEET_REGEX);
-    if (match) tweetData.attachment_url = match[0];
-  }
-
-  if (tweet.media)
-    tweetData.media_ids = await Promise.all(
-      tweet.media.map((media) => createMedia(client, media))
-    ).then((ids) => ids.join(","));
-
-  const tweetResult = await createTweet(client, tweetData);
-  if (tweet.thread)
-    tweetResult.thread = await handleTweet(
-      client,
-      { ...tweet.thread, reply: tweetResult.url },
-      name
-    );
-
-  return tweetResult;
-}
-
-function createPoll(
-  client,
-  {
-    name,
-    text,
-    pollOptions: [first_choice, second_choice, third_choice, fourth_choice],
-  }
-) {
-  return new Promise((resolve, reject) => {
-    // https://developer.twitter.com/en/docs/ads/creatives/api-reference/poll#post-accounts-account-id-cards-poll
-    client.post(
-      `https://ads-api.twitter.com/8/accounts/${process.env.TWITTER_ACCOUNT_ID}/cards/poll`,
-      {
-        name,
-        duration_in_minutes: 1440, // two days
-        first_choice,
-        second_choice,
-        third_choice,
-        fourth_choice,
-        text,
-      },
-      (error, result) => {
-        /* istanbul ignore if */
-        if (error) {
-          return reject(error);
-        }
-
-        resolve({ card_uri: result.data.card_uri });
-      }
-    );
-  });
-}
-
-async function createMedia(client, { file, alt }) {
-  const { size } = await fs.stat(file);
-
-  const id = await new Promise((resolve, reject) => {
-    client.post(
-      "media/upload",
-      {
-        command: "INIT",
-        total_bytes: size,
-        media_type: mime.lookup(file),
-      },
-      (error, result) => {
-        if (error) return reject(error);
-        resolve(result.media_id_string);
-      }
-    );
-  });
-
-  const data = await fs.readFile(file);
-
-  await new Promise((resolve, reject) => {
-    client.post(
-      "media/upload",
-      {
-        command: "APPEND",
-        media_id: id,
-        media: data,
-        segment_index: 0,
-      },
-      (error) => {
-        if (error) return reject(error);
-        resolve();
-      }
-    );
-  });
-
-  await new Promise((resolve, reject) => {
-    client.post(
-      "media/upload",
-      {
-        command: "FINALIZE",
-        media_id: id,
-      },
-      (error) => {
-        if (error) return reject(error);
-        resolve();
-      }
-    );
-  });
-
-  if (alt) {
-    await new Promise((resolve, reject) => {
-      client.post(
-        "media/metadata/create",
-        {
-          media_id: id,
-          alt_text: {
-            text: alt,
-          },
-        },
-        (error) => {
-          if (error) return reject(error);
-          resolve();
-        }
-      );
-    });
-  }
-
-  return id;
-}
-
-function createTweet(client, options) {
-  return new Promise((resolve, reject) => {
-    client.post("statuses/update", options, (error, result) => {
-      if (error) {
-        return reject(error);
-      }
-
-      resolve({
-        text: options.status,
-        url: `https://twitter.com/${result.user.screen_name}/status/${result.id_str}`,
-      });
-    });
-  });
-}
-
-function createRetweet(client, id) {
-  return new Promise((resolve, reject) => {
-    client.post(`statuses/retweet/${id}`, {}, (error, result) => {
-      if (error) {
-        return reject(error);
-      }
-
-      resolve({
-        retweet: `https://twitter.com/${result.retweeted_status.user.screen_name}/status/${result.retweeted_status.id_str}`,
-        url: `https://twitter.com/${result.user.screen_name}/status/${result.id_str}`,
-      });
-    });
-  });
-}
-
-
-/***/ }),
+/* 576 */,
 /* 577 */,
 /* 578 */
 /***/ (function(module) {
@@ -37205,323 +37023,206 @@ module.exports = new Type('tag:yaml.org,2002:int', {
 /* 713 */
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
-// Copyright 2011 Mark Cavage <mcavage@gmail.com> All rights reserved.
+module.exports = tweet;
 
-var assert = __webpack_require__(357);
-var Buffer = __webpack_require__(215).Buffer;
-var ASN1 = __webpack_require__(362);
-var errors = __webpack_require__(584);
+const { promises: fs } = __webpack_require__(747);
+const Twitter = __webpack_require__(918);
+const mime = __webpack_require__(779);
 
+const TWEET_REGEX = /^https:\/\/twitter\.com\/[^/]+\/status\/(\d+)$/;
 
-// --- Globals
-
-var newInvalidAsn1Error = errors.newInvalidAsn1Error;
-
-var DEFAULT_OPTS = {
-  size: 1024,
-  growthFactor: 8
-};
-
-
-// --- Helpers
-
-function merge(from, to) {
-  assert.ok(from);
-  assert.equal(typeof (from), 'object');
-  assert.ok(to);
-  assert.equal(typeof (to), 'object');
-
-  var keys = Object.getOwnPropertyNames(from);
-  keys.forEach(function (key) {
-    if (to[key])
-      return;
-
-    var value = Object.getOwnPropertyDescriptor(from, key);
-    Object.defineProperty(to, key, value);
-  });
-
-  return to;
+async function tweet({ twitterCredentials }, tweetData, tweetFile) {
+  const client = new Twitter(twitterCredentials);
+  return handleTweet(client, tweetData, tweetFile);
 }
 
-
-
-// --- API
-
-function Writer(options) {
-  options = merge(DEFAULT_OPTS, options || {});
-
-  this._buf = Buffer.alloc(options.size || 1024);
-  this._size = this._buf.length;
-  this._offset = 0;
-  this._options = options;
-
-  // A list of offsets in the buffer where we need to insert
-  // sequence tag/len pairs.
-  this._seq = [];
-}
-
-Object.defineProperty(Writer.prototype, 'buffer', {
-  get: function () {
-    if (this._seq.length)
-      throw newInvalidAsn1Error(this._seq.length + ' unended sequence(s)');
-
-    return (this._buf.slice(0, this._offset));
-  }
-});
-
-Writer.prototype.writeByte = function (b) {
-  if (typeof (b) !== 'number')
-    throw new TypeError('argument must be a Number');
-
-  this._ensure(1);
-  this._buf[this._offset++] = b;
-};
-
-
-Writer.prototype.writeInt = function (i, tag) {
-  if (typeof (i) !== 'number')
-    throw new TypeError('argument must be a Number');
-  if (typeof (tag) !== 'number')
-    tag = ASN1.Integer;
-
-  var sz = 4;
-
-  while ((((i & 0xff800000) === 0) || ((i & 0xff800000) === 0xff800000 >> 0)) &&
-        (sz > 1)) {
-    sz--;
-    i <<= 8;
+async function handleTweet(client, tweet, name) {
+  if (tweet.retweet && !tweet.text) {
+    // TODO: Should this throw if an invalid tweet is passed and there is no match?
+    const match = tweet.retweet.match(TWEET_REGEX);
+    if (match) return createRetweet(client, match[1]);
   }
 
-  if (sz > 4)
-    throw newInvalidAsn1Error('BER ints cannot be > 0xffffffff');
+  const tweetData = {
+    status: tweet.text,
+  };
 
-  this._ensure(2 + sz);
-  this._buf[this._offset++] = tag;
-  this._buf[this._offset++] = sz;
+  if (tweet.poll) {
+    /* istanbul ignore if */
+    if (!process.env.TWITTER_ACCOUNT_ID) {
+      throw new Error(`TWITTER_ACCOUNT_ID environment variable must be set`);
+    }
 
-  while (sz-- > 0) {
-    this._buf[this._offset++] = ((i & 0xff000000) >>> 24);
-    i <<= 8;
+    tweetData.card_uri = await createPoll(client, {
+      name,
+      pollOptions: tweet.poll,
+    }).then((poll) => poll.card_uri);
   }
 
-};
-
-
-Writer.prototype.writeNull = function () {
-  this.writeByte(ASN1.Null);
-  this.writeByte(0x00);
-};
-
-
-Writer.prototype.writeEnumeration = function (i, tag) {
-  if (typeof (i) !== 'number')
-    throw new TypeError('argument must be a Number');
-  if (typeof (tag) !== 'number')
-    tag = ASN1.Enumeration;
-
-  return this.writeInt(i, tag);
-};
-
-
-Writer.prototype.writeBoolean = function (b, tag) {
-  if (typeof (b) !== 'boolean')
-    throw new TypeError('argument must be a Boolean');
-  if (typeof (tag) !== 'number')
-    tag = ASN1.Boolean;
-
-  this._ensure(3);
-  this._buf[this._offset++] = tag;
-  this._buf[this._offset++] = 0x01;
-  this._buf[this._offset++] = b ? 0xff : 0x00;
-};
-
-
-Writer.prototype.writeString = function (s, tag) {
-  if (typeof (s) !== 'string')
-    throw new TypeError('argument must be a string (was: ' + typeof (s) + ')');
-  if (typeof (tag) !== 'number')
-    tag = ASN1.OctetString;
-
-  var len = Buffer.byteLength(s);
-  this.writeByte(tag);
-  this.writeLength(len);
-  if (len) {
-    this._ensure(len);
-    this._buf.write(s, this._offset);
-    this._offset += len;
-  }
-};
-
-
-Writer.prototype.writeBuffer = function (buf, tag) {
-  if (typeof (tag) !== 'number')
-    throw new TypeError('tag must be a number');
-  if (!Buffer.isBuffer(buf))
-    throw new TypeError('argument must be a buffer');
-
-  this.writeByte(tag);
-  this.writeLength(buf.length);
-  this._ensure(buf.length);
-  buf.copy(this._buf, this._offset, 0, buf.length);
-  this._offset += buf.length;
-};
-
-
-Writer.prototype.writeStringArray = function (strings) {
-  if ((!strings instanceof Array))
-    throw new TypeError('argument must be an Array[String]');
-
-  var self = this;
-  strings.forEach(function (s) {
-    self.writeString(s);
-  });
-};
-
-// This is really to solve DER cases, but whatever for now
-Writer.prototype.writeOID = function (s, tag) {
-  if (typeof (s) !== 'string')
-    throw new TypeError('argument must be a string');
-  if (typeof (tag) !== 'number')
-    tag = ASN1.OID;
-
-  if (!/^([0-9]+\.){3,}[0-9]+$/.test(s))
-    throw new Error('argument is not a valid OID string');
-
-  function encodeOctet(bytes, octet) {
-    if (octet < 128) {
-        bytes.push(octet);
-    } else if (octet < 16384) {
-        bytes.push((octet >>> 7) | 0x80);
-        bytes.push(octet & 0x7F);
-    } else if (octet < 2097152) {
-      bytes.push((octet >>> 14) | 0x80);
-      bytes.push(((octet >>> 7) | 0x80) & 0xFF);
-      bytes.push(octet & 0x7F);
-    } else if (octet < 268435456) {
-      bytes.push((octet >>> 21) | 0x80);
-      bytes.push(((octet >>> 14) | 0x80) & 0xFF);
-      bytes.push(((octet >>> 7) | 0x80) & 0xFF);
-      bytes.push(octet & 0x7F);
-    } else {
-      bytes.push(((octet >>> 28) | 0x80) & 0xFF);
-      bytes.push(((octet >>> 21) | 0x80) & 0xFF);
-      bytes.push(((octet >>> 14) | 0x80) & 0xFF);
-      bytes.push(((octet >>> 7) | 0x80) & 0xFF);
-      bytes.push(octet & 0x7F);
+  if (tweet.reply) {
+    // TODO: Should this throw if an invalid reply is passed and there is no match?
+    const match = tweet.reply.match(TWEET_REGEX);
+    if (match) {
+      tweetData.in_reply_to_status_id = match[1];
+      tweetData.auto_populate_reply_metadata = true;
     }
   }
 
-  var tmp = s.split('.');
-  var bytes = [];
-  bytes.push(parseInt(tmp[0], 10) * 40 + parseInt(tmp[1], 10));
-  tmp.slice(2).forEach(function (b) {
-    encodeOctet(bytes, parseInt(b, 10));
+  if (tweet.retweet) {
+    // TODO: Should this throw if an invalid tweet is passed and there is no match?
+    const match = tweet.retweet.match(TWEET_REGEX);
+    if (match) tweetData.attachment_url = match[0];
+  }
+
+  if (tweet.media)
+    tweetData.media_ids = await Promise.all(
+      tweet.media.map((media) => createMedia(client, media))
+    ).then((ids) => ids.join(","));
+
+  const tweetResult = await createTweet(client, tweetData);
+  if (tweet.thread)
+    tweetResult.thread = await handleTweet(
+      client,
+      { ...tweet.thread, reply: tweetResult.url },
+      name
+    );
+
+  return tweetResult;
+}
+
+function createPoll(
+  client,
+  {
+    name,
+    text,
+    pollOptions: [first_choice, second_choice, third_choice, fourth_choice],
+  }
+) {
+  return new Promise((resolve, reject) => {
+    // https://developer.twitter.com/en/docs/ads/creatives/api-reference/poll#post-accounts-account-id-cards-poll
+    client.post(
+      `https://ads-api.twitter.com/8/accounts/${process.env.TWITTER_ACCOUNT_ID}/cards/poll`,
+      {
+        name,
+        duration_in_minutes: 1440, // two days
+        first_choice,
+        second_choice,
+        third_choice,
+        fourth_choice,
+        text,
+      },
+      (error, result) => {
+        /* istanbul ignore if */
+        if (error) {
+          return reject(error);
+        }
+
+        resolve({ card_uri: result.data.card_uri });
+      }
+    );
+  });
+}
+
+async function createMedia(client, { file, alt }) {
+  const { size } = await fs.stat(file);
+
+  const id = await new Promise((resolve, reject) => {
+    client.post(
+      "media/upload",
+      {
+        command: "INIT",
+        total_bytes: size,
+        media_type: mime.lookup(file),
+      },
+      (error, result) => {
+        if (error) return reject(error);
+        resolve(result.media_id_string);
+      }
+    );
   });
 
-  var self = this;
-  this._ensure(2 + bytes.length);
-  this.writeByte(tag);
-  this.writeLength(bytes.length);
-  bytes.forEach(function (b) {
-    self.writeByte(b);
+  const data = await fs.readFile(file);
+
+  await new Promise((resolve, reject) => {
+    client.post(
+      "media/upload",
+      {
+        command: "APPEND",
+        media_id: id,
+        media: data,
+        segment_index: 0,
+      },
+      (error) => {
+        if (error) return reject(error);
+        resolve();
+      }
+    );
   });
-};
 
+  await new Promise((resolve, reject) => {
+    client.post(
+      "media/upload",
+      {
+        command: "FINALIZE",
+        media_id: id,
+      },
+      (error) => {
+        if (error) return reject(error);
+        resolve();
+      }
+    );
+  });
 
-Writer.prototype.writeLength = function (len) {
-  if (typeof (len) !== 'number')
-    throw new TypeError('argument must be a Number');
-
-  this._ensure(4);
-
-  if (len <= 0x7f) {
-    this._buf[this._offset++] = len;
-  } else if (len <= 0xff) {
-    this._buf[this._offset++] = 0x81;
-    this._buf[this._offset++] = len;
-  } else if (len <= 0xffff) {
-    this._buf[this._offset++] = 0x82;
-    this._buf[this._offset++] = len >> 8;
-    this._buf[this._offset++] = len;
-  } else if (len <= 0xffffff) {
-    this._buf[this._offset++] = 0x83;
-    this._buf[this._offset++] = len >> 16;
-    this._buf[this._offset++] = len >> 8;
-    this._buf[this._offset++] = len;
-  } else {
-    throw newInvalidAsn1Error('Length too long (> 4 bytes)');
+  if (alt) {
+    await new Promise((resolve, reject) => {
+      client.post(
+        "media/metadata/create",
+        {
+          media_id: id,
+          alt_text: {
+            text: alt,
+          },
+        },
+        (error) => {
+          if (error) return reject(error);
+          resolve();
+        }
+      );
+    });
   }
-};
 
-Writer.prototype.startSequence = function (tag) {
-  if (typeof (tag) !== 'number')
-    tag = ASN1.Sequence | ASN1.Constructor;
+  return id;
+}
 
-  this.writeByte(tag);
-  this._seq.push(this._offset);
-  this._ensure(3);
-  this._offset += 3;
-};
+function createTweet(client, options) {
+  return new Promise((resolve, reject) => {
+    client.post("statuses/update", options, (error, result) => {
+      if (error) {
+        return reject(error);
+      }
 
+      resolve({
+        text: options.status,
+        url: `https://twitter.com/${result.user.screen_name}/status/${result.id_str}`,
+      });
+    });
+  });
+}
 
-Writer.prototype.endSequence = function () {
-  var seq = this._seq.pop();
-  var start = seq + 3;
-  var len = this._offset - start;
+function createRetweet(client, id) {
+  return new Promise((resolve, reject) => {
+    client.post(`statuses/retweet/${id}`, {}, (error, result) => {
+      if (error) {
+        return reject(error);
+      }
 
-  if (len <= 0x7f) {
-    this._shift(start, len, -2);
-    this._buf[seq] = len;
-  } else if (len <= 0xff) {
-    this._shift(start, len, -1);
-    this._buf[seq] = 0x81;
-    this._buf[seq + 1] = len;
-  } else if (len <= 0xffff) {
-    this._buf[seq] = 0x82;
-    this._buf[seq + 1] = len >> 8;
-    this._buf[seq + 2] = len;
-  } else if (len <= 0xffffff) {
-    this._shift(start, len, 1);
-    this._buf[seq] = 0x83;
-    this._buf[seq + 1] = len >> 16;
-    this._buf[seq + 2] = len >> 8;
-    this._buf[seq + 3] = len;
-  } else {
-    throw newInvalidAsn1Error('Sequence too long');
-  }
-};
-
-
-Writer.prototype._shift = function (start, len, shift) {
-  assert.ok(start !== undefined);
-  assert.ok(len !== undefined);
-  assert.ok(shift);
-
-  this._buf.copy(this._buf, start + shift, start, start + len);
-  this._offset += shift;
-};
-
-Writer.prototype._ensure = function (len) {
-  assert.ok(len);
-
-  if (this._size - this._offset < len) {
-    var sz = this._size * this._options.growthFactor;
-    if (sz - this._offset < len)
-      sz += len;
-
-    var buf = Buffer.alloc(sz);
-
-    this._buf.copy(buf, 0, 0, this._offset);
-    this._buf = buf;
-    this._size = sz;
-  }
-};
-
-
-
-// --- Exported API
-
-module.exports = Writer;
+      resolve({
+        retweet: `https://twitter.com/${result.retweeted_status.user.screen_name}/status/${result.retweeted_status.id_str}`,
+        url: `https://twitter.com/${result.user.screen_name}/status/${result.id_str}`,
+      });
+    });
+  });
+}
 
 
 /***/ }),
@@ -48397,7 +48098,329 @@ Cache.prototype.clear = function Cache_clear() {
 
 
 /***/ }),
-/* 922 */,
+/* 922 */
+/***/ (function(module, __unusedexports, __webpack_require__) {
+
+// Copyright 2011 Mark Cavage <mcavage@gmail.com> All rights reserved.
+
+var assert = __webpack_require__(357);
+var Buffer = __webpack_require__(215).Buffer;
+var ASN1 = __webpack_require__(362);
+var errors = __webpack_require__(584);
+
+
+// --- Globals
+
+var newInvalidAsn1Error = errors.newInvalidAsn1Error;
+
+var DEFAULT_OPTS = {
+  size: 1024,
+  growthFactor: 8
+};
+
+
+// --- Helpers
+
+function merge(from, to) {
+  assert.ok(from);
+  assert.equal(typeof (from), 'object');
+  assert.ok(to);
+  assert.equal(typeof (to), 'object');
+
+  var keys = Object.getOwnPropertyNames(from);
+  keys.forEach(function (key) {
+    if (to[key])
+      return;
+
+    var value = Object.getOwnPropertyDescriptor(from, key);
+    Object.defineProperty(to, key, value);
+  });
+
+  return to;
+}
+
+
+
+// --- API
+
+function Writer(options) {
+  options = merge(DEFAULT_OPTS, options || {});
+
+  this._buf = Buffer.alloc(options.size || 1024);
+  this._size = this._buf.length;
+  this._offset = 0;
+  this._options = options;
+
+  // A list of offsets in the buffer where we need to insert
+  // sequence tag/len pairs.
+  this._seq = [];
+}
+
+Object.defineProperty(Writer.prototype, 'buffer', {
+  get: function () {
+    if (this._seq.length)
+      throw newInvalidAsn1Error(this._seq.length + ' unended sequence(s)');
+
+    return (this._buf.slice(0, this._offset));
+  }
+});
+
+Writer.prototype.writeByte = function (b) {
+  if (typeof (b) !== 'number')
+    throw new TypeError('argument must be a Number');
+
+  this._ensure(1);
+  this._buf[this._offset++] = b;
+};
+
+
+Writer.prototype.writeInt = function (i, tag) {
+  if (typeof (i) !== 'number')
+    throw new TypeError('argument must be a Number');
+  if (typeof (tag) !== 'number')
+    tag = ASN1.Integer;
+
+  var sz = 4;
+
+  while ((((i & 0xff800000) === 0) || ((i & 0xff800000) === 0xff800000 >> 0)) &&
+        (sz > 1)) {
+    sz--;
+    i <<= 8;
+  }
+
+  if (sz > 4)
+    throw newInvalidAsn1Error('BER ints cannot be > 0xffffffff');
+
+  this._ensure(2 + sz);
+  this._buf[this._offset++] = tag;
+  this._buf[this._offset++] = sz;
+
+  while (sz-- > 0) {
+    this._buf[this._offset++] = ((i & 0xff000000) >>> 24);
+    i <<= 8;
+  }
+
+};
+
+
+Writer.prototype.writeNull = function () {
+  this.writeByte(ASN1.Null);
+  this.writeByte(0x00);
+};
+
+
+Writer.prototype.writeEnumeration = function (i, tag) {
+  if (typeof (i) !== 'number')
+    throw new TypeError('argument must be a Number');
+  if (typeof (tag) !== 'number')
+    tag = ASN1.Enumeration;
+
+  return this.writeInt(i, tag);
+};
+
+
+Writer.prototype.writeBoolean = function (b, tag) {
+  if (typeof (b) !== 'boolean')
+    throw new TypeError('argument must be a Boolean');
+  if (typeof (tag) !== 'number')
+    tag = ASN1.Boolean;
+
+  this._ensure(3);
+  this._buf[this._offset++] = tag;
+  this._buf[this._offset++] = 0x01;
+  this._buf[this._offset++] = b ? 0xff : 0x00;
+};
+
+
+Writer.prototype.writeString = function (s, tag) {
+  if (typeof (s) !== 'string')
+    throw new TypeError('argument must be a string (was: ' + typeof (s) + ')');
+  if (typeof (tag) !== 'number')
+    tag = ASN1.OctetString;
+
+  var len = Buffer.byteLength(s);
+  this.writeByte(tag);
+  this.writeLength(len);
+  if (len) {
+    this._ensure(len);
+    this._buf.write(s, this._offset);
+    this._offset += len;
+  }
+};
+
+
+Writer.prototype.writeBuffer = function (buf, tag) {
+  if (typeof (tag) !== 'number')
+    throw new TypeError('tag must be a number');
+  if (!Buffer.isBuffer(buf))
+    throw new TypeError('argument must be a buffer');
+
+  this.writeByte(tag);
+  this.writeLength(buf.length);
+  this._ensure(buf.length);
+  buf.copy(this._buf, this._offset, 0, buf.length);
+  this._offset += buf.length;
+};
+
+
+Writer.prototype.writeStringArray = function (strings) {
+  if ((!strings instanceof Array))
+    throw new TypeError('argument must be an Array[String]');
+
+  var self = this;
+  strings.forEach(function (s) {
+    self.writeString(s);
+  });
+};
+
+// This is really to solve DER cases, but whatever for now
+Writer.prototype.writeOID = function (s, tag) {
+  if (typeof (s) !== 'string')
+    throw new TypeError('argument must be a string');
+  if (typeof (tag) !== 'number')
+    tag = ASN1.OID;
+
+  if (!/^([0-9]+\.){3,}[0-9]+$/.test(s))
+    throw new Error('argument is not a valid OID string');
+
+  function encodeOctet(bytes, octet) {
+    if (octet < 128) {
+        bytes.push(octet);
+    } else if (octet < 16384) {
+        bytes.push((octet >>> 7) | 0x80);
+        bytes.push(octet & 0x7F);
+    } else if (octet < 2097152) {
+      bytes.push((octet >>> 14) | 0x80);
+      bytes.push(((octet >>> 7) | 0x80) & 0xFF);
+      bytes.push(octet & 0x7F);
+    } else if (octet < 268435456) {
+      bytes.push((octet >>> 21) | 0x80);
+      bytes.push(((octet >>> 14) | 0x80) & 0xFF);
+      bytes.push(((octet >>> 7) | 0x80) & 0xFF);
+      bytes.push(octet & 0x7F);
+    } else {
+      bytes.push(((octet >>> 28) | 0x80) & 0xFF);
+      bytes.push(((octet >>> 21) | 0x80) & 0xFF);
+      bytes.push(((octet >>> 14) | 0x80) & 0xFF);
+      bytes.push(((octet >>> 7) | 0x80) & 0xFF);
+      bytes.push(octet & 0x7F);
+    }
+  }
+
+  var tmp = s.split('.');
+  var bytes = [];
+  bytes.push(parseInt(tmp[0], 10) * 40 + parseInt(tmp[1], 10));
+  tmp.slice(2).forEach(function (b) {
+    encodeOctet(bytes, parseInt(b, 10));
+  });
+
+  var self = this;
+  this._ensure(2 + bytes.length);
+  this.writeByte(tag);
+  this.writeLength(bytes.length);
+  bytes.forEach(function (b) {
+    self.writeByte(b);
+  });
+};
+
+
+Writer.prototype.writeLength = function (len) {
+  if (typeof (len) !== 'number')
+    throw new TypeError('argument must be a Number');
+
+  this._ensure(4);
+
+  if (len <= 0x7f) {
+    this._buf[this._offset++] = len;
+  } else if (len <= 0xff) {
+    this._buf[this._offset++] = 0x81;
+    this._buf[this._offset++] = len;
+  } else if (len <= 0xffff) {
+    this._buf[this._offset++] = 0x82;
+    this._buf[this._offset++] = len >> 8;
+    this._buf[this._offset++] = len;
+  } else if (len <= 0xffffff) {
+    this._buf[this._offset++] = 0x83;
+    this._buf[this._offset++] = len >> 16;
+    this._buf[this._offset++] = len >> 8;
+    this._buf[this._offset++] = len;
+  } else {
+    throw newInvalidAsn1Error('Length too long (> 4 bytes)');
+  }
+};
+
+Writer.prototype.startSequence = function (tag) {
+  if (typeof (tag) !== 'number')
+    tag = ASN1.Sequence | ASN1.Constructor;
+
+  this.writeByte(tag);
+  this._seq.push(this._offset);
+  this._ensure(3);
+  this._offset += 3;
+};
+
+
+Writer.prototype.endSequence = function () {
+  var seq = this._seq.pop();
+  var start = seq + 3;
+  var len = this._offset - start;
+
+  if (len <= 0x7f) {
+    this._shift(start, len, -2);
+    this._buf[seq] = len;
+  } else if (len <= 0xff) {
+    this._shift(start, len, -1);
+    this._buf[seq] = 0x81;
+    this._buf[seq + 1] = len;
+  } else if (len <= 0xffff) {
+    this._buf[seq] = 0x82;
+    this._buf[seq + 1] = len >> 8;
+    this._buf[seq + 2] = len;
+  } else if (len <= 0xffffff) {
+    this._shift(start, len, 1);
+    this._buf[seq] = 0x83;
+    this._buf[seq + 1] = len >> 16;
+    this._buf[seq + 2] = len >> 8;
+    this._buf[seq + 3] = len;
+  } else {
+    throw newInvalidAsn1Error('Sequence too long');
+  }
+};
+
+
+Writer.prototype._shift = function (start, len, shift) {
+  assert.ok(start !== undefined);
+  assert.ok(len !== undefined);
+  assert.ok(shift);
+
+  this._buf.copy(this._buf, start + shift, start, start + len);
+  this._offset += shift;
+};
+
+Writer.prototype._ensure = function (len) {
+  assert.ok(len);
+
+  if (this._size - this._offset < len) {
+    var sz = this._size * this._options.growthFactor;
+    if (sz - this._offset < len)
+      sz += len;
+
+    var buf = Buffer.alloc(sz);
+
+    this._buf.copy(buf, 0, 0, this._offset);
+    this._buf = buf;
+    this._size = sz;
+  }
+};
+
+
+
+// --- Exported API
+
+module.exports = Writer;
+
+
+/***/ }),
 /* 923 */,
 /* 924 */,
 /* 925 */,
