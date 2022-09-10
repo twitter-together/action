@@ -37173,23 +37173,25 @@ async function createMedia(client, { file, alt }) {
     );
   });
 
-  if (alt) {
-    await new Promise((resolve, reject) => {
-      client.post(
-        "media/metadata/create",
-        {
-          media_id: id,
-          alt_text: {
-            text: alt,
-          },
-        },
-        (error) => {
-          if (error) return reject(error);
-          resolve();
-        }
-      );
-    });
-  }
+  // TODO: Support alt text (twitter library does not support JSON payloads)
+  //       https://github.com/desmondmorris/node-twitter/issues/347
+  // if (alt) {
+  //   await new Promise((resolve, reject) => {
+  //     client.post(
+  //       "media/metadata/create",
+  //       {
+  //         media_id: id,
+  //         alt_text: {
+  //           text: alt,
+  //         },
+  //       },
+  //       (error) => {
+  //         if (error) return reject(error);
+  //         resolve();
+  //       }
+  //     );
+  //   });
+  // }
 
   return id;
 }
