@@ -40075,9 +40075,10 @@ function createPoll(
   }
 ) {
   return new Promise((resolve, reject) => {
+    // TODO: Switch to the v2 Twitter API for creating tweets and use the `poll` object, not Ads API
     // https://developer.twitter.com/en/docs/ads/creatives/api-reference/poll#post-accounts-account-id-cards-poll
     client.post(
-      `https://ads-api.twitter.com/8/accounts/${process.env.TWITTER_ACCOUNT_ID}/cards/poll`,
+      `https://ads-api.twitter.com/11/accounts/${process.env.TWITTER_ACCOUNT_ID}/cards/poll`,
       {
         name,
         duration_in_minutes: 1440, // two days
