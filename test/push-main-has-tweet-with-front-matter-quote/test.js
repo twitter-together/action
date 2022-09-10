@@ -1,6 +1,6 @@
 /**
- * This test checks the happy path of a commit to the main branch (master)
- * which includes a new *.tweet file that is making use of the front matter to reply.
+ * This test checks the happy path of a commit to the main branch
+ * which includes a new *.tweet file that is making use of the front matter to quote retweet.
  */
 
 const assert = require("assert");
@@ -13,7 +13,7 @@ const tap = require("tap");
 process.env.GITHUB_EVENT_NAME = "push";
 process.env.GITHUB_TOKEN = "secret123";
 process.env.GITHUB_EVENT_PATH = require.resolve("./event.json");
-process.env.GITHUB_REF = "refs/heads/master";
+process.env.GITHUB_REF = "refs/heads/main";
 process.env.GITHUB_WORKSPACE = path.dirname(process.env.GITHUB_EVENT_PATH);
 
 // set other env variables so action-toolkit is happy
@@ -57,9 +57,11 @@ nock("https://api.github.com", {
 
 nock("https://api.twitter.com")
   .post("/1.1/statuses/update.json", (body) => {
-    tap.equal(body.status, "Good idea :)");
-    tap.equal(body.in_reply_to_status_id, "0000000000000000001");
-    tap.equal(body.auto_populate_reply_metadata, "true");
+    tap.equal(body.status, "Smart thinking!");
+    tap.equal(
+      body.attachment_url,
+      "https://twitter.com/m2rg/status/0000000000000000001"
+    );
     return true;
   })
   .reply(201, {
