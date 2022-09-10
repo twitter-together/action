@@ -1,7 +1,9 @@
 name: Test
-on:
+"on":
   pull_request:
-    types: [opened, synchronize]
+    types:
+      - opened
+      - synchronize
 jobs:
   test:
     name: Test
@@ -11,7 +13,7 @@ jobs:
       - name: Setup node
         uses: actions/setup-node@v1
         with:
-          node-version: "12.x"
+          node-version: lts/*
       - run: npm ci
       - run: npm run build
       - run: npm test
