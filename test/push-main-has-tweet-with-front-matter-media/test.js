@@ -101,14 +101,14 @@ nock("https://upload.twitter.com")
   })
   .reply(201);
 
-  // TODO: Support alt text (twitter library does not support JSON payloads)
-  //       https://github.com/desmondmorris/node-twitter/issues/347
-  // .post("/1.1/media/metadata/create.json", (body) => {
-  //   tap.equal(body.media_id, "0000000000000000002");
-  //   tap.equal(body.alt_text.text, "Blahaj!");
-  //   return true;
-  // })
-  // .reply(201);
+// TODO: Support alt text (twitter library does not support JSON payloads)
+//       https://github.com/desmondmorris/node-twitter/issues/347
+// .post("/1.1/media/metadata/create.json", (body) => {
+//   tap.equal(body.media_id, "0000000000000000002");
+//   tap.equal(body.alt_text.text, "Blahaj!");
+//   return true;
+// })
+// .reply(201);
 
 process.on("exit", (code) => {
   assert.equal(code, 0);
