@@ -14,9 +14,9 @@
   },
   "repository": {
     "default_branch": "main",
-    "name": "twitter-together",
+    "name": "action",
     "owner": {
-      "login": "gr2m"
+      "login": "twitter-together"
     }
   }
 }

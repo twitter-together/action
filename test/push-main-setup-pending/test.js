@@ -30,7 +30,7 @@ nock("https://api.github.com", {
   },
 })
   // check if twitter-together-setup branch exists
-  .head("/repos/twitter-together/action/git/refs/heads/twitter-together-setup")
+  .head("/repos/twitter-together/action/git/refs/heads%2Ftwitter-together-setup")
   .reply(200);
 
 process.on("exit", (code) => {

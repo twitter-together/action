@@ -7,9 +7,9 @@
   },
   "repository": {
     "owner": {
-      "login": "gr2m"
+      "login": "twitter-together"
     },
-    "name": "twitter-together",
+    "name": "action",
     "default_branch": "main"
   }
 }
