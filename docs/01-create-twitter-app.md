@@ -24,7 +24,7 @@ When in doubt, select: Hobbyist -> Making a bot
 
 #### 1. In your words
 
-This app will be used to publish tweets using the [twitter-together](https://github.com/gr2m/twitter-together/) GitHub Action. It allows to use a GitHub repository and pull request reviews as a workflow to collaboratively tweet from a shared twitter account.
+This app will be used to publish tweets using the [twitter-together](https://github.com/twitter-together/action/) GitHub Action. It allows to use a GitHub repository and pull request reviews as a workflow to collaboratively tweet from a shared twitter account.
 
 #### 2. Are you planning to analyze Twitter data?
 
@@ -62,7 +62,7 @@ Collaboratively tweet using GitHub’s pull request review process by utilizing 
 
 ### Website URL (required)
 
-https://github.com/gr2m/twitter-together
+https://github.com/twitter-together/action
 
 ### Tell us how this app will be used (required)
 

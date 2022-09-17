@@ -13,7 +13,7 @@ Please note that this project is released with a [Contributor Code of Conduct](C
 
 ## Have a question? Found a bug? Have an idea?
 
-Please [create an issue](https://github.com/gr2m/twitter-together/issues/new/choose).
+Please [create an issue](https://github.com/twitter-together/action/issues/new/choose).
 
 I love pull requests 😍 but before you put in too much time I’d appreciate if you created an issue first to make sure that it is an actual issue.
 
@@ -21,7 +21,7 @@ I love pull requests 😍 but before you put in too much time I’d appreciate i
 
 If you would like to contribute a bug fix or new feature (after discussing in an issue), please add tests.
 
-Each test is a folder such as [`test/push-main-has-tweet`](https://github.com/gr2m/twitter-together/tree/main/test/push-main-has-tweet). You can either adapt one of the existing tests or create a new folder by copying it.
+Each test is a folder such as [`test/push-main-has-tweet`](https://github.com/twitter-together/action/tree/main/test/push-main-has-tweet). You can either adapt one of the existing tests or create a new folder by copying it.
 
 Each folder has a `test.js` file which runs the test, an `event.json` file which has the payload for the event you want to simulate and any other files that simulate a certain state a repository would be in.
 

@@ -26,7 +26,7 @@ nock("https://api.github.com", {
   },
 })
   // get changed files
-  .get("/repos/gr2m/twitter-together/pulls/123/files")
+  .get("/repos/twitter-together/action/pulls/123/files")
   .reply(500);
 
 process.on("exit", (code) => {

@@ -28,7 +28,7 @@ nock("https://api.github.com", {
   },
 })
   // get changed files
-  .get("/repos/gr2m/twitter-together/pulls/123/files")
+  .get("/repos/twitter-together/action/pulls/123/files")
   .reply(200, [
     {
       status: "added",
@@ -43,7 +43,7 @@ nock("https://api.github.com", {
     authorization: "token secret123",
   },
 })
-  .get("/repos/gr2m/twitter-together/pulls/123")
+  .get("/repos/twitter-together/action/pulls/123")
   .reply(
     200,
     `diff --git a/tweets/progress.tweet b/tweets/progress.tweet
@@ -61,7 +61,7 @@ nock("https://api.github.com", {
     authorization: "token secret123",
   },
 })
-  .post("/repos/gr2m/twitter-together/check-runs", (body) => {
+  .post("/repos/twitter-together/action/check-runs", (body) => {
     tap.equal(body.name, "preview");
     tap.equal(body.head_sha, "0000000000000000000000000000000000000002");
     tap.equal(body.status, "completed");

@@ -28,7 +28,7 @@ nock("https://api.github.com", {
   },
 })
   // get changed files
-  .get("/repos/gr2m/twitter-together/pulls/123/files")
+  .get("/repos/twitter-together/action/pulls/123/files")
   .reply(200, [
     {
       status: "added",
@@ -43,7 +43,7 @@ nock("https://api.github.com", {
     authorization: "token secret123",
   },
 })
-  .get("/repos/gr2m/twitter-together/pulls/123")
+  .get("/repos/twitter-together/action/pulls/123")
   .reply(
     200,
     `diff --git a/tweets/progress.tweet b/tweets/progress.tweet

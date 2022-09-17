@@ -21,7 +21,7 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request'
     steps:
-      - uses: gr2m/twitter-together@v1.x
+      - uses: twitter-together/action@v1.x
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   tweet:
@@ -32,7 +32,7 @@ jobs:
       - name: checkout main
         uses: actions/checkout@v3
       - name: Tweet
-        uses: gr2m/twitter-together@v1.x
+        uses: twitter-together/action@v1.x
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           TWITTER_ACCESS_TOKEN: ${{ secrets.TWITTER_ACCESS_TOKEN }}

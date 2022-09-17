@@ -1,12 +1,12 @@
 <p align="center">
-  <a href="https://github.com/gr2m/twitter-together/issues/16"><img src="assets/logo.png" width="150" alt="twitter together logo" /></a>
+  <a href="https://github.com/twitter-together/action/issues/16"><img src="assets/logo.png" width="150" alt="twitter together logo" /></a>
 </p>
 
 <h1 align="center">Twitter, together!</h1>
 
 <p align="center">
-  <a href="https://action-badges.now.sh" rel="nofollow"><img alt="Build Status" src="https://github.com/gr2m/twitter-together/workflows/Test/badge.svg"></a>
-  <a href="https://github.com/gr2m/twitter-together/blob/80c8aab34382347120e22501c2e44f30a7a62174/package.json#L8" rel="nofollow"><img alt="Coverage" src="https://img.shields.io/badge/coverage-100%25-green.svg"></a>
+  <a href="https://action-badges.now.sh" rel="nofollow"><img alt="Build Status" src="https://github.com/twitter-together/action/workflows/Test/badge.svg"></a>
+  <a href="https://github.com/twitter-together/action/blob/80c8aab34382347120e22501c2e44f30a7a62174/package.json#L8" rel="nofollow"><img alt="Coverage" src="https://img.shields.io/badge/coverage-100%25-green.svg"></a>
 </p>
 
 For Open Source or event maintainers that share a project twitter account, `twitter-together` is a GitHub Action that utilizes text files to publish tweets from a GitHub repository. Rather than tweeting directly, GitHub’s pull request review process encourages more collaboration, Twitter activity and editorial contributions by enabling everyone to submit tweet drafts to a project.
@@ -51,7 +51,7 @@ The Twitter Ads API we currently use is the `v8` version.
        runs-on: ubuntu-latest
        if: github.event_name == 'pull_request'
        steps:
-         - uses: gr2m/twitter-together@v1.x
+         - uses: twitter-together/action@v1.x
            env:
              GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
      tweet:
@@ -62,7 +62,7 @@ The Twitter Ads API we currently use is the `v8` version.
          - name: checkout main
            uses: actions/checkout@v3
          - name: Tweet
-           uses: gr2m/twitter-together@v1.x
+           uses: twitter-together/action@v1.x
            env:
              GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
              TWITTER_ACCESS_TOKEN: ${{ secrets.TWITTER_ACCESS_TOKEN }}
@@ -81,7 +81,7 @@ All contributions welcome!
 
 Especially if you try `twitter-together` for the first time, I’d love to hear if you ran into any trouble. I greatly appreciate any documentation improvements to make things more clear, I am not a native English speaker myself.
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for more information on how to contribute. You can also [just say thanks](https://github.com/gr2m/twitter-together/issues/new?labels=feature&template=04_thanks.md) 😊
+See [CONTRIBUTING.md](CONTRIBUTING.md) for more information on how to contribute. You can also [just say thanks](https://github.com/twitter-together/action/issues/new?labels=feature&template=04_thanks.md) 😊
 
 ## Thanks to all contributors 💐
 
@@ -89,7 +89,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore -->
-<table><tr><td align="center"><a href="https://jasonet.co"><img src="https://avatars1.githubusercontent.com/u/10660468?v=4" width="100px;" alt="Jason Etcovitch"/><br /><sub><b>Jason Etcovitch</b></sub></a><br /><a href="#design-JasonEtco" title="Design">🎨</a> <a href="https://github.com/gr2m/twitter-together/commits?author=JasonEtco" title="Documentation">📖</a> <a href="https://github.com/gr2m/twitter-together/commits?author=JasonEtco" title="Code">💻</a></td><td align="center"><a href="http://erons.me"><img src="https://avatars0.githubusercontent.com/u/37238033?v=4" width="100px;" alt="Erons"/><br /><sub><b>Erons</b></sub></a><br /><a href="https://github.com/gr2m/twitter-together/commits?author=Eronmmer" title="Documentation">📖</a></td></tr></table>
+<table><tr><td align="center"><a href="https://jasonet.co"><img src="https://avatars1.githubusercontent.com/u/10660468?v=4" width="100px;" alt="Jason Etcovitch"/><br /><sub><b>Jason Etcovitch</b></sub></a><br /><a href="#design-JasonEtco" title="Design">🎨</a> <a href="https://github.com/twitter-together/action/commits?author=JasonEtco" title="Documentation">📖</a> <a href="https://github.com/twitter-together/action/commits?author=JasonEtco" title="Code">💻</a></td><td align="center"><a href="http://erons.me"><img src="https://avatars0.githubusercontent.com/u/37238033?v=4" width="100px;" alt="Erons"/><br /><sub><b>Erons</b></sub></a><br /><a href="https://github.com/twitter-together/action/commits?author=Eronmmer" title="Documentation">📖</a></td></tr></table>
 
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
