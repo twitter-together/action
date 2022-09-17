@@ -188,10 +188,10 @@ To thread a chain of tweets, use `---` to delimit each tweet in the file. You ca
 ```tweet
 ---
 media:
-    - file: cat.jpg
-        alt: A cat
-    - file: dog.jpg
-        alt: A dog
+  - file: cat.jpg
+    alt: A cat
+  - file: dog.jpg
+    alt: A dog
 ---
 
 Here are some cute animals!
@@ -199,8 +199,8 @@ Here are some cute animals!
 ---
 ---
 poll:
-    - Cat
-    - Dog
+  - Cat
+  - Dog
 ---
 
 Which one is cuter?
