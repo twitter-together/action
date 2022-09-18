@@ -21,14 +21,14 @@
     "mime-types": "^2.1.35",
     "parse-diff": "^0.7.0",
     "twitter": "^1.7.1",
-    "twitter-text": "^3.0.0"
+    "twitter-text": "^3.1.0"
   },
   "devDependencies": {
     "@semantic-release/git": "^10.0.1",
     "@zeit/ncc": "^0.22.0",
     "nock": "^13.2.9",
-    "prettier": "^2.0.1",
-    "semantic-release": "^19.0.3",
+    "prettier": "^2.7.1",
+    "semantic-release": "^19.0.5",
     "tap": "^16.3.0"
   },
   "repository": "github:twitter-together/action",
