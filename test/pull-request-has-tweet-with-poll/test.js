@@ -44,12 +44,12 @@ nock("https://api.github.com", {
   .get("/repos/twitter-together/action/pulls/123")
   .reply(
     200,
-    `diff --git a/tweets/progress.tweet b/tweets/progress.tweet
+    `diff --git a/tweets/hello-world.tweet b/tweets/hello-world.tweet
 new file mode 100644
 index 0000000..0123456
 --- /dev/null
 +++ b/tweets/hello-world.tweet
-@@ -0,0 +6 @@
+@@ -0,0 +1,6 @@
 +Here is my poll
 +
 +( ) option 1
