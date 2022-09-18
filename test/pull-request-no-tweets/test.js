@@ -36,7 +36,7 @@ nock("https://api.github.com", {
 
 process.on("exit", (code) => {
   tap.equal(code, 0);
-  tap.deepEqual(nock.pendingMocks(), []);
+  tap.same(nock.pendingMocks(), []);
 });
 
 require("../../lib");

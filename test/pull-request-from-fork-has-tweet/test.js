@@ -2,8 +2,6 @@
  * This test checks the happy path of pull request adding a new *.tweet file
  */
 
-const assert = require("assert");
-
 const nock = require("nock");
 const tap = require("tap");
 
@@ -56,8 +54,8 @@ index 0000000..0123456
   );
 
 process.on("exit", (code) => {
-  assert.equal(code, 0);
-  assert.deepEqual(nock.pendingMocks(), []);
+  tap.equal(code, 0);
+  tap.same(nock.pendingMocks(), []);
 });
 
 require("../../lib");

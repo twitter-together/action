@@ -2,8 +2,6 @@
  * This test checks the happy path of pull request adding a new *.tweet file
  */
 
-const assert = require("assert");
-
 const nock = require("nock");
 const tap = require("tap");
 
@@ -63,7 +61,7 @@ nock("https://api.github.com")
     tap.equal(body.head_sha, "0000000000000000000000000000000000000002");
     tap.equal(body.status, "completed");
     tap.equal(body.conclusion, "success");
-    tap.deepEqual(body.output, {
+    tap.same(body.output, {
       title: "1 tweet(s)",
       summary: "### ✅ Valid\n\n> Hello, world!",
     });
@@ -73,8 +71,8 @@ nock("https://api.github.com")
   .reply(201);
 
 process.on("exit", (code) => {
-  assert.equal(code, 0);
-  assert.deepEqual(nock.pendingMocks(), []);
+  tap.equal(code, 0);
+  tap.same(nock.pendingMocks(), []);
 });
 
 require("../../lib");

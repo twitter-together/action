@@ -3,7 +3,6 @@
  * which includes a new *.tweet file that is making use of the front matter to quote retweet.
  */
 
-const assert = require("assert");
 const path = require("path");
 
 const nock = require("nock");
@@ -111,8 +110,8 @@ nock("https://upload.twitter.com")
 // .reply(201);
 
 process.on("exit", (code) => {
-  assert.equal(code, 0);
-  assert.deepEqual(nock.pendingMocks(), []);
+  tap.equal(code, 0);
+  tap.same(nock.pendingMocks(), []);
 });
 
 require("../../lib");

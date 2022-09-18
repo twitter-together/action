@@ -3,7 +3,6 @@
  * when the `tweets/` folder does not yet exist
  */
 
-const assert = require("assert");
 const path = require("path");
 
 const nock = require("nock");
@@ -30,7 +29,9 @@ nock("https://api.github.com", {
   },
 })
   // check if twitter-together-setup branch exists
-  .head("/repos/twitter-together/action/git/refs/heads/twitter-together-setup")
+  .head(
+    "/repos/twitter-together/action/git/refs/heads%2Ftwitter-together-setup"
+  )
   .reply(404)
 
   // Create the "twitter-together-setup" branch
@@ -43,11 +44,11 @@ nock("https://api.github.com", {
   .reply(201)
 
   // Read contents of tweets/README.md file in twitter-together/action
-  .get("/repos/twitter-together/action/contents/tweets/README.md")
+  .get("/repos/twitter-together/action/contents/tweets%2FREADME.md")
   .reply(200, "contents of tweets/README.md")
 
   // Create tweets/README.md file
-  .put("/repos/twitter-together/action/contents/tweets/README.md", (body) => {
+  .put("/repos/twitter-together/action/contents/tweets%2FREADME.md", (body) => {
     tap.equal(
       body.content,
       Buffer.from("contents of tweets/README.md").toString("base64")
@@ -76,8 +77,8 @@ nock("https://api.github.com", {
   });
 
 process.on("exit", (code) => {
-  assert.equal(code, 0);
-  assert.deepEqual(nock.pendingMocks(), []);
+  tap.equal(code, 0);
+  tap.same(nock.pendingMocks(), []);
 });
 
 require("../../lib");
