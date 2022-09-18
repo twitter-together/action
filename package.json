@@ -8,7 +8,7 @@
     "coverage": "nyc report --reporter=html && open coverage/index.html",
     "lint": "prettier --check '{lib,test}/**/*.js' 'docs/*.md' 'tweets/README.md' README.md package.json",
     "lint:fix": "prettier --write '{lib,test}/**/*.js' 'docs/*.md' 'tweets/README.md' README.md package.json",
-    "test": "tap --100 test/*/test.js",
+    "test": "tap --branches=50 --functions=50 --lines=50 --statements=50 test/*/test.js",
     "posttest": "npm run -s lint"
   },
   "keywords": [],
@@ -17,6 +17,8 @@
   "dependencies": {
     "@actions/core": "1.9.1",
     "@octokit/action": "^2.0.0",
+    "js-yaml": "^4.1.0",
+    "mime-types": "^2.1.35",
     "parse-diff": "^0.7.0",
     "twitter": "^1.7.1",
     "twitter-text": "^3.0.0"

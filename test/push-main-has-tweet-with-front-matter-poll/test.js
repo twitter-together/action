@@ -1,6 +1,6 @@
 /**
- * This test checks the happy path of a commit to the main branch (main)
- * which includes a new *.tweet file.
+ * This test checks the happy path of a commit to the main branch
+ * which includes a new *.tweet file that is making use of the front matter for a poll.
  */
 
 const assert = require("assert");
@@ -40,7 +40,7 @@ nock("https://api.github.com", {
     files: [
       {
         status: "added",
-        filename: "tweets/my-poll.tweet",
+        filename: "tweets/hello-world.tweet",
       },
     ],
   })
@@ -61,12 +61,10 @@ nock("https://api.github.com", {
 // lookup user ID
 nock("https://ads-api.twitter.com")
   .post("/11/accounts/account123/cards/poll", (body) => {
-    tap.equal(body.name, "tweets/my-poll.tweet");
+    tap.equal(body.name, "tweets/hello-world.tweet");
     tap.equal(body.duration_in_minutes, "1440"); // two days
-    tap.equal(body.first_choice, "option 1");
-    tap.equal(body.second_choice, "option 2");
-    tap.equal(body.third_choice, "option 3");
-    tap.equal(body.fourth_choice, "option 4");
+    tap.equal(body.first_choice, "a");
+    tap.equal(body.second_choice, "b");
     return true;
   })
   .reply(201, { data: { card_uri: "card://123" } });
@@ -74,7 +72,7 @@ nock("https://ads-api.twitter.com")
 nock("https://api.twitter.com")
   .post("/1.1/statuses/update.json", (body) => {
     tap.equal(body.card_uri, "card://123");
-    tap.equal(body.status, "Here is my poll");
+    tap.equal(body.status, "Hello, world!");
     return true;
   })
   .reply(201, {
