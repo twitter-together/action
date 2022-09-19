@@ -89,8 +89,20 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for more information on how to contribute
 Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
-<!-- prettier-ignore -->
-<table><tr><td align="center"><a href="https://jasonet.co"><img src="https://avatars1.githubusercontent.com/u/10660468?v=4" width="100px;" alt="Jason Etcovitch"/><br /><sub><b>Jason Etcovitch</b></sub></a><br /><a href="#design-JasonEtco" title="Design">🎨</a> <a href="https://github.com/twitter-together/action/commits?author=JasonEtco" title="Documentation">📖</a> <a href="https://github.com/twitter-together/action/commits?author=JasonEtco" title="Code">💻</a></td><td align="center"><a href="http://erons.me"><img src="https://avatars0.githubusercontent.com/u/37238033?v=4" width="100px;" alt="Erons"/><br /><sub><b>Erons</b></sub></a><br /><a href="https://github.com/twitter-together/action/commits?author=Eronmmer" title="Documentation">📖</a></td></tr></table>
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+<table>
+  <tbody>
+    <tr>
+      <td align="center"><a href="https://jasonet.co"><img src="https://avatars1.githubusercontent.com/u/10660468?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Jason Etcovitch</b></sub></a><br /><a href="#design-JasonEtco" title="Design">🎨</a> <a href="https://github.com/twitter-together/action/commits?author=JasonEtco" title="Documentation">📖</a> <a href="https://github.com/twitter-together/action/commits?author=JasonEtco" title="Code">💻</a></td>
+      <td align="center"><a href="http://erons.me"><img src="https://avatars0.githubusercontent.com/u/37238033?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Erons</b></sub></a><br /><a href="https://github.com/twitter-together/action/commits?author=Eronmmer" title="Documentation">📖</a></td>
+      <td align="center"><a href="https://mattcowley.co.uk/"><img src="https://avatars.githubusercontent.com/u/12371363?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Matt Cowley</b></sub></a><br /><a href="https://github.com/twitter-together/action/commits?author=MattIPv4" title="Code">💻</a> <a href="https://github.com/twitter-together/action/commits?author=MattIPv4" title="Documentation">📖</a> <a href="https://github.com/twitter-together/action/commits?author=MattIPv4" title="Tests">⚠️</a> <a href="#ideas-MattIPv4" title="Ideas, Planning, & Feedback">🤔</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- markdownlint-restore -->
+<!-- prettier-ignore-end -->
 
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
