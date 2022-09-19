@@ -8,7 +8,7 @@
     "coverage": "nyc report --reporter=html && open coverage/index.html",
     "lint": "prettier --check '{lib,test}/**/*.js' 'docs/*.md' 'tweets/README.md' README.md package.json",
     "lint:fix": "prettier --write '{lib,test}/**/*.js' 'docs/*.md' 'tweets/README.md' README.md package.json",
-    "test": "tap --branches=50 --functions=50 --lines=50 --statements=50 test/*/test.js",
+    "test": "tap --branches=70 --functions=100 --lines=80 --statements=80 test/*/test.js",
     "posttest": "npm run -s lint"
   },
   "keywords": [],
