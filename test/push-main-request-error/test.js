@@ -32,7 +32,7 @@ nock("https://api.github.com")
 
 process.on("exit", (code) => {
   tap.equal(code, 1);
-  tap.deepEqual(nock.pendingMocks(), []);
+  tap.same(nock.pendingMocks(), []);
 
   // above code exits with 1 (error), but tap expects 0.
   // Tap adds the "process.exitCode" property for that purpose.

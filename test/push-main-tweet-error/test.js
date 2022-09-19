@@ -3,7 +3,6 @@
  * which includes a new *.tweet file.
  */
 
-const assert = require("assert");
 const path = require("path");
 
 const nock = require("nock");
@@ -57,8 +56,8 @@ nock("https://api.github.com", {
   .reply(201);
 
 process.on("exit", (code) => {
-  assert.strictEqual(code, 1);
-  assert.deepStrictEqual(nock.pendingMocks(), []);
+  tap.equal(code, 1);
+  tap.same(nock.pendingMocks(), []);
 
   // above code exits with 1 (error), but tap expects 0.
   // Tap adds the "process.exitCode" property for that purpose.

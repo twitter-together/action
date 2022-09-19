@@ -2,8 +2,6 @@
  * This test checks the happy path of pull request adding a new *.tweet file
  */
 
-const assert = require("assert");
-
 const nock = require("nock");
 const tap = require("tap");
 
@@ -46,12 +44,12 @@ nock("https://api.github.com", {
   .get("/repos/twitter-together/action/pulls/123")
   .reply(
     200,
-    `diff --git a/tweets/progress.tweet b/tweets/progress.tweet
+    `diff --git a/tweets/hello-world.tweet b/tweets/hello-world.tweet
 new file mode 100644
 index 0000000..0123456
 --- /dev/null
 +++ b/tweets/hello-world.tweet
-@@ -0,0 +6 @@
+@@ -0,0 +1,7 @@
 +Here is my poll
 +
 +( ) option 1
@@ -69,7 +67,7 @@ nock("https://api.github.com")
     tap.equal(body.head_sha, "0000000000000000000000000000000000000002");
     tap.equal(body.status, "completed");
     tap.equal(body.conclusion, "failure");
-    tap.deepEqual(body.output, {
+    tap.same(body.output, {
       title: "1 tweet(s)",
       summary: `### ❌ Invalid
 
@@ -89,8 +87,8 @@ Polls cannot have more than four options, found 5 options`,
   .reply(201);
 
 process.on("exit", (code) => {
-  assert.equal(code, 0);
-  assert.deepEqual(nock.pendingMocks(), []);
+  tap.equal(code, 0);
+  tap.same(nock.pendingMocks(), []);
 });
 
 require("../../lib");

@@ -2,8 +2,6 @@
  * This test checks the happy path of pull request adding a new *.tweet file
  */
 
-const assert = require("assert");
-
 const nock = require("nock");
 const tap = require("tap");
 
@@ -46,7 +44,7 @@ nock("https://api.github.com", {
   .get("/repos/twitter-together/action/pulls/123")
   .reply(
     200,
-    `diff --git a/tweets/progress.tweet b/tweets/progress.tweet
+    `diff --git a/tweets/hello-world.tweet b/tweets/hello-world.tweet
 new file mode 100644
 index 0000000..0123456
 --- /dev/null
@@ -56,8 +54,11 @@ index 0000000..0123456
   );
 
 process.on("exit", (code) => {
-  assert.equal(code, 1);
-  assert.deepEqual(nock.pendingMocks(), []);
+  tap.equal(code, 1);
+  tap.same(nock.pendingMocks(), []);
+
+  // above code exits with 1 (error), but tap expects 0.
+  // Tap adds the "process.exitCode" property for that purpose.
   process.exitCode = 0;
 });
 
