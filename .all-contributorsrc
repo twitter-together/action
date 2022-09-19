@@ -1,6 +1,6 @@
 {
-  "projectName": "twitter-together",
-  "projectOwner": "gr2m",
+  "projectName": "action",
+  "projectOwner": "twitter-together",
   "repoType": "github",
   "repoHost": "https://github.com",
   "files": [
@@ -27,6 +27,18 @@
       "profile": "http://erons.me",
       "contributions": [
         "doc"
+      ]
+    },
+    {
+      "login": "MattIPv4",
+      "name": "Matt Cowley",
+      "avatar_url": "https://avatars.githubusercontent.com/u/12371363?v=4",
+      "profile": "https://mattcowley.co.uk/",
+      "contributions": [
+        "code",
+        "doc",
+        "test",
+        "ideas"
       ]
     }
   ],
