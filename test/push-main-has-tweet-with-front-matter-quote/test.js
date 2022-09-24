@@ -76,7 +76,7 @@ nock("https://api.twitter.com")
   .reply(201, {
     data: {
       id: "0000000000000000002",
-      text: "Smart thinking!",
+      text: "Smart thinking! https://t.co/abcdeFGHIJ",
     },
   });
 
