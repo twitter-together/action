@@ -14,6 +14,10 @@ process.env.GITHUB_TOKEN = "secret123";
 process.env.GITHUB_EVENT_PATH = require.resolve("./event.json");
 process.env.GITHUB_REF = "refs/heads/main";
 process.env.GITHUB_WORKSPACE = path.dirname(process.env.GITHUB_EVENT_PATH);
+process.env.TWITTER_API_KEY = "key123";
+process.env.TWITTER_API_SECRET_KEY = "keysecret123";
+process.env.TWITTER_ACCESS_TOKEN = "token123";
+process.env.TWITTER_ACCESS_TOKEN_SECRET = "tokensecret123";
 
 // set other env variables so action-toolkit is happy
 process.env.GITHUB_WORKFLOW = "";
@@ -55,17 +59,27 @@ nock("https://api.github.com", {
   .reply(201);
 
 nock("https://api.twitter.com")
-  .post("/1.1/statuses/update.json", (body) => {
-    tap.equal(body.status, "Good idea :)");
-    tap.equal(body.in_reply_to_status_id, "0000000000000000001");
-    tap.equal(body.auto_populate_reply_metadata, "true");
+  .get("/2/users/me")
+  .reply(200, {
+    data: {
+      id: "123",
+      name: "gr2m",
+      username: "gr2m",
+    }
+  })
+
+  .post("/2/tweets", (body) => {
+    tap.equal(body.text, "Good idea :)");
+    tap.type(body.reply, "object");
+    tap.hasProp(body.reply, "in_reply_to_tweet_id");
+    tap.equal(body.reply.in_reply_to_tweet_id, "0000000000000000001");
     return true;
   })
   .reply(201, {
-    id_str: "0000000000000000002",
-    user: {
-      screen_name: "gr2m",
-    },
+    data: {
+      id: "0000000000000000002",
+      text: "Good idea :)",
+    }
   });
 
 process.on("exit", (code) => {

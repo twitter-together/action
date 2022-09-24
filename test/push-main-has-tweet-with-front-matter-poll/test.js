@@ -14,6 +14,10 @@ process.env.GITHUB_TOKEN = "secret123";
 process.env.GITHUB_EVENT_PATH = require.resolve("./event.json");
 process.env.GITHUB_REF = "refs/heads/main";
 process.env.GITHUB_WORKSPACE = path.dirname(process.env.GITHUB_EVENT_PATH);
+process.env.TWITTER_API_KEY = "key123";
+process.env.TWITTER_API_SECRET_KEY = "keysecret123";
+process.env.TWITTER_ACCESS_TOKEN = "token123";
+process.env.TWITTER_ACCESS_TOKEN_SECRET = "tokensecret123";
 
 // set other env variables so action-toolkit is happy
 process.env.GITHUB_WORKFLOW = "";
@@ -21,9 +25,6 @@ process.env.GITHUB_ACTION = "twitter-together";
 process.env.GITHUB_ACTOR = "";
 process.env.GITHUB_REPOSITORY = "";
 process.env.GITHUB_SHA = "";
-
-// Needed for polls only
-process.env.TWITTER_ACCOUNT_ID = "account123";
 
 // MOCK
 nock("https://api.github.com", {
@@ -57,28 +58,30 @@ nock("https://api.github.com", {
   )
   .reply(201);
 
-// lookup user ID
-nock("https://ads-api.twitter.com")
-  .post("/11/accounts/account123/cards/poll", (body) => {
-    tap.equal(body.name, "tweets/hello-world.tweet");
-    tap.equal(body.duration_in_minutes, "1440"); // two days
-    tap.equal(body.first_choice, "a");
-    tap.equal(body.second_choice, "b");
-    return true;
-  })
-  .reply(201, { data: { card_uri: "card://123" } });
-
 nock("https://api.twitter.com")
-  .post("/1.1/statuses/update.json", (body) => {
-    tap.equal(body.card_uri, "card://123");
-    tap.equal(body.status, "Hello, world!");
+  .get("/2/users/me")
+  .reply(200, {
+    data: {
+      id: "123",
+      name: "gr2m",
+      username: "gr2m",
+    }
+  })
+
+  .post("/2/tweets", (body) => {
+    tap.equal(body.text, "Hello, world!");
+    tap.type(body.poll, "object");
+    tap.hasProp(body.poll, "options");
+    tap.same(body.poll.options, ["a", "b"]);
+    tap.hasProp(body.poll, "duration_minutes");
+    tap.equal(body.poll.duration_minutes, 1440);
     return true;
   })
   .reply(201, {
-    id_str: "0000000000000000001",
-    user: {
-      screen_name: "gr2m",
-    },
+    data: {
+      id: "0000000000000000001",
+      text: "Hello, world!",
+    }
   });
 
 process.on("exit", (code) => {
