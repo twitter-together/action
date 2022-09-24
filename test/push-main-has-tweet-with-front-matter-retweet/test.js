@@ -65,7 +65,7 @@ nock("https://api.twitter.com")
       id: "123",
       name: "gr2m",
       username: "gr2m",
-    }
+    },
   })
 
   .post("/2/users/123/retweets", (body) => {
@@ -75,7 +75,7 @@ nock("https://api.twitter.com")
   .reply(201, {
     data: {
       retweeted: true,
-    }
+    },
   })
 
   .get("/2/tweets/0000000000000000001?expansions=author_id")
@@ -91,9 +91,9 @@ nock("https://api.twitter.com")
           id: "456",
           name: "m2rg",
           username: "m2rg",
-        }
-      ]
-    }
+        },
+      ],
+    },
   });
 
 process.on("exit", (code) => {

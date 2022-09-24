@@ -19,7 +19,7 @@ nock("https://api.twitter.com")
       id: "123",
       name: "gr2m",
       username: "gr2m",
-    }
+    },
   })
 
   .post("/2/tweets", (body) => {
@@ -30,7 +30,7 @@ nock("https://api.twitter.com")
     data: {
       id: "0000000000000000001",
       text: "Hello, world!",
-    }
+    },
   });
 
 process.chdir(__dirname);

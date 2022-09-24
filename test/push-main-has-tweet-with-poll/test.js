@@ -65,14 +65,19 @@ nock("https://api.twitter.com")
       id: "123",
       name: "gr2m",
       username: "gr2m",
-    }
+    },
   })
 
   .post("/2/tweets", (body) => {
     tap.equal(body.text, "Here is my poll");
     tap.type(body.poll, "object");
     tap.hasProp(body.poll, "options");
-    tap.same(body.poll.options, ["option 1", "option 2", "option 3", "option 4"]);
+    tap.same(body.poll.options, [
+      "option 1",
+      "option 2",
+      "option 3",
+      "option 4",
+    ]);
     tap.hasProp(body.poll, "duration_minutes");
     tap.equal(body.poll.duration_minutes, 1440);
     return true;
@@ -81,7 +86,7 @@ nock("https://api.twitter.com")
     data: {
       id: "0000000000000000001",
       text: "Here is my poll",
-    }
+    },
   });
 
 process.on("exit", (code) => {

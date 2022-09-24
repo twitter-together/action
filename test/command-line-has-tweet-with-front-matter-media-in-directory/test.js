@@ -20,7 +20,7 @@ nock("https://api.twitter.com")
       id: "123",
       name: "gr2m",
       username: "gr2m",
-    }
+    },
   })
 
   .post("/2/tweets", (body) => {
@@ -34,14 +34,23 @@ nock("https://api.twitter.com")
     data: {
       id: "0000000000000000001",
       text: "Cuddly :) https://t.co/abcdeFGHIJ",
-    }
+    },
   });
 
 nock("https://upload.twitter.com")
   .post("/1.1/media/upload.json", (body) => {
-    tap.match(body, "Content-Disposition: form-data; name=\"command\"\r\n\r\nINIT");
-    tap.match(body, "Content-Disposition: form-data; name=\"total_bytes\"\r\n\r\n107352");
-    tap.match(body, "Content-Disposition: form-data; name=\"media_type\"\r\n\r\nimage/png");
+    tap.match(
+      body,
+      'Content-Disposition: form-data; name="command"\r\n\r\nINIT'
+    );
+    tap.match(
+      body,
+      'Content-Disposition: form-data; name="total_bytes"\r\n\r\n107352'
+    );
+    tap.match(
+      body,
+      'Content-Disposition: form-data; name="media_type"\r\n\r\nimage/png'
+    );
     return true;
   })
   .reply(202, {
@@ -54,8 +63,14 @@ nock("https://upload.twitter.com")
   .reply(204)
 
   .post("/1.1/media/upload.json", (body) => {
-    tap.match(body, "Content-Disposition: form-data; name=\"command\"\r\n\r\nFINALIZE");
-    tap.match(body, "Content-Disposition: form-data; name=\"media_id\"\r\n\r\n0000000000000000002");
+    tap.match(
+      body,
+      'Content-Disposition: form-data; name="command"\r\n\r\nFINALIZE'
+    );
+    tap.match(
+      body,
+      'Content-Disposition: form-data; name="media_id"\r\n\r\n0000000000000000002'
+    );
     return true;
   })
   .reply(201, {
@@ -67,7 +82,7 @@ nock("https://upload.twitter.com")
       image_type: "image/png",
       w: 640,
       h: 360,
-    }
+    },
   })
 
   .post("/1.1/media/metadata/create.json", (body) => {
