@@ -83,7 +83,10 @@ nock("https://api.twitter.com")
   });
 
 // Confirm there is whitespace
-const contents = fs.readFileSync(path.join(__dirname, "tweets/hello-world.tweet"), "utf-8");
+const contents = fs.readFileSync(
+  path.join(__dirname, "tweets/hello-world.tweet"),
+  "utf-8"
+);
 tap.match(contents, /^--- \n[\s\S]+\n--- \n[\s\S]+\n--- \n[\s\S]+$/);
 
 process.on("exit", (code) => {
