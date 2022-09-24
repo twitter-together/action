@@ -1,0 +1,15 @@
+{
+  "ref": "refs/heads/main",
+  "before": "0000000000000000000000000000000000000001",
+  "after": "0000000000000000000000000000000000000002",
+  "head_commit": {
+    "id": "0000000000000000000000000000000000000002"
+  },
+  "repository": {
+    "owner": {
+      "login": "twitter-together"
+    },
+    "name": "action",
+    "default_branch": "main"
+  }
+}
