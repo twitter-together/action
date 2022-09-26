@@ -42495,7 +42495,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 /* 731 */
 /***/ (function(module) {
 
-module.exports = {"name":"twitter-together","version":"2.1.0","description":"A GitHub action to tweet together using pull requests","main":"lib/index.js","scripts":{"build":"ncc build lib/index.js -o dist","coverage":"nyc report --reporter=html && open coverage/index.html","lint":"prettier --check '{lib,test}/**/*.js' 'docs/*.md' 'tweets/README.md' README.md package.json","lint:fix":"prettier --write '{lib,test}/**/*.js' 'docs/*.md' 'tweets/README.md' README.md package.json","test":"tap --branches=50 --functions=50 --lines=50 --statements=50 test/*/test.js","posttest":"npm run -s lint"},"keywords":[],"author":"","license":"MIT","dependencies":{"@actions/core":"1.9.1","@octokit/action":"^4.0.8","js-yaml":"^4.1.0","mime-types":"^2.1.35","parse-diff":"^0.9.0","twitter":"^1.7.1","twitter-text":"^3.1.0"},"devDependencies":{"@semantic-release/git":"^10.0.1","@zeit/ncc":"^0.22.0","nock":"^13.2.9","prettier":"^2.7.1","semantic-release":"^19.0.5","tap":"^16.3.0"},"repository":"github:twitter-together/action","release":{"branches":["+([0-9]).x","main","next",{"name":"beta","prerelease":true},{"name":"debug","prerelease":true}],"plugins":["@semantic-release/commit-analyzer","@semantic-release/release-notes-generator","@semantic-release/github",["@semantic-release/npm",{"npmPublish":false}],["@semantic-release/git",{"assets":["package.json","dist/index.js"],"message":"build(release): compiled action for ${nextRelease.version}\n\n[skip ci]"}]]}};
+module.exports = {"name":"twitter-together","version":"2.1.1","description":"A GitHub action to tweet together using pull requests","main":"lib/index.js","scripts":{"build":"ncc build lib/index.js -o dist","coverage":"nyc report --reporter=html && open coverage/index.html","lint":"prettier --check '{lib,test}/**/*.js' 'docs/*.md' 'tweets/README.md' README.md package.json","lint:fix":"prettier --write '{lib,test}/**/*.js' 'docs/*.md' 'tweets/README.md' README.md package.json","test":"tap --branches=70 --functions=100 --lines=80 --statements=80 test/*/test.js","posttest":"npm run -s lint"},"keywords":[],"author":"","license":"MIT","dependencies":{"@actions/core":"1.9.1","@octokit/action":"^4.0.8","js-yaml":"^4.1.0","mime-types":"^2.1.35","parse-diff":"^0.9.0","twitter":"^1.7.1","twitter-text":"^3.1.0"},"devDependencies":{"@semantic-release/git":"^10.0.1","@zeit/ncc":"^0.22.0","nock":"^13.2.9","prettier":"^2.7.1","semantic-release":"^19.0.5","tap":"^16.3.0"},"repository":"github:twitter-together/action","release":{"branches":["+([0-9]).x","main","next",{"name":"beta","prerelease":true},{"name":"debug","prerelease":true}],"plugins":["@semantic-release/commit-analyzer","@semantic-release/release-notes-generator","@semantic-release/github",["@semantic-release/npm",{"npmPublish":false}],["@semantic-release/git",{"assets":["package.json","dist/index.js"],"message":"build(release): compiled action for ${nextRelease.version}\n\n[skip ci]"}]]}};
 
 /***/ }),
 /* 732 */,
@@ -43069,7 +43069,7 @@ const { load } = __webpack_require__(186);
 
 const OPTION_REGEX = /^\(\s?\)\s+/;
 const FRONT_MATTER_REGEX = new RegExp(
-  `^---${EOL}([\\s\\S]*?)${EOL}---(?:$|(?:${EOL})+)`
+  `^---[ \t]*${EOL}([\\s\\S]*?)${EOL}---[ \t]*(?:$|(?:${EOL})+)`
 );
 
 function parseTweetFileContent(text, dir, isThread = false) {
@@ -43098,7 +43098,7 @@ function parseTweetFileContent(text, dir, isThread = false) {
   // Handle threading
   if (options.threadDelimiter) {
     const threadIdx = text.match(
-      new RegExp(`(?:${EOL})+${options.threadDelimiter}(?:${EOL})+`)
+      new RegExp(`(?:${EOL})+${options.threadDelimiter}[ \t]*(?:${EOL})+`)
     );
     if (threadIdx) {
       const threadText = text.slice(threadIdx.index + threadIdx[0].length);
