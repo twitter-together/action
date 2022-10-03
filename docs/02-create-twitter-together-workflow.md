@@ -51,6 +51,4 @@ To create the file, press the <kbd>Start commit</kbd> button. You can optionally
 
 Nearly done! Shortly after creating or updating `.github/workflows/twitter-together.yml` in your repository’s default branch, a pull request will be created with further instructions.
 
-If you like to create tweets including polls, you will have to [apply for access to the Twitter Ads API](03-apply-for-access-to-the-twitter-ads-api.md).
-
 [back to README.md](../README.md/#setup)
