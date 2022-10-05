@@ -54,6 +54,9 @@ Unless you wish to contribute to this project, you don't need to fork this repos
        runs-on: ubuntu-latest
        if: github.event_name == 'pull_request'
        steps:
+         - uses: actions/checkout@v3
+           with:
+             ref: ${{ github.event.pull_request.head.sha }}
          - uses: twitter-together/action@v2
            env:
              GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
