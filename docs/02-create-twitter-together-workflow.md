@@ -24,7 +24,7 @@ jobs:
       - name: checkout pull request
         uses: actions/checkout@v3
         with:
-          ref: ${{ github.event.pull_request.head.sha }}    
+          ref: ${{ github.event.pull_request.head.sha }}
       - name: Validate Tweets
         uses: twitter-together/action@v2
         env:
