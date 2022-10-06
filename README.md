@@ -36,13 +36,17 @@ You can submit a tweet to this repository to see the magic happen. Please follow
 
 ## Twitter API compatibility
 
-The Twitter Ads API we currently use is the `v8` version.
+Twitter, Together uses the v2 Twitter API for most functionality.
+It makes use of the v1 API for media uploads, as there is no v2 equivalent endpoint.
+
+Essentials level Twitter access should grant access to all endpoints Twitter, Together uses.
 
 ## Setup
 
-Unless you wish to contribute to this project, you don't need to fork this repository. Instead, you can make use of this GitHub Action from the comfort of your own repository (either a new one, or one you already have) by creating a GitHub Actions workflow following these steps:
+Unless you wish to contribute to this project, you don't need to fork this repository.
+Instead, you can make use of this GitHub Action from the comfort of your own repository (either a new one, or one you already have) by creating a GitHub Actions workflow following these steps:
 
-1. [Create a twitter app](docs/01-create-twitter-app.md) with your shared twitter account and store the credentials as `TWITTER_API_KEY`, `TWITTER_API_SECRET_KEY`, `TWITTER_ACCESS_TOKEN` and `TWITTER_ACCESS_TOKEN_SECRET` in your repository’s secrets settings.
+1. [Create a Twitter app](docs/01-create-twitter-app.md) with your shared Twitter account and store the credentials as `TWITTER_API_KEY`, `TWITTER_API_SECRET_KEY`, `TWITTER_ACCESS_TOKEN` and `TWITTER_ACCESS_TOKEN_SECRET` in your repository’s secrets settings.
 2. [Create a `.github/workflows/twitter-together.yml` file](docs/02-create-twitter-together-workflow.md) with the content below. Make sure to replace `'main'` if you changed your repository's default branch.
 
    ```yml

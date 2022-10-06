@@ -1,82 +1,103 @@
 [back to README.md](../README.md/#setup)
 
-# Create a twitter app
+# Create a Twitter App
 
-You can create a twitter app for your twitter account at https://developer.twitter.com/en/apps.
+Head to <https://developer.twitter.com/en/portal/projects-and-apps> to begin the process of creating a Twitter app.
 
-[![](twitter-01-create-an-app.png)](https://developer.twitter.com/en/apps)
-
-If you haven’t yet, you will be asked to apply for a Twitter developer account. See my answers below for reference. If you’ve done that before, skip the next section and continue at [Create an app](#create-an-app).
+If you haven’t yet, you will be asked to apply for a Twitter developer account.
+If you’ve done that before, skip the next section and continue at [Create an app](#create-an-app).
 
 ## Apply for a developer account
 
-You might be asked to add a phone number to your twitter account before proceeding. If the phone number is used in another account, it won’t let you use it again. But you can remove the phone number from the other account. You can change it back once your developer account was approved.
+You might be asked to add a phone number to your Twitter account before proceeding.
+If the phone number is used in another account, it won’t let you use it again
+But you can remove the phone number from the other account.
+You can change it back once your developer account was approved.
 
-Your twitter account will also need to be associated with an email address. If it isn't yet, set the email address in your twitter account [email settings](https://twitter.com/settings/email).
+Your Twitter account will also need to be associated with an email address.
+If it isn't yet, set the email address in your Twitter account [email settings](https://twitter.com/settings/email).
 
-![](twitter-02-sign-up-for-developer-account.png)
+During the account creation, Twitter tends to ask about what you'll be doing with the developer account.
+If you aren't sure what to answer, here are our recommend answers:
 
-### What is your primary reason for using Twitter developer tools?
+- What's your use case? Select "Making a bot".
+- Will you make Twitter content or derived information available to a government entity or a government affiliated entity? Select "No".
 
-When in doubt, select: Hobbyist -> Making a bot
-
-### Describe in your own words what you are building
-
-#### 1. In your words
-
-This app will be used to publish tweets using the [twitter-together](https://github.com/twitter-together/action/) GitHub Action. It allows to use a GitHub repository and pull request reviews as a workflow to collaboratively tweet from a shared twitter account.
-
-#### 2. Are you planning to analyze Twitter data?
-
-No
-
-#### 3. Will your app use Tweet, Retweet, like, follow, or Direct Message functionality?
-
-Yes. This app will be used to publish tweets for this account. It might be used for retweeting in future. There are no plans for liking.
-
-#### 4. Do you plan to display Tweets or aggregate data about Twitter content outside of Twitter?
-
-No twitter data will be displayed. The `twitter-together` GitHub action shows a preview of the tweet before it is published and becomes twitter data.
-
-### Will your product, service, or analysis make Twitter content or derived information available to a government entity?
-
-No
+Once you've submitted the form, you will receive an email to verify your developer account.
+After that you can head back to <https://developer.twitter.com/en/portal/projects-and-apps> to begin creating your app.
 
 ---
 
-You will receive an email to verify your developer account. After that you can create an app at https://developer.twitter.com/en/portal/apps/new.
+## Create an App
 
-## Create an app
+### Project creation
 
-![](twitter-03-create-app.png)
+Before we create the app itself, we need to create a project that will house the app.
+If you've already got a project in your developer account that you want to use, skip this step.
+Head to <https://developer.twitter.com/en/portal/projects/new> or click "Create Project" on your dashboard.
 
-Only 4 questions are required. Here are my answers for reference
+#### Project name
 
-### App name (required)
+You can provide any name you want for your project here.
+We recommend keeping the name related to Twitter, Together, to avoid future confusion.
 
-`<your twitter account name>-twitter-together`, e.g. `probot-twitter-together`
+#### Project use case
 
-### Application description (required)
+If unsure, select "Making a bot" for the project use case.
 
-Collaboratively tweet using GitHub’s pull request review process by utilizing the twitter-together GitHub Action.
+#### Project description
 
-### Website URL (required)
+You can provide any description you want for your project here.
+If you're creating this project for Twitter, Together only, you could use:
 
-https://github.com/twitter-together/action
+> Collaboratively tweet using GitHub’s pull request review process by utilizing the twitter-together GitHub Action.
 
-### Tell us how this app will be used (required)
+### App creation
 
-This app will be used to create tweets that have previously been reviewed and accepted on our GitHub repository. It allows everyone to submit a tweet draft that we can discuss prior publishing.
+With the project created, we can now create the app itself.
+If you've gone through the project creation flow immediately before, Twitter may automatically take you to the app creation flow.
+If not, head back to your [dashboard](https://developer.twitter.com/en/portal/projects-and-apps) and look for a "Add App" button under your project.
 
-## Save credentials
+#### App environment
 
-"read and write" permissions are required. When you have created your app, open `app settings` and set app permissions to "Read & Write". If you change the permission you must re-generate tokens for the change to take effect.
+Depending on your level of access to the Twitter API, the app creation flow may or may not ask you for this step.
 
-Open your app’s "Keys and tokens" tab. In the "Access token & access token secret" section, press the "Create" button. After that you will see all four credentials required for `twitter-together`.
+If you are asked for the app environment, select the environment the best suites how you'll be using Twitter, Together.
 
-![](twitter-04-keys-and-tokens.png)
+#### App name
 
-Now save the credentials into your repository’s "Secrets" settings as follows
+Twitter app names are globally unique, so you'll want to provide a name here that makes sense in the context of your Twitter account or intended usage.
+We recommend going for `<your twitter account name>-twitter-together`, e.g. `probot-twitter-together`.
+
+Once you've provided the app name, Twitter will present you with credentials for your app.
+Note down the "API Key" and "API Secret" as we'll need them later.
+
+#### App settings
+
+With your app created, head to the settings for the app as we'll need to ensure it has write access as well as the default read access.
+Twitter seems to change this UI far too often, but as of writing, to enable write access you'll need to configure "User authentication settings".
+
+Press "Set up" under the "User authentication settings" section. Select "Read and write" under "App permissions" and "Web App, Automated App or Bot" under "Type of App".
+
+Now we'll need to configure a fake OAuth 2.0 flow (which we won't use):
+
+- App info -> Callback URI: http://localhost
+- App info -> Website URL: https://github.com/twitter-together/action
+
+With those all set, press "Save" and confirm that you are happy to change the permissions for your app.
+Disregard the client ID and secret presented, as we won't actually be using OAuth.
+
+### Save credentials
+
+Head back to your app settings, and jump into the "Keys and tokens" tab.
+
+If you forgot to note down the API Key/Secret earlier, no worries!
+Press "Regenerate" next to "API Key and Secret" and Twitter will give you a new pair.
+
+We'll also want to press "Regenerate" next to the "Access Token and Secret" as we need to update the permissions it has to be both read and write.
+Note down the token and token secret Twitter gives you.
+
+Now save the credentials into your repository’s "Secrets" settings as follows:
 
 | Twitter Credential name | GitHub Secret name            |
 | ----------------------- | ----------------------------- |
@@ -85,8 +106,10 @@ Now save the credentials into your repository’s "Secrets" settings as follows
 | Access token            | `TWITTER_ACCESS_TOKEN`        |
 | Access token secret     | `TWITTER_ACCESS_TOKEN_SECRET` |
 
-![](twitter-05-repository-secrets.png)
+![](twitter-01-repository-secrets.png)
 
 ---
 
-next: [Create a `.github/workflows/twitter-together.yml` file](02-create-twitter-together-workflow.md)
+You're all set! :tada:
+
+Next: [Create a `.github/workflows/twitter-together.yml` file](02-create-twitter-together-workflow.md)

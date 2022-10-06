@@ -20,12 +20,12 @@
     "js-yaml": "^4.1.0",
     "mime-types": "^2.1.35",
     "parse-diff": "^0.9.0",
-    "twitter": "^1.7.1",
+    "twitter-api-v2": "^1.12.7",
     "twitter-text": "^3.1.0"
   },
   "devDependencies": {
     "@semantic-release/git": "^10.0.1",
-    "@zeit/ncc": "^0.22.0",
+    "@vercel/ncc": "^0.34.0",
     "nock": "^13.2.9",
     "prettier": "^2.7.1",
     "semantic-release": "^19.0.5",
