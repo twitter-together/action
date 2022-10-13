@@ -1,5 +1,6 @@
 {
   "action": "opened",
+  "after": "0000000000000000000000000000000000000003",
   "pull_request": {
     "number": 123,
     "base": {

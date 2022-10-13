@@ -63,7 +63,7 @@ index 0000000..1715c04
 +media:
 +  - file: cat.jpg
 +    alt: A cat
-+  - file: dog.jpg
++  - file: nested/media/pets/dog.jpg
 +    alt: A dog
 +---
 +
@@ -85,10 +85,10 @@ nock("https://api.github.com")
 Uploading media:
 
 A cat
-<img src="https://raw.githubusercontent.com/twitter-together/action/undefined/media/cat.jpg" height="200" />
+<img src="https://raw.githubusercontent.com/twitter-together/action/0000000000000000000000000000000000000003/media/cat.jpg" height="200" />
 
 A dog
-<img src="https://raw.githubusercontent.com/twitter-together/action/undefined/media/dog.jpg" height="200" />
+<img src="https://raw.githubusercontent.com/twitter-together/action/0000000000000000000000000000000000000003/media/nested/media/pets/dog.jpg" height="200" />
 
 > Here are some cute animals!`,
     });
