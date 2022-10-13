@@ -84,8 +84,11 @@ nock("https://api.github.com")
 
 Uploading media:
 
-- cat.jpg [A cat]
-- dog.jpg [A dog]
+A cat
+<img src="https://raw.githubusercontent.com/twitter-together/action/undefined/media/cat.jpg" height="200" />
+
+A dog
+<img src="https://raw.githubusercontent.com/twitter-together/action/undefined/media/dog.jpg" height="200" />
 
 > Here are some cute animals!`,
     });
