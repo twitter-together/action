@@ -26,6 +26,9 @@
   "devDependencies": {
     "@semantic-release/git": "^10.0.1",
     "@vercel/ncc": "^0.34.0",
+    "eslint": "^8.25.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.2.1",
     "nock": "^13.2.9",
     "prettier": "^2.7.1",
     "semantic-release": "^19.0.5",
