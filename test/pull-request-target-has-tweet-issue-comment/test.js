@@ -53,23 +53,6 @@ index 0000000..0123456
 +Hello, world!`
   );
 
-// create check run
-nock("https://api.github.com")
-  // get changed files
-  .post("/repos/twitter-together/action/check-runs", (body) => {
-    tap.equal(body.name, "preview");
-    tap.equal(body.head_sha, "0000000000000000000000000000000000000002");
-    tap.equal(body.status, "completed");
-    tap.equal(body.conclusion, "success");
-    tap.same(body.output, {
-      title: "1 tweet(s)",
-      summary: "### ✅ Valid Tweet\n\n> Hello, world!",
-    });
-
-    return true;
-  })
-  .reply(201);
-
 // check for comments
 nock("https://api.github.com", {
   reqheaders: {
@@ -86,7 +69,7 @@ nock("https://api.github.com")
   .post("/repos/twitter-together/action/issues/123/comments", ({ body }) => {
     tap.same(
       body,
-      `## Found 1 new .tweet file(s)
+      `## Found 1 new \`.tweet\` file(s)
 
 ### ✅ Valid Tweet
 

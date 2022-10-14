@@ -75,7 +75,7 @@ nock("https://api.github.com")
   // get changed files
   .post("/repos/twitter-together/action/check-runs", (body) => {
     tap.equal(body.name, "preview");
-    tap.equal(body.head_sha, "0000000000000000000000000000000000000002");
+    tap.equal(body.head_sha, "0000000000000000000000000000000000000003");
     tap.equal(body.status, "completed");
     tap.equal(body.conclusion, "success");
     tap.same(body.output, {
