@@ -70,15 +70,13 @@ nock("https://api.github.com")
     tap.equal(body.conclusion, "success");
     tap.same(body.output, {
       title: "1 tweet(s)",
-      summary: `### ✅ Valid
+      summary: `### ✅ Valid Tweet
 
-> What is your favorite color?
+- Red
+- Blue
+- Green
 
-The tweet includes a poll:
-
-> 🔘 Red
-> 🔘 Blue
-> 🔘 Green`,
+> What is your favorite color?`,
     });
 
     return true;

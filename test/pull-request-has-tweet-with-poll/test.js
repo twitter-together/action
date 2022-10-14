@@ -68,16 +68,14 @@ nock("https://api.github.com")
     tap.equal(body.conclusion, "success");
     tap.same(body.output, {
       title: "1 tweet(s)",
-      summary: `### ✅ Valid
+      summary: `### ✅ Valid Tweet
 
-> Here is my poll
+- option 1
+- option 2
+- option 3
+- option 4
 
-The tweet includes a poll:
-
-> 🔘 option 1
-> 🔘 option 2
-> 🔘 option 3
-> 🔘 option 4`,
+> Here is my poll`,
     });
 
     return true;

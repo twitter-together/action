@@ -72,20 +72,22 @@ nock("https://api.github.com")
     tap.equal(body.conclusion, "failure");
     tap.same(body.output, {
       title: "1 tweet(s)",
-      summary: `### ❌ Invalid
+      summary: `### ❌ Invalid Tweet
 
-> ---
-> poll:
->   - Red
->   - Blue
->   - Green
->   - Orange
->   - Purple
-> ---
->
-> What is your favorite color?
+\`\`\`tweet
+---
+poll:
+  - Red
+  - Blue
+  - Green
+  - Orange
+  - Purple
+---
 
-Polls cannot have more than four options, found 5 options`,
+What is your favorite color?
+\`\`\`
+
+**Polls cannot have more than four options, found 5 options**`,
     });
 
     return true;

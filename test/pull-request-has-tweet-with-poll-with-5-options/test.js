@@ -69,17 +69,19 @@ nock("https://api.github.com")
     tap.equal(body.conclusion, "failure");
     tap.same(body.output, {
       title: "1 tweet(s)",
-      summary: `### ❌ Invalid
+      summary: `### ❌ Invalid Tweet
 
-> Here is my poll
->
-> ( ) option 1
-> ( ) option 2
-> ( ) option 3
-> ( ) option 4
-> ( ) option 5
+\`\`\`tweet
+Here is my poll
 
-Polls cannot have more than four options, found 5 options`,
+( ) option 1
+( ) option 2
+( ) option 3
+( ) option 4
+( ) option 5
+\`\`\`
+
+**Polls cannot have more than four options, found 5 options**`,
     });
 
     return true;

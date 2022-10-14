@@ -65,13 +65,15 @@ nock("https://api.github.com")
     tap.equal(body.conclusion, "failure");
     tap.same(body.output, {
       title: "1 tweet(s)",
-      summary: `### ❌ Invalid
+      summary: `### ❌ Invalid Tweet
 
-> ---
-> reply: spoons
-> ---
+\`\`\`tweet
+---
+reply: spoons
+---
+\`\`\`
 
-Invalid tweet reference: spoons`,
+**Invalid tweet reference: spoons**`,
     });
 
     return true;

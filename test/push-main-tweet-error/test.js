@@ -45,7 +45,6 @@ nock("https://api.github.com", {
   .post(
     "/repos/twitter-together/action/commits/0000000000000000000000000000000000000002/comments",
     (body) => {
-      console.log(body.body);
       tap.equal(
         body.body,
         "Errors:\n\n- Tweet exceeds maximum length of 280 characters by 166 characters"

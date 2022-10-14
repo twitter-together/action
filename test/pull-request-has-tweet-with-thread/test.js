@@ -77,35 +77,26 @@ nock("https://api.github.com")
     tap.equal(body.conclusion, "success");
     tap.same(body.output, {
       title: "1 tweet(s)",
-      summary: `### ✅ Valid
+      summary: `### ✅ Valid Thread
 
-<table>
-<tr><td>
+#### --- 🧵 1 ---
 
 > 🧵 Here is a thread...
 
-</td></tr>
-<tr><td>
+#### --- 🧵 2 ---
+
+- Banana
+- Mango
 
 > Which fruit is more delicious?
 
-The tweet includes a poll:
-
-> 🔘 Banana
-> 🔘 Mango
-
-</td></tr>
-<tr><td>
+#### --- 🧵 3 ---
 
 > We hope you enjoyed this thread...
 
-</td></tr>
-<tr><td>
+#### --- 🧵 4 ---
 
-> We certainly did.
-
-</td></tr>
-</table>`,
+> We certainly did.`,
     });
 
     return true;
