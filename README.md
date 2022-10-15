@@ -49,39 +49,69 @@ Instead, you can make use of this GitHub Action from the comfort of your own rep
 1. [Create a Twitter app](docs/01-create-twitter-app.md) with your shared Twitter account and store the credentials as `TWITTER_API_KEY`, `TWITTER_API_SECRET_KEY`, `TWITTER_ACCESS_TOKEN` and `TWITTER_ACCESS_TOKEN_SECRET` in your repository’s secrets settings.
 2. [Create a `.github/workflows/twitter-together.yml` file](docs/02-create-twitter-together-workflow.md) with the content below. Make sure to replace `'main'` if you changed your repository's default branch.
 
-   ```yml
-   on: [push, pull_request]
-   name: Twitter, together!
-   jobs:
-     preview:
-       name: Preview
-       runs-on: ubuntu-latest
-       if: github.event_name == 'pull_request'
-       steps:
-         - name: checkout pull request
-           uses: actions/checkout@v3
-           with:
-             ref: ${{ github.event.pull_request.head.sha }}
-         - name: Validate Tweets
-           uses: twitter-together/action@v2
-           env:
-             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-     tweet:
-       name: Tweet
-       runs-on: ubuntu-latest
-       if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-       steps:
-         - name: checkout main
-           uses: actions/checkout@v3
-         - name: Tweet
-           uses: twitter-together/action@v2
-           env:
-             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-             TWITTER_ACCESS_TOKEN: ${{ secrets.TWITTER_ACCESS_TOKEN }}
-             TWITTER_ACCESS_TOKEN_SECRET: ${{ secrets.TWITTER_ACCESS_TOKEN_SECRET }}
-             TWITTER_API_KEY: ${{ secrets.TWITTER_API_KEY }}
-             TWITTER_API_SECRET_KEY: ${{ secrets.TWITTER_API_SECRET_KEY }}
-   ```
+```yml
+on: [push, pull_request]
+name: Twitter, together!
+jobs:
+  preview:
+    name: Preview
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - name: checkout pull request
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - name: Validate Tweets
+        uses: twitter-together/action@v3
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  tweet:
+    name: Tweet
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    steps:
+      - name: checkout main
+        uses: actions/checkout@v3
+      - name: Tweet
+        uses: twitter-together/action@v3
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TWITTER_ACCESS_TOKEN: ${{ secrets.TWITTER_ACCESS_TOKEN }}
+          TWITTER_ACCESS_TOKEN_SECRET: ${{ secrets.TWITTER_ACCESS_TOKEN_SECRET }}
+          TWITTER_API_KEY: ${{ secrets.TWITTER_API_KEY }}
+          TWITTER_API_SECRET_KEY: ${{ secrets.TWITTER_API_SECRET_KEY }}
+```
+
+TODO: CONFIRM
+
+If you wish to have this action create preview comments in the PR thread, you can use the following config.
+
+Note that `pull_request_target` action have elevated permissions, so you should configure your repository to only trigger actions that are trusted. You can do this in [various](https://securitylab.github.com/research/github-actions-preventing-pwn-requests/) ways, including preventing outside contributors from triggering actions automatically, and requiring only allowing actions from Verified Creators in your repository Settings -> Actions -> General.
+
+You can also securely enable PR comments only for local branch commits, using the `pull_request` events with an `ENABLE_COMMENTS: 1` env variable, but comments will not be created for PRs from forks.
+
+```yml
+# enable comments, but beware of security implications
+on: [push, pull_request_target]
+name: Twitter, together!
+jobs:
+  preview:
+    name: Preview
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request_target'
+    permissions:
+      pull-requests: write
+    steps:
+      - name: checkout pull request
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - name: Validate Tweets
+        uses: twitter-together/action@v3
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+```
 
 3. After creating or updating `.github/workflows/twitter-together.yml` in your repository’s default branch, a pull request will be created with further instructions.
 
