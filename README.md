@@ -87,7 +87,7 @@ TODO: CONFIRM
 
 If you wish to have this action create preview comments in the PR thread, you can use the following config.
 
-Note that `pull_request_target` action have elevated permissions, so you should configure your repository to only trigger actions that are trusted. You can do this in [various](https://securitylab.github.com/research/github-actions-preventing-pwn-requests/) ways, including preventing outside contributors from triggering actions automatically, and requiring only allowing actions from Verified Creators in your repository Settings -> Actions -> General.
+Note that `pull_request_target` events have elevated permissions, so if you are using this config, you should configure your repository to only trigger actions that are trusted. You can do this in [various](https://securitylab.github.com/research/github-actions-preventing-pwn-requests/) ways, including preventing outside contributors from triggering actions automatically, and requiring only allowing actions from Verified Creators in your repository Settings -> Actions -> General.
 
 You can also securely enable PR comments only for local branch commits, using the `pull_request` events with an `ENABLE_COMMENTS: 1` env variable, but comments will not be created for PRs from forks.
 
