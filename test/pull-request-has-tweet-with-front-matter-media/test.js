@@ -62,7 +62,6 @@ index 0000000..1715c04
 +---
 +media:
 +  - file: cat.jpg
-+    alt: A cat
 +  - file: nested/media/pets/dog.jpg
 +    alt: A dog
 +---
@@ -82,7 +81,6 @@ nock("https://api.github.com")
       title: "1 tweet(s)",
       summary: `### ✅ Valid Tweet
 
-A cat
 <img src="https://raw.githubusercontent.com/twitter-together/action/0000000000000000000000000000000000000003/media/cat.jpg" height="200" />
 
 A dog
