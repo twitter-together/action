@@ -57,7 +57,7 @@
         }
       ],
       [
-        "@semantic-release/exec", 
+        "@semantic-release/exec",
         {
           "publishCmd": "npm run build"
         }
