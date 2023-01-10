@@ -57,6 +57,12 @@
         }
       ],
       [
+        "@semantic-release/exec",
+        {
+          "publishCmd": "npm run build"
+        }
+      ],
+      [
         "@semantic-release/git",
         {
           "assets": [
