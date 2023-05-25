@@ -44,35 +44,34 @@ nock("https://api.github.com", {
   .get("/repos/twitter-together/action/pulls/123")
   .reply(
     200,
-    `diff --git a/tweets/hello-world.tweet b/tweets/hello-world.tweet
+    `diff --git a/tweets/retweet.tweet b/tweets/retweet.tweet
 new file mode 100644
-index 0000000..0123456
+index 0000000..d462a1f
 --- /dev/null
-+++ b/tweets/hello-world.tweet
-@@ -0,0 +1 @@
-+Cupcake ipsum dolor sit amet chupa chups candy halvah I love. Apple pie gummi bears chupa chups jujubes I love cake jelly. Jelly candy canes pudding jujubes caramels sweet roll I love. Sweet fruitcake oat cake I love brownie sesame snaps apple pie lollipop. Pie dragée I love apple pie cotton candy candy chocolate bar.`
++++ b/tweets/retweet.tweet
+@@ -0,0 +1,5 @@
++---
++reply: https://twitter.com/m2rg/status/0000000000000000001
++---
++
++Good idea :)`
   );
 
 // create check run
-nock("https://api.github.com", {
-  reqheaders: {
-    authorization: "token secret123",
-  },
-})
+nock("https://api.github.com")
+  // get changed files
   .post("/repos/twitter-together/action/check-runs", (body) => {
     tap.equal(body.name, "preview");
     tap.equal(body.head_sha, "0000000000000000000000000000000000000002");
     tap.equal(body.status, "completed");
-    tap.equal(body.conclusion, "failure");
+    tap.equal(body.conclusion, "success");
     tap.same(body.output, {
       title: "1 tweet(s)",
-      summary: `### ❌ Invalid Tweet
+      summary: `### ✅ Valid Tweet
 
-\`\`\`tweet
-Cupcake ipsum dolor sit amet chupa chups candy halvah I love. Apple pie gummi bears chupa chups jujubes I love cake jelly. Jelly candy canes pudding jujubes caramels sweet roll I love. Sweet fruitcake oat cake I love brownie sesame snaps apple pie lollipop. Pie dragée I love apple pie cotton candy candy chocolate bar.
-\`\`\`
+Replying to https://twitter.com/m2rg/status/0000000000000000001
 
-**Tweet exceeds maximum length of 280 characters by 39 characters**`,
+> Good idea :)`,
     });
 
     return true;

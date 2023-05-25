@@ -63,7 +63,7 @@ nock("https://api.github.com")
     tap.equal(body.conclusion, "success");
     tap.same(body.output, {
       title: "1 tweet(s)",
-      summary: "### ✅ Valid\n\n> Hello, world!",
+      summary: "### ✅ Valid Tweet\n\n> Hello, world!",
     });
 
     return true;

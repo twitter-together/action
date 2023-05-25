@@ -4,6 +4,7 @@
 
 const nock = require("nock");
 const tap = require("tap");
+const path = require("path");
 
 // SETUP
 process.env.GITHUB_EVENT_NAME = "pull_request";
@@ -12,7 +13,7 @@ process.env.GITHUB_EVENT_PATH = require.resolve("./event.json");
 
 // set other env variables so action-toolkit is happy
 process.env.GITHUB_REF = "";
-process.env.GITHUB_WORKSPACE = "";
+process.env.GITHUB_WORKSPACE = path.dirname(process.env.GITHUB_EVENT_PATH);
 process.env.GITHUB_WORKFLOW = "";
 process.env.GITHUB_ACTION = "twitter-together";
 process.env.GITHUB_ACTOR = "";
@@ -44,35 +45,48 @@ nock("https://api.github.com", {
   .get("/repos/twitter-together/action/pulls/123")
   .reply(
     200,
-    `diff --git a/tweets/hello-world.tweet b/tweets/hello-world.tweet
+    `diff --git a/media/cat.jpg b/media/cat.jpg
 new file mode 100644
-index 0000000..0123456
+index 0000000..a10d505
+Binary files /dev/null and b/media/cat.jpg differ
+diff --git a/media/dog.jpg b/media/dog.jpg
+new file mode 100644
+index 0000000..7a25bfb
+Binary files /dev/null and b/media/dog.jpg differ
+diff --git a/tweets/media.tweet b/tweets/media.tweet
+new file mode 100644
+index 0000000..1715c04
 --- /dev/null
-+++ b/tweets/hello-world.tweet
-@@ -0,0 +1 @@
-+Cupcake ipsum dolor sit amet chupa chups candy halvah I love. Apple pie gummi bears chupa chups jujubes I love cake jelly. Jelly candy canes pudding jujubes caramels sweet roll I love. Sweet fruitcake oat cake I love brownie sesame snaps apple pie lollipop. Pie dragée I love apple pie cotton candy candy chocolate bar.`
++++ b/tweets/media.tweet
+@@ -0,0 +1,9 @@
++---
++media:
++  - file: cat.jpg
++  - file: nested/media/pets/dog.jpg
++    alt: A dog
++---
++
++Here are some cute animals!`
   );
 
 // create check run
-nock("https://api.github.com", {
-  reqheaders: {
-    authorization: "token secret123",
-  },
-})
+nock("https://api.github.com")
+  // get changed files
   .post("/repos/twitter-together/action/check-runs", (body) => {
     tap.equal(body.name, "preview");
-    tap.equal(body.head_sha, "0000000000000000000000000000000000000002");
+    tap.equal(body.head_sha, "0000000000000000000000000000000000000003");
     tap.equal(body.status, "completed");
-    tap.equal(body.conclusion, "failure");
+    tap.equal(body.conclusion, "success");
     tap.same(body.output, {
       title: "1 tweet(s)",
-      summary: `### ❌ Invalid Tweet
+      summary: `### ✅ Valid Tweet
 
-\`\`\`tweet
-Cupcake ipsum dolor sit amet chupa chups candy halvah I love. Apple pie gummi bears chupa chups jujubes I love cake jelly. Jelly candy canes pudding jujubes caramels sweet roll I love. Sweet fruitcake oat cake I love brownie sesame snaps apple pie lollipop. Pie dragée I love apple pie cotton candy candy chocolate bar.
-\`\`\`
+<img src="https://raw.githubusercontent.com/twitter-together/action/0000000000000000000000000000000000000003/media/cat.jpg" height="200" />
 
-**Tweet exceeds maximum length of 280 characters by 39 characters**`,
+A dog
+<img src="https://raw.githubusercontent.com/twitter-together/action/0000000000000000000000000000000000000003/media/nested/media/pets/dog.jpg" height="200" />
+
+> Here are some cute animals!`,
     });
 
     return true;

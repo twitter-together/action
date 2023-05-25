@@ -44,35 +44,59 @@ nock("https://api.github.com", {
   .get("/repos/twitter-together/action/pulls/123")
   .reply(
     200,
-    `diff --git a/tweets/hello-world.tweet b/tweets/hello-world.tweet
+    `diff --git a/tweets/thread.tweet b/tweets/thread.tweet
 new file mode 100644
-index 0000000..0123456
+index 0000000..ec04564
 --- /dev/null
-+++ b/tweets/hello-world.tweet
-@@ -0,0 +1 @@
-+Cupcake ipsum dolor sit amet chupa chups candy halvah I love. Apple pie gummi bears chupa chups jujubes I love cake jelly. Jelly candy canes pudding jujubes caramels sweet roll I love. Sweet fruitcake oat cake I love brownie sesame snaps apple pie lollipop. Pie dragée I love apple pie cotton candy candy chocolate bar.`
++++ b/tweets/thread.tweet
+@@ -0,0 +1,15 @@
++🧵 Here is a thread...
++
++---
++---
++poll:
++  - Banana
++  - Mango
++---
++
++Which fruit is more delicious?
++
++---
++We hope you enjoyed this thread...
++---
++We certainly did.`
   );
 
 // create check run
-nock("https://api.github.com", {
-  reqheaders: {
-    authorization: "token secret123",
-  },
-})
+nock("https://api.github.com")
+  // get changed files
   .post("/repos/twitter-together/action/check-runs", (body) => {
     tap.equal(body.name, "preview");
     tap.equal(body.head_sha, "0000000000000000000000000000000000000002");
     tap.equal(body.status, "completed");
-    tap.equal(body.conclusion, "failure");
+    tap.equal(body.conclusion, "success");
     tap.same(body.output, {
       title: "1 tweet(s)",
-      summary: `### ❌ Invalid Tweet
+      summary: `### ✅ Valid Thread
 
-\`\`\`tweet
-Cupcake ipsum dolor sit amet chupa chups candy halvah I love. Apple pie gummi bears chupa chups jujubes I love cake jelly. Jelly candy canes pudding jujubes caramels sweet roll I love. Sweet fruitcake oat cake I love brownie sesame snaps apple pie lollipop. Pie dragée I love apple pie cotton candy candy chocolate bar.
-\`\`\`
+#### --- 🧵 1 ---
 
-**Tweet exceeds maximum length of 280 characters by 39 characters**`,
+> 🧵 Here is a thread...
+
+#### --- 🧵 2 ---
+
+- Banana
+- Mango
+
+> Which fruit is more delicious?
+
+#### --- 🧵 3 ---
+
+> We hope you enjoyed this thread...
+
+#### --- 🧵 4 ---
+
+> We certainly did.`,
     });
 
     return true;

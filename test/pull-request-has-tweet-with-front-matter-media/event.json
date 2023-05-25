@@ -1,0 +1,27 @@
+{
+  "action": "opened",
+  "after": "0000000000000000000000000000000000000003",
+  "pull_request": {
+    "number": 123,
+    "base": {
+      "ref": "main"
+    },
+    "head": {
+      "sha": "0000000000000000000000000000000000000003",
+      "repo": {
+        "name": "action",
+        "fork": false,
+        "owner": {
+          "login": "twitter-together"
+        }
+      }
+    }
+  },
+  "repository": {
+    "default_branch": "main",
+    "name": "action",
+    "owner": {
+      "login": "twitter-together"
+    }
+  }
+}
