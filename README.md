@@ -58,7 +58,7 @@ Instead, you can make use of this GitHub Action from the comfort of your own rep
        runs-on: ubuntu-latest
        if: github.event_name == 'pull_request'
        steps:
-         - uses: twitter-together/action@v3.0.0
+         - uses: twitter-together/action@v3
            env:
              GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
      tweet:
@@ -69,7 +69,7 @@ Instead, you can make use of this GitHub Action from the comfort of your own rep
          - name: checkout main
            uses: actions/checkout@v3
          - name: Tweet
-           uses: twitter-together/action@v3.0.0
+           uses: twitter-together/action@v3
            env:
              GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
              TWITTER_ACCESS_TOKEN: ${{ secrets.TWITTER_ACCESS_TOKEN }}
