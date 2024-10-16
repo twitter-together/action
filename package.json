@@ -1,6 +1,6 @@
 {
   "name": "twitter-together",
-  "version": "3.0.2",
+  "version": "3.1.0",
   "description": "A GitHub action to tweet together using pull requests",
   "main": "lib/index.js",
   "scripts": {
